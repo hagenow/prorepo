@@ -15,14 +15,9 @@ define('DB_HOST', 'localhost');
 /** prefix of tables */
 define ('PREFIX', 'repo_');
 
-/** some database settings when creating tables */
-define('DB_CHARSET', 'utf8');
-
-define('DB_COLLATE', '');
-
 /** PHP Settings */
 /** suppress errors */
-error_reporting(E_ALL);
+error_reporting(-1);
 
 /** Timezone */
 date_default_timezone_set('Europe/Berlin');

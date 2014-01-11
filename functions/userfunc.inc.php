@@ -88,13 +88,12 @@ function checkblocked($user, $conid)
 function checkpass($user, $pass, $conid)
 {
         /** leere Variablen deklarieren */
-        $salt = '';
         $failedlogins = '';
         $pass_from_db = '';
 
-        /** SQL Statement, welches den salt ausließt */
+        /** SQL Statement, welches das password  ausließt */
         $sql1 = "SELECT
-                    salt
+                    password
                  FROM
                     repo_users
                  WHERE 
@@ -107,23 +106,34 @@ function checkpass($user, $pass, $conid)
         /** Ergebnisse abspeichern */
         $res->store_result();
         /** Ergebnisse an Variablen binden */
-        $res->bind_result($salt);
+        $res->bind_result($pass_from_db);
 
-        /** wenn nur eine Ergebniszeile aus der DB zurückgeliefert wird,
-         * dann hole das Ergebnis, prüfe die Anzahl der fehlgeschlagenen Logins 
-         * und definiere $salt, danach gebe das $res wieder frei.
-         * */
+        $pass_from_db = $conid->real_escape_string($pass_from_db);
+
+        $failuredlogins = checkfailedlogins($user,$conid);
+
         if($res->affected_rows == 1 )
         {
             $res->fetch();
-            if(checkfailedlogins($user,$conid) < 10)
-            {
-                /** encodiere PW mit crypt-Funktion, salt beinhaltet $6$, somit wird 
-                 * SHA512 benutzt 
-                 */
-                $pw_enc = crypt($pass, $salt);
 
+            /** prüfe fehlerhafte logins */
+            if($failuredlogins < 10)
+            {
+                /** prüfe übergebenes PW mit dem aus der DB - der salt wird 
+                 * ausgelesen aus $pass_from_db */
+                $pw_correct = password_verify($pass, $pass_from_db);
                 $res->free_result();
+                if($pw_correct)
+                {
+                    return true;
+                }
+                else
+                {
+                    $failuredlogins = $failuredlogins + 1;
+                    $count = updatefailedlogins($user,$failuredlogins,$conid);
+                    if($count == 10) blockuser($user,$conid);
+                    return false;
+                }
             }
             else
             {
@@ -132,48 +142,6 @@ function checkpass($user, $pass, $conid)
         }
         else
         {
-            return false;
-        }
-
-        $sql2 = "SELECT
-                    password
-                 FROM
-                    repo_users
-                 WHERE
-                    login = '".$user."'";
-
-        $res = $conid->prepare($sql2);
-        /** Verbundung ausführen */
-        $res->execute();
-        /** Ergebnisse abspeichern */
-        $res->store_result();
-        /** Ergebnisse an Variablen binden */
-        $res->bind_result($pass_from_db);
-        
-        /** wenn nur eine Ergebniszeile aus der DB zurückgeliefert wird,
-         * dann hole dir das Ergebnis und binde es an $pass_from_db,
-         * vergleiche das berechnete PW und das aus der DB und gebe
-         * true oder false zurück, danach gebe das $res wieder frei.
-         * */
-        if($res->affected_rows == 1)
-        {
-            $res->fetch();
-            if($pass_from_db === $pw_enc)
-            {
-                $res->free_result();
-                return true;
-            }
-            else
-            {
-                $failedlogins = checkfailedlogins($user,$conid) + 1;
-                $count = updatefailedlogins($user,$failedlogins,$conid);
-                if($count == 10) blockuser($user,$conid);
-                return false;
-            }
-        }
-        else
-        {
-            $res->free_result();
             return false;
         }
 

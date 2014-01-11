@@ -1,6 +1,16 @@
 <?php
 require 'includes/authcheck.inc.php';
 
+if((!isset($_POST['cid']) || !$_POST['cid'] ) && ( !isset($_POST['cname']) || !$_POST['cname'])) {
+    $cid = "";
+    $cname = "";
+}
+else
+{
+    $cid = $_POST['cid'];
+    $cname = $_POST['cname'];
+}
+
 /** Wurde das Formular abgeschickt? */
 if(!isset($_POST['submit_log']) || !$_POST['submit_log']) {
 ?>
@@ -37,14 +47,14 @@ if(!isset($_POST['submit_log']) || !$_POST['submit_log']) {
 </div>
 
 <!-- hidden field for setting category id -->
-<input type="hidden" name="catid" value="<?php echo $_POST['cid']; ?>">
+<input type="hidden" name="catid" value="<?php echo $cid; ?>">
 
 <!-- Search input-->
 <div class="form-group">
   <label class="control-label col-sm-3" for="category">Category</label>
   <div class="col-sm-6">
-  <input id="category" name="category" type="text" placeholder="<?php echo $_POST['cname']; ?>" value="<?php echo $_POST['cname']; ?>" class="form-control search-query" disabled>
-  <input type="hidden" name="catname" value="<?php echo $_POST['cname']; ?>">
+  <input id="category" name="category" type="text" placeholder="<?php echo $cname; ?>" value="<?php echo $cname; ?>" class="form-control search-query" disabled>
+  <input type="hidden" name="catname" value="<?php echo $cname; ?>">
   </div>
 </div>
 

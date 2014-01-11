@@ -11,6 +11,7 @@ function db_connect()
     } 
     else
     {
+        $conid->set_charset("utf8");
         return $conid;
     }
 }

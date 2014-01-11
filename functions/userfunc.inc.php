@@ -120,7 +120,10 @@ function checkpass($user, $pass, $conid)
             if($failuredlogins < 10)
             {
                 /** prüfe übergebenes PW mit dem aus der DB - der salt wird 
-                 * ausgelesen aus $pass_from_db */
+                 * ausgelesen aus $pass_from_db 
+                 * wenn was fehlschlägt, kann man hier die abwärtskompatible 
+                 * Library bekommen: 
+                 * https://github.com/ircmaxell/password_compat */
                 $pw_correct = password_verify($pass, $pass_from_db);
                 $res->free_result();
                 if($pw_correct)

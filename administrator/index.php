@@ -1,30 +1,34 @@
 <?php
-  require_once 'includes/header.php';
-  require_once 'includes/css.php';
+    /** Lade die Konfigurationen und die Funktionen
+    * */
+    require_once 'config.inc.php';
+    require_once 'functions.inc.php';
+?>
+<?php
+    /** ausgelagerter HTML und CSS Code
+     * */
+    require_once 'includes/header.inc.php';
+    require_once 'includes/css.inc.php';
 ?>
   <body>
 
     <div class="container">
 <?php
-  /** *
-    include 'includes/menu.php'; 
-  /*/
+    /** *  
+     include 'includes/menu.php'; 
+    /*/
 ?>
 
-      <form class="form-signin" role="form">
-        <h2 class="form-signin-heading">Please sign in</h2>
-        <input type="text" class="form-control" placeholder="Email address" required autofocus>
-        <input type="password" class="form-control" placeholder="Password" required>
-        <label class="checkbox">
-          <input type="checkbox" value="remember-me"> Remember me
-        </label>
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
-      </form>
 
-    </div> 
-
+<?php 
+    require_once 'includes/inhalt.inc.php'; 
+?>
+</div>
+    
 
 <?php
-  require_once 'includes/javascripts.php';
-  require_once 'includes/footer.php';
+  require_once 'includes/javascripts.inc.php';
 ?>
+  </body>
+</html>
+

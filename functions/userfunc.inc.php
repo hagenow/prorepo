@@ -1,40 +1,15 @@
 <?php
-
-function db_connect()
-{
-    $conid = mysqli_connect( DB_HOST, DB_USER, DB_PASSWORD, DB_NAME );
-
-    if(!$conid)
-    {
-        die('Verbindung konnte nicht hergestellt werden ('.mysqli_connect_errno().') : ' . mysqli_connect_error());
-    } 
-    else
-    {
-        return $conid;
-    }
-}
-
 /** Prüft den Login im Userbereich, übergibt Parameter an andere 
  * check-Funktionen
  * */
 function checkuserlogin($user, $pass, $conid)
 {
-    /** übergebene Variablen bereinigen */
-    $user = stripslashes($user);
-    $pass = stripslashes($pass);
-    $user = mysqli_real_escape_string($conid,$user);
-    $pass = mysqli_real_escape_string($conid,$pass);
+    $user = $conid->real_escape_string($user);
+    $pass = $conid->real_escape_string($pass);
 
     if(checkuser($user,$conid))
     {
-        if(checkblocked($user,$conid) == 0)
-        {
-            return checkpass($user,$pass,$conid);
-        }
-        else
-        {
-            return false;
-        }
+        return checkpass($user,$pass,$conid);
     }
     else
     {
@@ -47,31 +22,21 @@ function checkuserlogin($user, $pass, $conid)
  * */
 function checkadminlogin($user, $pass, $conid)
 {
-    /** übergebene Variablen bereinigen */
-    $user = stripslashes($user);
-    $pass = stripslashes($pass);
-    $user = mysqli_real_escape_string($conid,$user);
-    $pass = mysqli_real_escape_string($conid,$pass);
+    $user = $conid->real_escape_string($user);
+    $pass = $conid->real_escape_string($pass);
 
     $usergroup = checkgroup($user,$conid);
 
     if(checkuser($user,$conid))
     {
-        if(checkblocked($user,$conid) == 0)
-        {
-            if(checkadmin($usergroup,$conid))
-            {
-                return checkpass($user,$pass,$conid);
-            }
-            else
-            {
-                return false;
-            }
-        }
-        else
-        {
-            return false;
-        }
+       if(checkadmin($usergroup,$conid))
+       {
+           return checkpass($user,$pass,$conid);
+       }
+       else
+       {
+           return false;
+       }
     }
     else
     {
@@ -309,8 +274,101 @@ function blockuser($user, $conid)
              SET
                 blocked = 1
              WHERE
-                login = '".$user."'";
+                login = '".$user."'
+             LIMIT
+                 1";
 
     $res = $conid->query($sql);
 }
+
+/** updateuser($user, $conid)
+ * Bei erfolgreichem Login setze Logintime und letzte IP
+ * */
+function updateuser($user, $conid)
+{
+    $sql = "UPDATE
+                repo_users
+            SET
+                failedlogins = 0,
+                blocked = 0,
+                lastlogin = NOW(),
+                IP = '" .$conid->real_escape_string( $_SERVER['REMOTE_ADDR'] ). "'
+            WHERE
+                login = '".$user."'
+            LIMIT
+                1";
+
+    $res = $conid->prepare($sql);
+    $res->execute();
+    $res->store_result();
+
+    if($res->affected_rows == 1)
+    {
+        $_SESSION['angemeldet']   = true;
+        $_SESSION['user'] = $user;
+        $_SESSION['anmeldung']    = md5( $_SERVER['REQUEST_TIME'] );
+        return true;
+    }
+
+}
+
+/** bereinige Nutzereingaben */
+function cleaninput($conid)
+{
+    $input['user'] = $_POST['user'];
+    $input['pass'] = $_POST['pass'];
+
+    $conid->real_escape_string( $input['user']);
+    $conid->real_escape_string( $input['pass']);
+
+    // slashes entfernen
+   	$input['user'] = stripslashes( $input['user'] );
+   	$input['pass'] = stripslashes( $input['pass'] );
+    
+    /** Trimmen - entfernt Leerzeichen, Zeilenvorschub, Tabulator, binäres 
+     * Leerzeichen, \, / ", ', ,, ., usw.
+     * */
+    $input['user'] = trim( $input['user'], " \n\r\0\x0B\t.,\='-\\\/\"!?§$%&(){}[]´`@" );
+    $input['pass'] = trim( $input['pass'], " \n\r\0\x0B\t" );
+
+    // In Kleinschrift umwandeln
+    $input['user'] = strtolower( $input['user'] );
+
+    // Eingabe zurückgeben
+    return $input;
+}
+
+/** checksession($conid)
+ * Prüft die Session und überträgt die bisherigen Sessiondaten in eine neue 
+ * Session
+ * */
+function checksession($conid)
+{
+    // Alte Session löschen und Sessiondaten in neue Session transferieren
+    session_regenerate_id( true );
+
+    if ($_SESSION['login'] !== true) return false;
+
+    $sql = "SELECT 
+                IP, lastlogin
+            FROM
+                repo_users
+            WHERE
+                login = '" .$conid->real_escape_string( $_SESSION['user'] ). "'
+            ";
+
+    $res = $conid->query($sql);
+    $res->store_result();
+
+}
+
+/** Beendet die laufende Session und leitet wieder auf den Login um
+ * */
+function resetsession()
+{
+    session_destroy();
+    header( 'location: index.php' );
+    exit;
+}
+
 ?>

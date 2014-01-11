@@ -4,6 +4,22 @@ require 'includes/authcheck.inc.php';
 /** Wurde das Formular abgeschickt? */
 if(!isset($_POST['submit_log']) || !$_POST['submit_log']) {
 ?>
+<?php if(!isset($_POST['cname']) || !$_POST['cname']) { ?>
+<h4>Choose a category</h4>
+<!-- Search input-->
+<form class="form-horizontal" method="post" name"cat" id="cat" action="<?php echo $_SERVER['PHP_SELF']; ?>?show=newmod">
+<div class="form-group">
+  <label class="control-label col-sm-3" for="search_cat">Search Category</label>
+  <div class="col-sm-6">
+    <input id="search_cat" name="search_cat" type="text" placeholder="Name of category" class="form-control search-query" autocomplete="off">
+    <!-- Show Results -->
+    <h4 id="results-text">Showing results for: <b id="catsearch-string">Category</b></h4>
+    <ul id="results"></ul>
+
+  </div>
+</div>
+</form>
+<?php } ?>
 
 <form class="form-horizontal" name="logupload" id="logupload" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>?show=newlog" enctype="multipart/form-data">
 <fieldset>
@@ -20,12 +36,15 @@ if(!isset($_POST['submit_log']) || !$_POST['submit_log']) {
   </div>
 </div>
 
+<!-- hidden field for setting category id -->
+<input type="hidden" name="catid" value="<?php echo $_POST['cid']; ?>">
+
 <!-- Search input-->
 <div class="form-group">
-  <label class="control-label col-sm-3" for="search_cat">Search Category</label>
+  <label class="control-label col-sm-3" for="category">Category</label>
   <div class="col-sm-6">
-    <input id="search_cat" name="search_cat" type="text" placeholder="" class="form-control search-query" required="">
-    
+  <input id="category" name="category" type="text" placeholder="<?php echo $_POST['cname']; ?>" value="<?php echo $_POST['cname']; ?>" class="form-control search-query" disabled>
+  <input type="hidden" name="catname" value="<?php echo $_POST['cname']; ?>">
   </div>
 </div>
 

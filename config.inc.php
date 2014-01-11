@@ -23,6 +23,7 @@ define('DB_COLLATE', '');
 /** PHP Settings */
 /** suppress errors */
 error_reporting(E_ALL);
+
 /** Timezone */
 date_default_timezone_set('Europe/Berlin');
 ?>

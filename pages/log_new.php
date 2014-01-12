@@ -17,13 +17,13 @@ if(!isset($_POST['submit_log']) || !$_POST['submit_log']) {
 <?php if(!isset($_POST['cname']) || !$_POST['cname']) { ?>
 <legend>Choose a category</legend>
 <!-- Search input-->
-<form class="form-horizontal" method="post" name"cat" id="cat" action="<?php echo $_SERVER['PHP_SELF']; ?>?show=newmod">
+<form class="form-horizontal" method="post" name"cat" id="cat" action="<?php echo $_SERVER['PHP_SELF']; ?>?show=newlog">
 <div class="form-group">
   <label class="control-label col-sm-3" for="search_cat">Search Category</label>
   <div class="col-sm-6">
     <input id="search_cat" name="search_cat" type="text" placeholder="Name of category" class="form-control search-query" autocomplete="off">
     <!-- Show Results -->
-    <h4 id="results-text">Showing results for: <b id="catsearch-string">Category</b></h4>
+    <h5 id="results-text">Showing results for: <b id="catsearch-string">Category</b></h5>
     <ul id="results"></ul>
 
   </div>

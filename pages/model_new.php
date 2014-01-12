@@ -23,7 +23,7 @@ if(!isset($_POST['submit_model']) || !$_POST['submit_model']) {
           <div class="col-sm-6">
             <input id="search_cat" name="search_cat" type="text" placeholder="Name of category" class="form-control search-query" autocomplete="off">
             <!-- Show Results -->
-            <h4 id="results-text">Showing results for: <b id="catsearch-string">Category</b></h4>
+            <h5 id="results-text">Showing results for: <b id="catsearch-string">Category</b></h5>
             <ul id="results"></ul>
             
           </div>

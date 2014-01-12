@@ -2,17 +2,21 @@
 /** Prüft den Login im Userbereich, übergibt Parameter an andere 
  * check-Funktionen
  * */
-function checkuserlogin($user, $pass, $conid)
+function checkuserlogin($user, $pass)
 {
+    $conid = db_connect();
+
     $user = $conid->real_escape_string($user);
     $pass = $conid->real_escape_string($pass);
 
     if(checkuser($user,$conid))
     {
-        return checkpass($user,$pass,$conid);
+        $conid->close();
+        return checkpass($user,$pass);
     }
     else
     {
+        $conid->close();
         return false;
     }
 } 
@@ -20,8 +24,10 @@ function checkuserlogin($user, $pass, $conid)
 /** Ähnlich wie checkuserlogin mit dem Zusatz der Gruppenprüfung auf 
  * Mitgliedschaft in der admin-Gruppe
  * */
-function checkadminlogin($user, $pass, $conid)
+function checkadminlogin($user, $pass)
 {
+    $conid = db_connect();
+
     $user = $conid->real_escape_string($user);
     $pass = $conid->real_escape_string($pass);
 
@@ -31,23 +37,28 @@ function checkadminlogin($user, $pass, $conid)
     {
        if(checkadmin($usergroup,$conid))
        {
+            $conid->close();
            return checkpass($user,$pass,$conid);
        }
        else
        {
+            $conid->close();
            return false;
        }
     }
     else
     {
+        $conid->close();
         return false;
     }
 } 
 
 /** Prüft ob der Nutzer existiert
  * */
-function checkuser($user, $conid)
+function checkuser($user)
 {
+    $conid = db_connect();
+
     $sql = "SELECT
                 login
              FROM
@@ -59,14 +70,17 @@ function checkuser($user, $conid)
     $res->execute();
     $res->store_result();
     
+    $conid->close();
     return ($res->affected_rows == 1) ?  true : false;
 }
 
 /** checkblocked($user, $count)
  * Falls ein User gesperrt ist, verweigere den Login.
  * */
-function checkblocked($user, $conid)
+function checkblocked($user)
 {
+    $conid = db_connect();
+
     $sql = "SELECT
                 blocked
              FROM
@@ -80,13 +94,17 @@ function checkblocked($user, $conid)
     $res->bind_result($blocked);
     $res->fetch();
 
+    $conid->close();
+
     return $blocked;
 }
 
 /** Prüft das übergebene Passwort
  * */
-function checkpass($user, $pass, $conid)
+function checkpass($user, $pass)
 {
+    $conid = db_connect();
+
         /** leere Variablen deklarieren */
         $failedlogins = '';
         $pass_from_db = '';
@@ -99,9 +117,9 @@ function checkpass($user, $pass, $conid)
                  WHERE 
                     login = '".$user."'";
 
-        /** Verbindungen mit obigem SQL Statement vorbereiten */
+        /** Verbindungen mit obigem SQL Statement ausführen */
         $res = $conid->prepare( $sql1 );
-        /** Verbundung ausführen */
+        /** Statement ausführen */
         $res->execute();
         /** Ergebnisse abspeichern */
         $res->store_result();
@@ -128,6 +146,7 @@ function checkpass($user, $pass, $conid)
                 $res->free_result();
                 if($pw_correct)
                 {
+                    $conid->close();
                     return true;
                 }
                 else
@@ -135,16 +154,19 @@ function checkpass($user, $pass, $conid)
                     $failuredlogins = $failuredlogins + 1;
                     $count = updatefailedlogins($user,$failuredlogins,$conid);
                     if($count == 10) blockuser($user,$conid);
+                    $conid->close();
                     return false;
                 }
             }
             else
             {
+                $conid->close();
                 return false;
             }
         }
         else
-        {
+        {  
+            $conid->close();
             return false;
         }
 
@@ -152,8 +174,10 @@ function checkpass($user, $pass, $conid)
 
 /** prüft die assozierte Gruppe des Users 
  * */
-function checkgroup($user, $conid)
+function checkgroup($user)
 {
+    $conid = db_connect();
+
     $sql = "SELECT
                 usergroup
              FROM
@@ -169,14 +193,17 @@ function checkgroup($user, $conid)
     if($res->affected_rows == 1)
     {
         $res->fetch();
+        $conid->close();
         return $usergroup;
     }
 }
 
 /** prüft die Gruppenzugehörigkeit für den Administrationslogin
  * */
-function checkadmin($usergroup,$conid)
+function checkadmin($usergroup)
 {
+    $conid = db_connect();
+
     $sql = "SELECT
                 groupname
              FROM
@@ -192,14 +219,17 @@ function checkadmin($usergroup,$conid)
     if($res->affected_rows == 1)
     {
         $res->fetch();
+        $conid->close();
         return ($groupname == "admin") ? true : false;
     }
 }
 
 /** lese die Anzahl der fehlerhaften Logins aus
  * */
-function checkfailedlogins($user, $conid)
+function checkfailedlogins($user)
 {
+    $conid = db_connect();
+
     $sql = "SELECT
                 failedlogins
              FROM
@@ -213,6 +243,8 @@ function checkfailedlogins($user, $conid)
     $res->bind_result($failedlogins);
     
     $res->fetch();
+    
+    $conid->close();
 
     return $failedlogins;
 }
@@ -221,8 +253,10 @@ function checkfailedlogins($user, $conid)
  * Setzt den failedlogin-Counter auf 0 wenn Login erfolgreich, ansonsten zählt 
  * er eins hoch!
  * */
-function updatefailedlogins($user, $count, $conid)
+function updatefailedlogins($user, $count)
 {
+    $conid = db_conect();
+
     $sql = "UPDATE
                 repo_users
              SET
@@ -230,7 +264,10 @@ function updatefailedlogins($user, $count, $conid)
              WHERE
                 login = '".$user."'";
 
-    $res = $conid->query($sql);
+    $res = $conid->prepare($sql);
+    $res->execute();
+    $conid->close();
+
     return $count;
 }
 
@@ -238,8 +275,10 @@ function updatefailedlogins($user, $count, $conid)
  * Bei mehr als einer erlaubten Anzahl fehlerhafter Logins wird der Benutzer 
  * gesperrt.
  * */
-function blockuser($user, $conid)
+function blockuser($user)
 {
+    $conid = db_connect();
+
     $sql = "UPDATE
                 repo_users
              SET
@@ -249,14 +288,19 @@ function blockuser($user, $conid)
              LIMIT
                  1";
 
-    $res = $conid->query($sql);
+    $conid->close();
+
+    $res = $conid->prepare($sql);
+    $res->execute();
 }
 
 /** updateuser($user, $conid)
  * Bei erfolgreichem Login setze Logintime und letzte IP
  * */
-function updateuser($user, $conid)
+function updateuser($user)
 {
+    $conid = db_connect();
+
     $sql = "UPDATE
                 repo_users
             SET
@@ -283,9 +327,52 @@ function updateuser($user, $conid)
 
 }
 
-/** bereinige Nutzereingaben */
-function cleaninput($conid)
+/** user registration */
+function registeruser()
 {
+    $conid = db_connect();
+
+    $login = $_POST['login'];
+    $firstname = $_POST['firstname'];
+    $lastname = $_POST['lastname'];
+    $email = $_POST['email'];
+    $affiliation = $_POST['affiliation'];
+
+    /** TODO checkmail - mxrecord und aufbau 
+     * */
+
+    /** TODO cleaninput */
+
+    /** encrypt password */
+    $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+
+    $sql = "INSERT INTO
+                ".TBL_PREFIX."users
+                (login, password, firstname, lastname, email, affiliation, registerdate)
+                VALUES
+                ('".$conid->real_escape_string($login)."','".$conid->real_escape_string($password)."',
+                    '".$conid->real_escape_string($firstname)."','".$conid->real_escape_string($lastname)."',
+                    '".$conid->real_escape_string($email)."','".$conid->real_escape_string($affiliation)."',
+                    CURDATE())";
+
+    echo $sql;
+
+    $res = $conid->prepare($sql);
+    $res->execute();
+    $res->store_result();
+
+    $ergb = $res->affected_rows;
+    var_dump( $ergb );
+
+    return ($res->affected_rows == 1) ? true : false;
+
+}
+
+/** bereinige Nutzereingaben */
+function cleaninput()
+{
+    $conid = db_connect();
+
     $input['user'] = $_POST['user'];
     $input['pass'] = $_POST['pass'];
 
@@ -305,6 +392,9 @@ function cleaninput($conid)
     // In Kleinschrift umwandeln
     $input['user'] = strtolower( $input['user'] );
 
+    // db-Verbindung schließen
+    $conid->close();
+
     // Eingabe zurückgeben
     return $input;
 }
@@ -313,8 +403,9 @@ function cleaninput($conid)
  * Prüft die Session und überträgt die bisherigen Sessiondaten in eine neue 
  * Session
  * */
-function checksession($conid)
+function checksession()
 {
+    $conid = db_connect();
     // Alte Session löschen und Sessiondaten in neue Session transferieren
     session_regenerate_id( true );
 
@@ -328,9 +419,11 @@ function checksession($conid)
                 login = '" .$conid->real_escape_string( $_SESSION['user'] ). "'
             ";
 
-    $res = $conid->query($sql);
+    $res = $conid->prepare($sql);
+    $res->execute();
     $res->store_result();
 
+    $conid->close();
 }
 
 /** Beendet die laufende Session und leitet wieder auf den Login um
@@ -338,7 +431,7 @@ function checksession($conid)
 function resetsession()
 {
     session_destroy();
-    header( 'location: index.php' );
+    header( 'location: index.php?show=notloggedin' );
     exit;
 }
 

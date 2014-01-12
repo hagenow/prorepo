@@ -15,7 +15,7 @@ else
 if(!isset($_POST['submit_log']) || !$_POST['submit_log']) {
 ?>
 <?php if(!isset($_POST['cname']) || !$_POST['cname']) { ?>
-<h4>Choose a category</h4>
+<legend>Choose a category</legend>
 <!-- Search input-->
 <form class="form-horizontal" method="post" name"cat" id="cat" action="<?php echo $_SERVER['PHP_SELF']; ?>?show=newmod">
 <div class="form-group">

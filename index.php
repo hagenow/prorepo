@@ -1,21 +1,19 @@
 <?php
-
 ob_start();
 if(!isset($_SESSION)){
-        session_start();
+    session_start();
 }
 session_regenerate_id();
 
-//$_SESSION['angemeldet'] = false;
-$conid                  = '';
-$input                  = array();
-$login                  = false;
-$error                  = '';
-
+$conid = '';
+$input = array();
+$login = false;
+$error = '';
 
 require_once 'config.inc.php';
 require_once 'functions.inc.php';
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -64,9 +62,13 @@ require_once 'functions.inc.php';
             </div>
 </div>
 
+<?php 
+if(!isset($_SESSION['angemeldet']) || !$_SESSION['angemeldet']) {
+    require_once 'includes/registration.inc.php';
+}
+?>
 
-
-<?php require 'includes/javascripts.inc.php'; ?>
+<?php require_once 'includes/javascripts.inc.php'; ?>
 
   </body>
 </html>

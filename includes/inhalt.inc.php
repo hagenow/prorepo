@@ -5,6 +5,7 @@ if(isset($_GET['show']))
     {
         case "login": require 'pages/user_login.php'; break;
         case "usersettings": require 'pages/user_settings.php'; break;
+        case "updateuser": require 'pages/user_update.php'; break;
         case "register": require 'pages/user_register.php'; break;
         case "logout": require 'pages/user_logout.php'; break;
         case "notloggedin": require 'pages/user_notloggedin.php'; break;

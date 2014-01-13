@@ -62,7 +62,7 @@ function checkuser($user)
     $sql = "SELECT
                 login
              FROM
-                repo_users
+                ".TBL_PREFIX."users
              WHERE
                 login = '".$user."'";
 
@@ -84,7 +84,7 @@ function checkblocked($user)
     $sql = "SELECT
                 blocked
              FROM
-                repo_users
+                ".TBL_PREFIX."users
              WHERE
                 login = '".$user."'";
 
@@ -113,7 +113,7 @@ function checkpass($user, $pass)
         $sql1 = "SELECT
                     password
                  FROM
-                    repo_users
+                    ".TBL_PREFIX."users
                  WHERE 
                     login = '".$user."'";
 
@@ -181,7 +181,7 @@ function checkgroup($user)
     $sql = "SELECT
                 usergroup
              FROM
-                repo_users
+                ".TBL_PREFIX."users
              WHERE
                 login = '".$user."'";
 
@@ -207,7 +207,7 @@ function checkadmin($usergroup)
     $sql = "SELECT
                 groupname
              FROM
-                repo_usergroups
+                ".TBL_PREFIX."usergroups
              WHERE
                 usergroupID = '".$usergroup."'";
 
@@ -233,7 +233,7 @@ function checkfailedlogins($user)
     $sql = "SELECT
                 failedlogins
              FROM
-                repo_users
+                ".TBL_PREFIX."users
              WHERE
                 login = '".$user."'";
 
@@ -258,7 +258,7 @@ function updatefailedlogins($user, $count)
     $conid = db_conect();
 
     $sql = "UPDATE
-                repo_users
+                ".TBL_PREFIX."users
              SET
                 failedlogins = '".$count."'
              WHERE
@@ -280,7 +280,7 @@ function blockuser($user)
     $conid = db_connect();
 
     $sql = "UPDATE
-                repo_users
+                ".TBL_PREFIX."users
              SET
                 blocked = 1
              WHERE
@@ -302,7 +302,7 @@ function updateuser($user)
     $conid = db_connect();
 
     $sql = "UPDATE
-                repo_users
+                ".TBL_PREFIX."users
             SET
                 failedlogins = 0,
                 blocked = 0,
@@ -332,16 +332,15 @@ function registeruser()
 {
     $conid = db_connect();
 
-    $login = $_POST['login'];
-    $firstname = $_POST['firstname'];
-    $lastname = $_POST['lastname'];
-    $email = $_POST['email'];
-    $affiliation = $_POST['affiliation'];
+    /** TODO more input cleaning */
+    $login = htmlspecialchars($_POST['login'], ENT_QUOTES, 'UTF-8');
+    $firstname = htmlspecialchars($_POST['firstname'], ENT_QUOTES, 'UTF-8');
+    $lastname = htmlspecialchars($_POST['lastname'], ENT_QUOTES, 'UTF-8');
+    $email = htmlspecialchars($_POST['email'], ENT_QUOTES, 'UTF-8');
+    $affiliation = htmlspecialchars($_POST['affiliation'], ENT_QUOTES, 'UTF-8');
 
     /** TODO checkmail - mxrecord und aufbau 
      * */
-
-    /** TODO cleaninput */
 
     /** encrypt password */
     $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
@@ -361,15 +360,86 @@ function registeruser()
     $res->execute();
     $res->store_result();
 
-    $ergb = $res->affected_rows;
-    var_dump( $ergb );
-
     return ($res->affected_rows == 1) ? true : false;
 
 }
 
+/** update user details */
+function updateuserdata()
+{
+    $conid = db_connect();
+
+    $firstname = htmlspecialchars($_POST['firstname'], ENT_QUOTES, 'UTF-8');
+    $lastname = htmlspecialchars($_POST['lastname'], ENT_QUOTES, 'UTF-8');
+    $email = htmlspecialchars($_POST['email'], ENT_QUOTES, 'UTF-8');
+    $affiliation = htmlspecialchars($_POST['affiliation'], ENT_QUOTES, 'UTF-8');
+
+    /** encrypt password */
+    if(isset($_POST['password'])&& (strlen($_POST['password']) >= 1 && $_POST['password'] !== ' ') )
+    {
+        $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+        $sql_wpw = "UPDATE
+                        ".TBL_PREFIX."users
+                     SET
+                         password = '".$password."',
+                         firstname = '".$firstname."',
+                         lastname = '".$lastname."', 
+                         email = '".$email."', 
+                         affiliation = '".$affiliation."'
+                     WHERE
+                         login = '".$_SESSION['user']."'";
+        $res = $conid->prepare($sql_wpw);
+    }
+    else
+    {
+        $sql_wopw = "UPDATE
+                        ".TBL_PREFIX."users
+                     SET
+                         firstname = '".$firstname."',
+                         lastname = '".$lastname."', 
+                         email = '".$email."', 
+                         affiliation = '".$affiliation."'
+                     WHERE
+                     login = '".$_SESSION['user']."'";
+        $res = $conid->prepare($sql_wopw);
+    }
+
+    $res->execute();
+    $res->store_result();
+
+    return ($res->affected_rows == 1) ? true : false;
+}
+
+/** get user details */
+function getuserdata()
+{
+    $conid = db_connect();
+
+    $userdata = array();
+
+    $sql = "SELECT 
+                firstname, lastname, email, affiliation
+            FROM
+                ".TBL_PREFIX."users
+            WHERE
+                login = '".$_SESSION['user']."'";
+
+    $res = $conid->prepare($sql);
+    $res->execute();
+    $res->store_result();
+    $res->bind_result($userdata['firstname'],$userdata['lastname'],$userdata['email'],$userdata['affiliation']);
+    $res->fetch();
+
+    if($res->affected_rows == 1)
+    {
+        $res->fetch();
+        return $userdata;
+    }
+    
+}
+
 /** bereinige Nutzereingaben */
-function cleaninput()
+function cleanlogininput()
 {
     $conid = db_connect();
 
@@ -414,7 +484,7 @@ function checksession()
     $sql = "SELECT 
                 IP, lastlogin
             FROM
-                repo_users
+                ".TBL_PREFIX."users
             WHERE
                 login = '" .$conid->real_escape_string( $_SESSION['user'] ). "'
             ";

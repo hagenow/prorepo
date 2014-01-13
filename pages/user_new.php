@@ -1,4 +1,4 @@
-<form class="form-horizontal" name="register" id="register" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>?show=register" enctype="multipart/form-data">
+<form class="form-horizontal" name="register" id="register" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>?show=register">
     <fieldset>
 
     <div class="form-group">
@@ -51,5 +51,6 @@
             <button type="reset" id="close_modal" name="close_modal" value"Reset and Close" class="btn btn-danger" data-dismiss="modal">Reset &amp; Close</button>
         </div>
     </div>
+    <!-- place captcha here -->
     </fieldset>
 </form>

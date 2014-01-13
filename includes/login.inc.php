@@ -3,7 +3,7 @@
 if(isset( $_POST['login'] ))
 {
     /** Eingabe bereinigen */
-    $input = cleaninput();
+    $input = cleanlogininput();
     $login = checkadminlogin( $input['user'], $input['pass']);
     /** Prüfen ob die Anmeldung korrekt war */
     if(!checkblocked($input['user']))

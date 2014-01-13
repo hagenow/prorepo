@@ -347,12 +347,12 @@ function registeruser()
 
     $sql = "INSERT INTO
                 ".TBL_PREFIX."users
-                (login, password, firstname, lastname, email, affiliation, registerdate)
+                (login, password, firstname, lastname, email, affiliation, registerdate,verifyid)
                 VALUES
                 ('".$conid->real_escape_string($login)."','".$conid->real_escape_string($password)."',
                     '".$conid->real_escape_string($firstname)."','".$conid->real_escape_string($lastname)."',
                     '".$conid->real_escape_string($email)."','".$conid->real_escape_string($affiliation)."',
-                    CURDATE())";
+                    CURDATE(), '".md5( $_SERVER['REQUEST_TIME'] );."')";
 
     echo $sql;
 
@@ -360,8 +360,8 @@ function registeruser()
     $res->execute();
     $res->store_result();
 
+    /** TODO send mail after registration to verify emailaddress */
     return ($res->affected_rows == 1) ? true : false;
-
 }
 
 /** update user details */

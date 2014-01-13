@@ -30,7 +30,7 @@ define ('STRG_PATH', 'repository/');
  *
  * define ('STRG_DEST, 'remote');
  * define ('STRG_PROT', 'sftp');
- * define ('STRG_HOST', 'IP_ADRESS');
+ * define ('STRG_HOST', 'IP_ADDRESS');
  * define ('STRG_PORT', 'PORT as Number, eg. 22');
  * define ('STRG_USER', 'SSH-USER');
  * define ('STRG_PASS', 'SSH-PASS');

@@ -15,6 +15,11 @@ define('DB_HOST', 'localhost');
 /** prefix of tables */
 define ('TBL_PREFIX', 'repo_');
 
+/** define max. size of an uploaded file 
+ * here 1024*500 are 500 kilobytes. 
+ * The value have to be in bytes */
+define ('FILESIZE', '512000');
+
 /** Storage for placing the repository files
  * possible options
  * local or remote
@@ -28,7 +33,7 @@ define ('STRG_PATH', 'repository/');
  * look at http://us2.php.net/manual/de/function.ssh2-sftp.php for sftp/ssh2 
  * connection or http://php.net/manual/de/ref.ftp.php for ftp functions.
  *
- * define ('STRG_DEST, 'remote');
+ * define ('STRG_DEST', 'remote');
  * define ('STRG_PROT', 'sftp');
  * define ('STRG_HOST', 'IP_ADDRESS');
  * define ('STRG_PORT', 'PORT as Number, eg. 22');

@@ -352,7 +352,7 @@ function registeruser()
                 ('".$conid->real_escape_string($login)."','".$conid->real_escape_string($password)."',
                     '".$conid->real_escape_string($firstname)."','".$conid->real_escape_string($lastname)."',
                     '".$conid->real_escape_string($email)."','".$conid->real_escape_string($affiliation)."',
-                    CURDATE(), '".md5( $_SERVER['REQUEST_TIME'] );."')";
+                    CURDATE(), '".uniqid('',TRUE)."')";
 
     echo $sql;
 

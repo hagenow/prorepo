@@ -113,7 +113,7 @@ if(!isset($_POST['submit_model']) || !$_POST['submit_model']) {
     <input type="hidden" name="type" value="model">
     
     <!-- hidden field for marking up as model -->
-    <input type="hidden" name="date" value="<?php echo date("YmdHis"); ?>">
+    <input type="hidden" name="timestamp" value="<?php echo date("YmdHis"); ?>">
     
     <!-- Action submit or reset -->
     <div class="form-group">

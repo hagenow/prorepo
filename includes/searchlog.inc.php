@@ -10,6 +10,7 @@ $conid = db_connect();
 ************************************************/
 
 // Define Output HTML Formating
+$html = '';
 $html .= '<li class="result-log">';
 $html .= '<input type="hidden" name="logid" value="logID" /><input type="hidden" name="logname" value="logName" />';
 $html .= '<a href="#" class="list-group-item" onclick="document.forms[\'log\'].submit();">logName</a>';

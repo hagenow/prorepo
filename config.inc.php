@@ -26,9 +26,10 @@ define ('FILESIZE', '512000');
 /** Storage for placing the repository files
  * possible options
  * local or remote
+ * no trailing slash because of errors!
  * */
 define ('STRG_DEST', 'local');
-define ('STRG_PATH', 'repository/');
+define ('STRG_PATH', 'repository');
 
 /** Example for remote storage:
  *
@@ -42,7 +43,7 @@ define ('STRG_PATH', 'repository/');
  * define ('STRG_PORT', 'PORT as Number, eg. 22');
  * define ('STRG_USER', 'SSH-USER');
  * define ('STRG_PASS', 'SSH-PASS');
- * define ('STRG_PATH', 'repository/');
+ * define ('STRG_PATH', 'repository');
  * */
 
 /** PHP Settings */

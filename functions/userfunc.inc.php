@@ -354,8 +354,6 @@ function registeruser()
                     '".$conid->real_escape_string($email)."','".$conid->real_escape_string($affiliation)."',
                     CURDATE(), '".uniqid('',TRUE)."')";
 
-    echo $sql;
-
     $res = $conid->prepare($sql);
     $res->execute();
     $res->store_result();

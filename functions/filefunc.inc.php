@@ -7,17 +7,19 @@
  * */
 function uploadfiles_new()
 {
+    $conid = db_connect();
+
     /** define the allowed extensions to prevent an attack */
     $valid_formats =array();
     $type = '';
     $typeinfo = array();
-    if($_POST['type'] == model)
+    if($_POST['type'] == "model")
     {
         $type = "model";
         $typeinfo = createmodel();
         $valid_formats = array("pdf", "png", "pnml", "xml", "svg", "eps");
     }
-    elseif($_POST['type'] == log)
+    elseif($_POST['type'] == "log")
     {
         $type = "log";
         $typeinfo = createlog();
@@ -39,25 +41,30 @@ function uploadfiles_new()
     $catid = $_POST['catid'];
 
     /** get submitted date */
-    $date = $_POST['date'];
+    $timestamp = $typeinfo['timestamp'];
 
     /** get model or log ID, if not exists, create a model or log instead and 
         * return the ID*/
+    $id = $typeinfo['id'];
+    $name = $typeinfo['name'];
+
+    /** set creator to current logged in user */
+    $creator = $_SESSION['user'];
 
     
     if(isset($_POST) && $_SERVER['REQUEST_METHOD'] == "POST")
     {
     	// Loop $_FILES to execute all files
-        foreach ($_FILES['modfiles']['name'] as $f => $filename) 
+        foreach ($_FILES['files']['name'] as $f => $filename) 
         {     
-            if ($_FILES['modfiles']['error'][$f] == 4) 
+            if ($_FILES['files']['error'][$f] == 4) 
             {
     	        continue; // Skip file if any error found
             }
     
-            if ($_FILES['modfiles']['error'][$f] == 0) 
+            if ($_FILES['files']['error'][$f] == 0) 
             {	           
-                if ($_FILES['modfiles']['size'][$f] > $max_file_size) 
+                if ($_FILES['files']['size'][$f] > $max_file_size) 
                 {
     	            $message[] = "$filename is too large!.";
     	            continue; // Skip large files
@@ -69,25 +76,56 @@ function uploadfiles_new()
     			}
                 else // No error found! Move uploaded files 
                 {
-                    /** convert the given modelname to lower and replace chars */ 
-                    $modelname = strtr( strtolower( $_SESSION['modelName'] ), $replacements );
-                    $modelname = cleaninput($modelname);
+                    // extract extension
+                    $ext = pathinfo($filename, PATHINFO_EXTENSION);
 
                     /** clean up the filename */
+                    $filename = pathinfo($filename, PATHINFO_FILENAME);
                     $filename = strtr( strtolower( $filename), $replacements );
-                    $filename = $cleaninput( $filename );
+                    $filename = cleaninput($filename);
+                    
+                    $size = $_FILES['files']['size'][$f];
 
                     /** create the filename */ 
-                    $pathname = STRG_PATH."/".$type."/".$modelid."_".$modelname."/".$date."/";
+                    $path = STRG_PATH."/".$type."/".$id."_".$name."/".$timestamp."/";
+                    if(STRG_DEST == "local")
+                    {
+                        mkdir($path, 0755, true);
+                        /** create local folder-path 
+                        if (!mkdir($path, 0755, true)) {
+                            die('Erstellung der Verzeichnisse schlug fehl...');
+                        } */
+                    }
+                    elseif(STRG_DEST == "remote")
+                    {
+                        /** create remote folder-path eg. with sftp or ftp
+                         * */
+                    }
+                    else
+                    {
+                        $messages[] = "can't create folders, because the STRG parameter is not set correctly via setup!";
+                    }
 
                     /** create entry in the files table */
-                    $sql_create = "INSERT INTO
+                    $sql = "INSERT INTO
                                         ".TBL_PREFIX."files
-                                        (
-                                  "; 
+                                        (fileName, type, foreignID, fileType, uploader, timestamp, size)
+                                   VALUES
+                                        ('$filename','$type','$id','$ext','$creator','$timestamp','$size')"; 
+
+                    if($res = $conid->prepare($sql)){
+                        $res->execute();
+                        $res->store_result();
+                    }
+                    else
+                    {
+                        echo $conid->error;
+                    }
+
+                    $target = $path.$filename.".".$ext;
 
                     // upload the file to the repository
-    	            if(move_uploaded_file($_FILES["modfiles"]["tmp_name"][$f], $path.$filename))
+    	            if(move_uploaded_file($_FILES["files"]["tmp_name"][$f], $target))
     	            $count++; // Number of successfully uploaded file
     	        }
     	    }

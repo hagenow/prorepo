@@ -41,7 +41,7 @@ if(!isset($_POST['submit_log']) || !$_POST['submit_log']) {
 <?php if(!isset($_SESSION['cname']) || !$_SESSION['cname']) { ?>
 <legend>Choose a category</legend>
 <!-- Search input-->
-<form class="form-horizontal" method="post" name"cat" id="cat" action="<?php echo $_SERVER['PHP_SELF']; ?>?show=newlog">
+<form class="form-horizontal" method="post" name"cat" id="cat" action="<?php echo $_SERVER['PHP_SELF']; ?>?show=newlog2">
 <div class="form-group">
   <label class="control-label col-sm-3" for="search_cat">Search Category</label>
   <div class="col-sm-6">
@@ -58,7 +58,7 @@ if(!isset($_POST['submit_log']) || !$_POST['submit_log']) {
 <?php if(!isset($_SESSION['modelname']) || !$_SESSION['modelname']) { ?>
 <legend>Choose a model</legend>
 <!-- Search input-->
-<form class="form-horizontal" method="post" name"mod" id="mod" action="<?php echo $_SERVER['PHP_SELF']; ?>?show=newlog">
+<form class="form-horizontal" method="post" name"mod" id="mod" action="<?php echo $_SERVER['PHP_SELF']; ?>?show=newlog2">
 <div class="form-group">
   <label class="control-label col-sm-3" for="search_mod">Search models</label>
   <div class="col-sm-6">
@@ -72,7 +72,7 @@ if(!isset($_POST['submit_log']) || !$_POST['submit_log']) {
 </form>
 <?php } ?>
 
-<form class="form-horizontal" name="logupload" id="logupload" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>?show=newlog" enctype="multipart/form-data">
+<form class="form-horizontal" name="logupload" id="logupload" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>?show=newlog2" enctype="multipart/form-data">
 <fieldset>
 
 <!-- Form Name -->
@@ -80,9 +80,9 @@ if(!isset($_POST['submit_log']) || !$_POST['submit_log']) {
 
 <!-- Text input-->
 <div class="form-group">
-  <label class="control-label col-sm-3" for="modelName">Logname</label>
+  <label class="control-label col-sm-3" for="logName">Logname</label>
   <div class="col-sm-6">
-    <input id="modelName" name="modelName" type="text" placeholder="" class="form-control" required="">
+    <input id="logName" name="logName" type="text" placeholder="" class="form-control" required="">
     
   </div>
 </div>
@@ -114,25 +114,9 @@ if(!isset($_POST['submit_log']) || !$_POST['submit_log']) {
 
 <!-- File Button --> 
 <div class="form-group">
-  <label class="control-label col-sm-3" for="file_xes">Choose XES file</label>
+  <label class="control-label col-sm-3" for="file_xes">Choose files<br>(*.xes, *.mxml, *.csv)</label>
   <div class="col-sm-6">
-    <input id="file_xes" name="file_xes" class="input-file" type="file" accept=".xes">
-  </div>
-</div>
-
-<!-- File Button --> 
-<div class="form-group">
-  <label class="control-label col-sm-3" for="file_mxml">Choose MXML file</label>
-  <div class="col-sm-6">
-    <input id="file_mxml" name="file_mxml" class="input-file" type="file" accept=".mxml">
-  </div>
-</div>
-
-<!-- File Button --> 
-<div class="form-group">
-  <label class="control-label col-sm-3" for="file_csv">Choose CSV file</label>
-  <div class="col-sm-6">
-    <input id="file_csv" name="file_csv" class="input-file" type="file" accept=".csv">
+    <input id="files" name="files[]" class="input-file" multiple="multiple" type="file" accept=".xes,.mxml,.csv">
   </div>
 </div>
 
@@ -199,7 +183,7 @@ else {
             echo "<pre>" .print_r( $_FILES, true ). "</pre>";
         }
 
-        // uploadfiles($_FILES, $_POST);
+        uploadfiles_new();
     }
 }
 ?>

@@ -30,7 +30,7 @@ if(!isset($_POST['submit_model']) || !$_POST['submit_model']) {
     <?php if(!isset($_POST['cname']) || !$_POST['cname']) { ?>
         <legend>Choose a category</legend>
         <!-- Search input-->
-        <form class="form-horizontal" method="post" name"cat" id="cat" action="<?php echo $_SERVER['PHP_SELF']; ?>?show=newmod">
+        <form class="form-horizontal" method="post" name"cat" id="cat" action="<?php echo $_SERVER['PHP_SELF']; ?>?show=newmod2">
         <div class="form-group">
           <label class="control-label col-sm-3" for="search_cat">Search Category</label>
           <div class="col-sm-6">
@@ -44,7 +44,7 @@ if(!isset($_POST['submit_model']) || !$_POST['submit_model']) {
         </form>
     <?php } ?>
     
-    <form class="form-horizontal" name="modelupload" id="modelupload" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>?show=newmod" enctype="multipart/form-data">
+    <form class="form-horizontal" name="modelupload" id="modelupload" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>?show=newmod2" enctype="multipart/form-data">
     <fieldset>
     
     <!-- Form Name -->

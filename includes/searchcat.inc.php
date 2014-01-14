@@ -10,6 +10,7 @@ $conid = db_connect();
 ************************************************/
 
 // Define Output HTML Formating
+$html = '';
 $html .= '<li class="result-cat">';
 $html .= '<input type="hidden" name="cid" value="catID" /><input type="hidden" name="cname" value="catName" />';
 $html .= '<a href="#" class="list-group-item" onclick="document.forms[\'cat\'].submit();">catName</a>';

@@ -36,6 +36,8 @@ function cleaninput($string)
     // db-Verbindung schließen
     $conid->close();
 
+    return $string;
+
 }
 
 ?>

@@ -24,6 +24,10 @@
                 <li class="dropdown-header">Upload new files</li>
                 <li><a href="<?php echo $_SERVER['PHP_SELF']; ?>?show=newmod">New model</a></li>
                 <li><a href="<?php echo $_SERVER['PHP_SELF']; ?>?show=newlog">New log</a></li>
+                <li class="divider"></li>
+                <li class="dropdown-header">webkitdirectory</li>
+                <li><a href="<?php echo $_SERVER['PHP_SELF']; ?>?show=newmod2">New model</a></li>
+                <li><a href="<?php echo $_SERVER['PHP_SELF']; ?>?show=newlog2">New log</a></li>
               </ul>
             </li>
             <li><a href="#contact">Contact</a></li>

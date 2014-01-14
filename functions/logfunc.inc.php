@@ -13,17 +13,25 @@ function createlog()
     /** must set via POST from search form */ 
     $modelID = $_POST['modelid'];
 
+    var_dump($logName, $timestamp, $comment, $catid, $creator, $modelID);
+
     $sql = "INSERT INTO
                 ".TBL_PREFIX."logs
                 (logName, timestamp, comment, catID, modelID, creator)
                 VALUES
-                ('".$logName."','".$timestamp."','".$comment."','".$catid."', '".$modelID."'
-                    (SELECT userID
-                     FROM ".TBL_PREFIX."users
-                     WHERE login ='".$creator."'))";
+                ('$logName','$timestamp','$comment','$catid', '$modelID','$creator')";
+                // ('".$logName."','".$timestamp."','".$comment."','".$catid."', '".$modelID."','".$creator."')";
 
-    $res = $conid->prepare($sql);
-    $res->execute();
+    if($res = $conid->prepare($sql)){
+        $res->execute();
+        $res->store_result();
+    }
+    else
+    {
+        echo $conid->error;
+    }
+
+    // return($res->affected_rows == 1) ? true : false;
 
     $typeinfo = array('name' => $logName, 'timestamp' => $timestamp, 'id' => mysqli_insert_id($conid));
 

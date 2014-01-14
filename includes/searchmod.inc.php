@@ -10,6 +10,7 @@ $conid = db_connect();
 ************************************************/
 
 // Define Output HTML Formating
+$html = '';
 $html .= '<li class="result-mod">';
 $html .= '<input type="hidden" name="modelid" value="modelID" /><input type="hidden" name="modelname" value="modelName" />';
 $html .= '<a href="#" class="list-group-item" onclick="document.forms[\'mod\'].submit();">modelName</a>';

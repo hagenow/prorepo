@@ -1,14 +1,19 @@
 <?php
 require 'includes/authcheck.inc.php';
 
+/** wurden Category ID und Name bereits ermittelt? Falls nein, dann setze $cid 
+ * und $cname auf einen leeren String - ist das obsolet? */
 if((!isset($_POST['cid']) || !$_POST['cid'] ) && ( !isset($_POST['cname']) || !$_POST['cname'])) {
     $cid = "";
     $cname = "";
 }
 else
 {
+    /** transfer sumbitted values to _SESSION and set a semaphore for exclusive 
+     * access to the submitted variables */
     $_SESSION['cid'] = $_POST['cid'];
     $_SESSION['cname'] = $_POST['cname'];
+    $_SESSION['log_semaphore'] = true;
 }
 if((!isset($_POST['modelid']) || !$_POST['modelid'] ) && ( !isset($_POST['modelname']) || !$_POST['modelname'])) {
     $modelid = "";
@@ -18,7 +23,18 @@ else
 {
     $_SESSION['modelid'] = $_POST['modelid'];
     $_SESSION['modelname'] = $_POST['modelname'];
+    $_SESSION['log_semaphore'] = true;
 }
+
+if($_SESSION['mod_semaphore'])
+{
+        unset($_SESSION['cid']);
+        unset($_SESSION['cname']);
+        unset($_SESSION['modelid']);
+        unset($_SESSION['modelname']);
+        unset($_SESSION['mod_semaphore']);
+}
+
 /** Wurde das Formular abgeschickt? */
 if(!isset($_POST['submit_log']) || !$_POST['submit_log']) {
 ?>
@@ -173,6 +189,7 @@ else {
         unset($_SESSION['cname']);
         unset($_SESSION['modelid']);
         unset($_SESSION['modelname']);
+        unset($_SESSION['log_semaphore']);
 
         if(DEBUG)
         {

@@ -10,7 +10,7 @@ $conid = db_connect();
 ************************************************/
 
 // Define Output HTML Formating
-$html .= '<li class="result">';
+$html .= '<li class="result-cat">';
 $html .= '<input type="hidden" name="cid" value="catID" /><input type="hidden" name="cname" value="catName" />';
 $html .= '<a href="#" class="list-group-item" onclick="document.forms[\'cat\'].submit();">catName</a>';
 $html .= '</li>';
@@ -25,7 +25,7 @@ $output = '';
 // Check Length More Than One Character
 if (strlen($search_string) >= 1 && $search_string !== ' ') {
 	// Build Query
-	$query = 'SELECT * FROM repo_categories WHERE catName LIKE "%'.$search_string.'%"';
+	$query = 'SELECT * FROM '.TBL_PREFIX.'categories WHERE catName LIKE "%'.$search_string.'%"';
 
 	// Do Search
 	$result = $conid->query($query);

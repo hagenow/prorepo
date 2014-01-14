@@ -1,14 +1,13 @@
 <?php
 require 'includes/authcheck.inc.php';
-
-if((!isset($_POST['cid']) || !$_POST['cid'] ) && ( !isset($_POST['cname']) || !$_POST['cname']) ){ 
+if((!isset($_POST['cid']) || !$_POST['cid'] ) && ( !isset($_POST['cname']) || !$_POST['cname'])) {
     $cid = "";
     $cname = "";
 }
 else
 {
-    $cid = $_POST['cid'];
-    $cname = $_POST['cname'];
+    $_SESSION['cid'] = $_POST['cid'];
+    $_SESSION['cname'] = $_POST['cname'];
 }
 
 /** Wurde das Formular abgeschickt? */
@@ -23,8 +22,8 @@ if(!isset($_POST['submit_model']) || !$_POST['submit_model']) {
           <div class="col-sm-6">
             <input id="search_cat" name="search_cat" type="text" placeholder="Name of category" class="form-control search-query" autocomplete="off">
             <!-- Show Results -->
-            <h5 id="results-text">Showing results for: <b id="catsearch-string">Category</b></h5>
-            <ul id="results"></ul>
+            <h5 id="results-cat-text">Showing results for: <b id="catsearch-string">Category</b></h5>
+            <ul id="results-cat"></ul>
             
           </div>
         </div>
@@ -47,14 +46,14 @@ if(!isset($_POST['submit_model']) || !$_POST['submit_model']) {
     </div>
     
     <!-- hidden field for setting category id -->
-    <input type="hidden" name="catid" value="<?php echo $cid ?>">
+    <input type="hidden" name="catid" value="<?php echo $_SESSION['cid'] ?>">
     
     <!-- Search input-->
     <div class="form-group">
       <label class="control-label col-sm-3" for="category">Category</label>
       <div class="col-sm-6">
-      <input id="category" name="category" type="text" placeholder="<?php echo $cname; ?>" value="<?php echo $cname; ?>" class="form-control search-query" disabled>
-      <input type="hidden" name="catname" value="<?php echo $cname; ?>">
+      <input id="category" name="category" type="text" placeholder="<?php echo $_SESSION['cname']; ?>" value="<?php echo $_SESSION['cname']; ?>" class="form-control search-query" disabled>
+      <input type="hidden" name="catname" value="<?php echo $_SESSION['cname']; ?>">
       </div>
     </div>
     
@@ -136,8 +135,17 @@ else {
         /** if(!isset($_POST['filetype'])) die("Der Dateityp wurde nicht 
          * angegeben!"); */
         
-        echo "<pre>" .print_r( $_POST, true ). "</pre>";
-        echo "<pre>" .print_r( $_FILES, true ). "</pre>";
+        unset($_SESSION['cid']);
+        unset($_SESSION['cname']);
+        unset($_SESSION['modelid']);
+        unset($_SESSION['modelname']);
+
+        if(DEBUG)
+        {
+            echo "<pre>" .print_r( $_SESSION, true ). "</pre>";
+            echo "<pre>" .print_r( $_POST, true ). "</pre>";
+            echo "<pre>" .print_r( $_FILES, true ). "</pre>";
+        }
         
         uploadfiles($_FILES, $_POST);
     }

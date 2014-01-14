@@ -7,14 +7,22 @@ if((!isset($_POST['cid']) || !$_POST['cid'] ) && ( !isset($_POST['cname']) || !$
 }
 else
 {
-    $cid = $_POST['cid'];
-    $cname = $_POST['cname'];
+    $_SESSION['cid'] = $_POST['cid'];
+    $_SESSION['cname'] = $_POST['cname'];
 }
-
+if((!isset($_POST['modelid']) || !$_POST['modelid'] ) && ( !isset($_POST['modelname']) || !$_POST['modelname'])) {
+    $modelid = "";
+    $modelname = "";
+}
+else
+{
+    $_SESSION['modelid'] = $_POST['modelid'];
+    $_SESSION['modelname'] = $_POST['modelname'];
+}
 /** Wurde das Formular abgeschickt? */
 if(!isset($_POST['submit_log']) || !$_POST['submit_log']) {
 ?>
-<?php if(!isset($_POST['cname']) || !$_POST['cname']) { ?>
+<?php if(!isset($_SESSION['cname']) || !$_SESSION['cname']) { ?>
 <legend>Choose a category</legend>
 <!-- Search input-->
 <form class="form-horizontal" method="post" name"cat" id="cat" action="<?php echo $_SERVER['PHP_SELF']; ?>?show=newlog">
@@ -23,8 +31,25 @@ if(!isset($_POST['submit_log']) || !$_POST['submit_log']) {
   <div class="col-sm-6">
     <input id="search_cat" name="search_cat" type="text" placeholder="Name of category" class="form-control search-query" autocomplete="off">
     <!-- Show Results -->
-    <h5 id="results-text">Showing results for: <b id="catsearch-string">Category</b></h5>
-    <ul id="results"></ul>
+    <h5 id="results-cat-text">Showing results for: <b id="catsearch-string">Category</b></h5>
+    <ul id="results-cat"></ul>
+
+  </div>
+</div>
+</form>
+<?php } ?>
+
+<?php if(!isset($_SESSION['modelname']) || !$_SESSION['modelname']) { ?>
+<legend>Choose a model</legend>
+<!-- Search input-->
+<form class="form-horizontal" method="post" name"mod" id="mod" action="<?php echo $_SERVER['PHP_SELF']; ?>?show=newlog">
+<div class="form-group">
+  <label class="control-label col-sm-3" for="search_mod">Search models</label>
+  <div class="col-sm-6">
+    <input id="search_mod" name="search_mod" type="text" placeholder="Name of model" class="form-control search-query" autocomplete="off">
+    <!-- Show Results -->
+    <h5 id="results-mod-text">Showing results for: <b id="modsearch-string">Model</b></h5>
+    <ul id="results-mod"></ul>
 
   </div>
 </div>
@@ -47,14 +72,26 @@ if(!isset($_POST['submit_log']) || !$_POST['submit_log']) {
 </div>
 
 <!-- hidden field for setting category id -->
-<input type="hidden" name="catid" value="<?php echo $cid; ?>">
+<input type="hidden" name="catid" value="<?php echo $_SESSION['cid']; ?>">
 
 <!-- Search input-->
 <div class="form-group">
   <label class="control-label col-sm-3" for="category">Category</label>
   <div class="col-sm-6">
-  <input id="category" name="category" type="text" placeholder="<?php echo $cname; ?>" value="<?php echo $cname; ?>" class="form-control search-query" disabled>
-  <input type="hidden" name="catname" value="<?php echo $cname; ?>">
+  <input id="category" name="category" type="text" placeholder="<?php echo $_SESSION['cname']; ?>" value="<?php echo $_SESSION['cname']; ?>" class="form-control search-query" disabled>
+  <input type="hidden" name="catname" value="<?php echo $_SESSION['cname']; ?>">
+  </div>
+</div>
+
+<!-- hidden field for setting model id -->
+<input type="hidden" name="modelid" value="<?php echo $_SESSION['modelid']; ?>">
+
+<!-- Search input-->
+<div class="form-group">
+  <label class="control-label col-sm-3" for="category">Model</label>
+  <div class="col-sm-6">
+  <input id="modelname" name="category" type="text" placeholder="<?php echo $_SESSION['modelname']; ?>" value="<?php echo $_SESSION['modelname']; ?>" class="form-control search-query" disabled>
+  <input type="hidden" name="modelname" value="<?php echo $_SESSION['modelname']; ?>">
   </div>
 </div>
 
@@ -132,11 +169,19 @@ else {
         /** if(!isset($_POST['filetype'])) die("Der Dateityp wurde nicht
          * angegeben!"); */
 
-        echo "<pre>" .print_r( $_POST, true ). "</pre>";
-        echo "<pre>" .print_r( $_FILES, true ). "</pre>";
+        unset($_SESSION['cid']);
+        unset($_SESSION['cname']);
+        unset($_SESSION['modelid']);
+        unset($_SESSION['modelname']);
+
+        if(DEBUG)
+        {
+            echo "<pre>" .print_r( $_SESSION, true ). "</pre>";
+            echo "<pre>" .print_r( $_POST, true ). "</pre>";
+            echo "<pre>" .print_r( $_FILES, true ). "</pre>";
+        }
 
         uploadfiles($_FILES, $_POST);
     }
 }
 ?>
-

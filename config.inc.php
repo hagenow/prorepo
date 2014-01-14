@@ -15,6 +15,9 @@ define('DB_HOST', 'localhost');
 /** prefix of tables */
 define ('TBL_PREFIX', 'repo_');
 
+/** own debug check */
+define ('DEBUG', TRUE);
+
 /** define max. size of an uploaded file 
  * here 1024*500 are 500 kilobytes. 
  * The value have to be in bytes */

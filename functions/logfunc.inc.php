@@ -9,7 +9,8 @@ function createlog()
     $comment = cleaninput($_POST['comment']);
     $catid = $_POST['catid'];
     $creator = $_SESSION['user'];
-    
+
+    /** must set via POST from search form */ 
     $modelID = $_POST['modelid'];
 
     $sql = "INSERT INTO
@@ -24,7 +25,7 @@ function createlog()
     $res = $conid->prepare($sql);
     $res->execute();
 
-    $typeinfo = ('logName' => $logName, 'timestamp' => $timestamp, 'modelID' => mysqli_insert_id($conid));
+    $typeinfo = array('name' => $logName, 'timestamp' => $timestamp, 'id' => mysqli_insert_id($conid));
 
     return $typeinfo;
 }

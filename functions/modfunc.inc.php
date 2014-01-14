@@ -22,7 +22,7 @@ function createmodel()
     $res = $conid->prepare($sql);
     $res->execute();
 
-    $typeinfo = ('modelName' => $modelName, 'timestamp' => $timestamp, 'modelID' => mysqli_insert_id($conid));
+    $typeinfo = array('name' => $modelName, 'timestamp' => $timestamp, 'id' => mysqli_insert_id($conid));
 
     return $typeinfo;
 }

@@ -1,6 +1,6 @@
 <?php
-/** Creates a new model */
-function createmodel()
+/** Creates a new log */
+function createmod()
 {
     $conid = db_connect();
 
@@ -14,13 +14,17 @@ function createmodel()
                 ".TBL_PREFIX."models
                 (modelName, timestamp, comment, catID, creator)
                 VALUES
-                ('".$modelName."','".$timestamp."','".$comment."','".$catid."',
-                    (SELECT userID
-                     FROM ".TBL_PREFIX."users
-                     WHERE login ='".$creator."'))";
+                ('$modelName','$timestamp','$comment','$catid',
+                (SELECT userID from ".TBL_PREFIX."users WHERE login ='$creator'))";
 
-    $res = $conid->prepare($sql);
-    $res->execute();
+    if($res = $conid->prepare($sql)){
+        $res->execute();
+        $res->store_result();
+    }
+    else
+    {
+        echo $conid->error;
+    }
 
     $typeinfo = array('name' => $modelName, 'timestamp' => $timestamp, 'id' => mysqli_insert_id($conid));
 

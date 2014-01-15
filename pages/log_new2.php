@@ -114,7 +114,7 @@ if(!isset($_POST['submit_log']) || !$_POST['submit_log']) {
 
 <!-- File Button --> 
 <div class="form-group">
-  <label class="control-label col-sm-3" for="file_xes">Choose files<br>(*.xes, *.mxml, *.csv)</label>
+  <label class="control-label col-sm-3" for="file_xes">Choose files<br><h6>(.xes,.mxml,.csv)</h6></label>
   <div class="col-sm-6">
     <input id="files" name="files[]" class="input-file" multiple="multiple" type="file" accept=".xes,.mxml,.csv">
   </div>

@@ -71,29 +71,14 @@ if(!isset($_POST['submit_model']) || !$_POST['submit_model']) {
       </div>
     </div>
     
-    <!-- File Button --> 
+    <!-- File Button -->
     <div class="form-group">
-      <label class="control-label col-sm-3" for="file_png">Choose PNG file</label>
+      <label class="control-label col-sm-3" for="file_xes">Choose files<br><h6>(.pnml,.png,.jpg,.pdf,.eps,.svg,.xml)</h6></label>
       <div class="col-sm-6">
-        <input id="file_png" name="file_png" class="input-file" type="file" accept="image/png">
+        <input id="files" name="files[]" class="input-file" multiple="multiple" type="file" accept=".pnml,.png,.jpg,.pdf,.eps,.svg,.xml">
       </div>
     </div>
-    
-    <!-- File Button --> 
-    <div class="form-group">
-      <label class="control-label col-sm-3" for="file_pdf">Choose PDF file</label>
-      <div class="col-sm-6">
-        <input id="file_pdf" name="file_pdf" class="input-file" type="file" accept="application/pdf">
-      </div>
-    </div>
-    
-    <!-- File Button --> 
-    <div class="form-group">
-      <label class="control-label col-sm-3" for="file_pnml">Choose PNML file</label>
-      <div class="col-sm-6">
-        <input id="file_pnml" name="file_pnml" class="input-file" type="file" accept=".pnml">
-      </div>
-    </div>
+
     
     <!-- Multiple Checkboxes (inline) -->
     <div class="form-group">
@@ -103,14 +88,6 @@ if(!isset($_POST['submit_model']) || !$_POST['submit_model']) {
           <input type="checkbox" name="checkboxes" id="checkboxes-0" value="validate">
           validate
         </label>
-      </div>
-    </div>
-    
-    <!-- File Button --> 
-    <div class="form-group">
-      <label class="control-label col-sm-3" for="file_xml">Choose XML file</label>
-      <div class="col-sm-6">
-        <input id="file_xml" name="file_xml" class="input-file" type="file" accept="application/xml">
       </div>
     </div>
     

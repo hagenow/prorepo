@@ -13,6 +13,8 @@ function uploadfiles_new()
     $valid_formats =array();
     $type = '';
     $typeinfo = array();
+
+    // check type of submitted files
     if($_POST['type'] == "model")
     {
         $type = "model";
@@ -35,6 +37,8 @@ function uploadfiles_new()
 
     /** use the FILESIZE from config.inc.php */
     $max_file_size = FILESIZE;
+
+    /** init submitted file-conuter to zero */
     $count = 0;
 
     /** get category ID */
@@ -52,6 +56,7 @@ function uploadfiles_new()
     $creator = $_SESSION['user'];
 
     
+    /** if the form is sending input data, then execute the following if-stmt */
     if(isset($_POST) && $_SERVER['REQUEST_METHOD'] == "POST")
     {
     	// Loop $_FILES to execute all files
@@ -61,9 +66,10 @@ function uploadfiles_new()
             {
     	        continue; // Skip file if any error found
             }
-    
+            /** if a error occurs, then go to the next file */
             if ($_FILES['files']['error'][$f] == 0) 
             {	           
+                /** if the file is to large, then go to the next file */
                 if ($_FILES['files']['size'][$f] > $max_file_size) 
                 {
     	            $message[] = "$filename is too large!.";
@@ -90,11 +96,14 @@ function uploadfiles_new()
                     $path = STRG_PATH."/".$type."/".$id."_".$name."/".$timestamp."/";
                     if(STRG_DEST == "local")
                     {
-                        mkdir($path, 0755, true);
-                        /** create local folder-path 
-                        if (!mkdir($path, 0755, true)) {
-                            die('Erstellung der Verzeichnisse schlug fehl...');
-                        } */
+                        if(!file_exists($path) && !is_dir($path))
+                        {
+                            mkdir($path, 0755, true);
+                        }
+                        else
+                        {
+                            continue;
+                        }
                     }
                     elseif(STRG_DEST == "remote")
                     {
@@ -125,8 +134,22 @@ function uploadfiles_new()
                     $target = $path.$filename.".".$ext;
 
                     // upload the file to the repository
-    	            if(move_uploaded_file($_FILES["files"]["tmp_name"][$f], $target))
-    	            $count++; // Number of successfully uploaded file
+                    if(STRG_DEST == "local")
+                    {
+    	                if(move_uploaded_file($_FILES["files"]["tmp_name"][$f], $target))
+                        {
+                            $count++; // Number of successfully uploaded file
+                        }
+                    }
+                    elseif(STRG_DEST== "remote")
+                    {
+                        // do something with sftp or ftp
+                    }
+                    else
+                    {
+                        continue;
+                    }
+
     	        }
     	    }
     	}
@@ -134,53 +157,53 @@ function uploadfiles_new()
 }
 
 /** this is a deprecated crappy function */
-function uploadfiles()
-{
-    // Whiteliste Dateiendungen und Ersetzungen
-    $allowed_ext = array( "jpg", "gif", "zip" );
-    $replacements = array( 'ä' => 'ae', 'ö' => 'oe', 'ü' => 'ue', 'ß' => 'ss', ' ' => '_' );
-    // Pruefen ob die hochgeladenen Datei mehr als 0 Byte hat
-    // Hat sie das nicht, wurde auch nichts hochgeladen, logisch, was?! ;)
-    if ($_SESSION['datei']['size'] > 0)
-    {
-        // Dateiendung der hochgeladenen Datei abtrennen
-        $file_ext = array_pop( explode( ".", strtolower( $_SESSION['datei']['name'] ) ) );
-        // Schauen ob die Endung der hochgeladenen Datei in der Whitelist steht
-        if (!in_array( $file_ext, $allowed_ext ))
-        {
-            die( "Die angeh&auml;ngte Datei hat eine nicht erlaubte Dateiendung!" );
-        }
-        // Neuer Dateiname erzeugen indem Umlaute und Leerzeichen umgewandelt werden
-        $filename_new = strtr( strtolower( $_SESSION['modelName'] ), $replacements );
-
-        /** clean up the modelname */
-        $modelname = strtr( strtolower( $_POST['datei']['name'] ), $replacements );
-        $modelname = $cleaninput( $modelname );
-
-        $pathname = STRG_PATH."/".$_POST['type']."/".$modelid."_".$modelname."/".$_POST['date']."/";
-        $target = $pathname."/".$filename_new;
-        echo $target;
-        // UMASK resetten um Dateirechte zu ändern (wird nur fuer Linux benoetigt, Windows ignoriert das)
-        $umask_alt = umask( 0 );
-        // Hochgeladenen Datei verschieben
-        if (@move_uploaded_file( $arr['datei']['tmp_name'], $target ))
-        {
-            // Die Datei wurde erfolgreich an ihren Bestimmungsort verschoben
-            /* ***************************************************************************************** */
-            /* *** Hier koennte Code stehen um Email zu versenden oder Datenbank-Eintraege zu machen *** */
-            /* ***************************************************************************************** */
-
-            // Dateirechte setzen, damit man später die Datei wieder vom FTP bekommt und die UMASK auf den alten Wert setzen
-            @chmod( $filename_new, 0755 );
-            umask( $umask_alt );
-        }
-        else
-        {
-            // UMASK resetten
-            umask( $umask_alt );
-            // Hier steht Code der ausgefuehrt wird, wenn der Upload fehl schlug
-        }
-    }
-
-}
+// function uploadfiles()
+// {
+//     // Whiteliste Dateiendungen und Ersetzungen
+//     $allowed_ext = array( "jpg", "gif", "zip" );
+//     $replacements = array( 'ä' => 'ae', 'ö' => 'oe', 'ü' => 'ue', 'ß' => 'ss', ' ' => '_' );
+//     // Pruefen ob die hochgeladenen Datei mehr als 0 Byte hat
+//     // Hat sie das nicht, wurde auch nichts hochgeladen, logisch, was?! ;)
+//     if ($_SESSION['datei']['size'] > 0)
+//     {
+//         // Dateiendung der hochgeladenen Datei abtrennen
+//         $file_ext = array_pop( explode( ".", strtolower( $_SESSION['datei']['name'] ) ) );
+//         // Schauen ob die Endung der hochgeladenen Datei in der Whitelist steht
+//         if (!in_array( $file_ext, $allowed_ext ))
+//         {
+//             die( "Die angeh&auml;ngte Datei hat eine nicht erlaubte Dateiendung!" );
+//         }
+//         // Neuer Dateiname erzeugen indem Umlaute und Leerzeichen umgewandelt werden
+//         $filename_new = strtr( strtolower( $_SESSION['modelName'] ), $replacements );
+// 
+//         /** clean up the modelname */
+//         $modelname = strtr( strtolower( $_POST['datei']['name'] ), $replacements );
+//         $modelname = $cleaninput( $modelname );
+// 
+//         $pathname = STRG_PATH."/".$_POST['type']."/".$modelid."_".$modelname."/".$_POST['date']."/";
+//         $target = $pathname."/".$filename_new;
+//         echo $target;
+//         // UMASK resetten um Dateirechte zu ändern (wird nur fuer Linux benoetigt, Windows ignoriert das)
+//         $umask_alt = umask( 0 );
+//         // Hochgeladenen Datei verschieben
+//         if (@move_uploaded_file( $arr['datei']['tmp_name'], $target ))
+//         {
+//             // Die Datei wurde erfolgreich an ihren Bestimmungsort verschoben
+//             /* ***************************************************************************************** */
+//             /* *** Hier koennte Code stehen um Email zu versenden oder Datenbank-Eintraege zu machen *** */
+//             /* ***************************************************************************************** */
+// 
+//             // Dateirechte setzen, damit man später die Datei wieder vom FTP bekommt und die UMASK auf den alten Wert setzen
+//             @chmod( $filename_new, 0755 );
+//             umask( $umask_alt );
+//         }
+//         else
+//         {
+//             // UMASK resetten
+//             umask( $umask_alt );
+//             // Hier steht Code der ausgefuehrt wird, wenn der Upload fehl schlug
+//         }
+//     }
+// 
+// }
 ?>

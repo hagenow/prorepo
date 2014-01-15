@@ -14,10 +14,10 @@ if(isset($_GET['show']))
         case "cat": require 'pages/cat_list.php'; break;
         case "mod": require 'pages/model_list.php'; break;
         case "newmod": require 'pages/model_new.php'; break;
-        case "newmod2": require 'pages/model_new2.php'; break;
+        //case "newmod2": require 'pages/model_new2.php'; break;
         case "log": require 'pages/log_list.php'; break;
         case "newlog": require 'pages/log_new.php'; break;
-        case "newlog2": require 'pages/log_new2.php'; break;
+        //case "newlog2": require 'pages/log_new2.php'; break;
         
         default: require 'pages/start.php'; break;
     }

@@ -29,8 +29,8 @@ function cleaninput($string)
     // slashes entfernen, falls noch welche vorhanden oder anders codiert
     $string = stripslashes( $string );
 
-    // erlaubt sind nur folgende Zeichen: -,_,a-z,A-Z,0-9 - alles andere wird 
-    // escaped
+    // erlaubt sind nur folgende Zeichen: -,_,a-z,A-Z,0-9,[Leerzeichen] - alles andere
+    // wird escaped
     $string = preg_replace('/[^-a-zA-Z0-9_]/', '',$string);
 
     // db-Verbindung schließen

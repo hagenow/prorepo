@@ -1,19 +1,22 @@
 <?php
 
-function getcategories($conid)
+function getcategories()
 {
+    $conid = db_connect();
     $sql = "SELECT
                 catName
             FROM 
-                repo_categories";
+                ".TBL_PREFIX."categories";
 
     if( $res = $conid->query($sql) ){
 
         while( $row = $res->fetch_assoc())
         {
-            echo $row['catName']."<br/>";
+            echo "<a href=\"".$_SERVER['PHP_SELF']."?getmodels=".$row['catID']."\" class=\"list-group-item\">".$row['catName']."</a>";
         }
     }
+
+    $conid->close();
 
 }
 
@@ -31,9 +34,6 @@ function cleancatname($conid)
      * */
     $catname = trim( $catname, "\n\r\0\x0B\t,\='\\\/\"!?§$%&{}´`" );
 
-    // In Kleinschrift umwandeln
-    $catname = strtolower( $catname );
-
     // Eingabe zurückgeben
     return $catname;
 
@@ -42,7 +42,7 @@ function cleancatname($conid)
 function createcat($conid, $catname, $user)
 {
     $sql = "INSERT INTO
-                repo_categories (`catName`, `date`, `creator`)
+                ".TBL_PREFIX."categories (`catName`, `date`, `creator`)
             VALUES
             ('$catname', NOW(), '$user')";
 

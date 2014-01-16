@@ -6,7 +6,17 @@ function createlog()
 
     $logName = cleaninput($_POST['logName']);
     $timestamp = $_POST['timestamp'];
-    $comment = cleaninput($_POST['comment']);
+
+    /* special treatment for comments */
+    $comment = $_POST['comment'];
+    $comment = filter_var($comment ,FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW | FILTER_FLAG_STRIP_HIGH);
+    // falls es in die Datenbank kommen soll, wird es noch mal escaped
+    $conid->real_escape_string( $comment );
+    // slashes entfernen, falls noch welche vorhanden oder anders codiert
+    $comment = stripslashes( $comment );
+    // Zeilenumbrüche hinzufügen
+    $comment = nl2br($comment);
+
     $catid = $_POST['catid'];
     $creator = $_SESSION['user'];
 

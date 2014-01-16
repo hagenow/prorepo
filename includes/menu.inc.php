@@ -13,7 +13,6 @@
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
 	    <li class="active"><a href="#">Home</a></li>
-            <li><a href="#about">About</a></li>
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">Repository<b class="caret"></b></a>
               <ul class="dropdown-menu">
@@ -25,9 +24,9 @@
                 <li><a href="<?php echo $_SERVER['PHP_SELF']; ?>?show=newmod">New model</a></li>
                 <li><a href="<?php echo $_SERVER['PHP_SELF']; ?>?show=newlog">New log</a></li>
                 <li class="divider"></li>
-                <li class="dropdown-header">webkitdirectory</li>
-                <li><a href="<?php echo $_SERVER['PHP_SELF']; ?>?show=newmod2">New model</a></li>
-                <li><a href="<?php echo $_SERVER['PHP_SELF']; ?>?show=newlog2">New log</a></li>
+                <li class="dropdown-header">Batch upload</li>
+                <li><a href="<?php echo $_SERVER['PHP_SELF']; ?>?show=uc">New models</a></li>
+                <li><a href="<?php echo $_SERVER['PHP_SELF']; ?>?show=uc">New logs</a></li>
               </ul>
             </li>
             <li><a href="#contact">Contact</a></li>

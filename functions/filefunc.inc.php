@@ -18,7 +18,7 @@ function uploadfiles_new()
     if($_POST['type'] == "model")
     {
         $type = "model";
-        $typeinfo = createmodel();
+        $typeinfo = createmod();
         $valid_formats = array("pdf", "png", "pnml", "xml", "svg", "eps");
     }
     elseif($_POST['type'] == "log")
@@ -87,40 +87,26 @@ function uploadfiles_new()
 
                     /** clean up the filename */
                     $filename = pathinfo($filename, PATHINFO_FILENAME);
-                    $filename = strtr( strtolower( $filename), $replacements );
+                    $filename = strtr( $filename , $replacements );
                     $filename = cleaninput($filename);
                     
                     $size = $_FILES['files']['size'][$f];
 
                     /** create the filename */ 
                     $path = STRG_PATH."/".$type."/".$id."_".$name."/".$timestamp."/";
-                    if(STRG_DEST == "local")
+
+                    if(!file_exists($path) && !is_dir($path))
                     {
-                        if(!file_exists($path) && !is_dir($path))
-                        {
-                            mkdir($path, 0755, true);
-                        }
-                        else
-                        {
-                            continue;
-                        }
-                    }
-                    elseif(STRG_DEST == "remote")
-                    {
-                        /** create remote folder-path eg. with sftp or ftp
-                         * */
-                    }
-                    else
-                    {
-                        $messages[] = "can't create folders, because the STRG parameter is not set correctly via setup!";
+                        mkdir($path, 0755, true);
                     }
 
+                    $filename_w_ext = $filename.".".$ext;
                     /** create entry in the files table */
                     $sql = "INSERT INTO
                                         ".TBL_PREFIX."files
-                                        (fileName, type, foreignID, fileType, uploader, timestamp, size)
+                                        (fileName, path, type, foreignID, fileType, uploader, timestamp, size)
                                    VALUES
-                                        ('$filename','$type','$id','$ext','$creator','$timestamp','$size')"; 
+                                        ('$filename_w_ext','$path','$type','$id','$ext','$creator','$timestamp','$size')"; 
 
                     if($res = $conid->prepare($sql)){
                         $res->execute();
@@ -133,21 +119,9 @@ function uploadfiles_new()
 
                     $target = $path.$filename.".".$ext;
 
-                    // upload the file to the repository
-                    if(STRG_DEST == "local")
+    	            if(move_uploaded_file($_FILES["files"]["tmp_name"][$f], $target))
                     {
-    	                if(move_uploaded_file($_FILES["files"]["tmp_name"][$f], $target))
-                        {
-                            $count++; // Number of successfully uploaded file
-                        }
-                    }
-                    elseif(STRG_DEST== "remote")
-                    {
-                        // do something with sftp or ftp
-                    }
-                    else
-                    {
-                        continue;
+                        $count++; // Number of successfully uploaded file
                     }
 
     	        }
@@ -155,55 +129,4 @@ function uploadfiles_new()
     	}
     }
 }
-
-/** this is a deprecated crappy function */
-// function uploadfiles()
-// {
-//     // Whiteliste Dateiendungen und Ersetzungen
-//     $allowed_ext = array( "jpg", "gif", "zip" );
-//     $replacements = array( 'ä' => 'ae', 'ö' => 'oe', 'ü' => 'ue', 'ß' => 'ss', ' ' => '_' );
-//     // Pruefen ob die hochgeladenen Datei mehr als 0 Byte hat
-//     // Hat sie das nicht, wurde auch nichts hochgeladen, logisch, was?! ;)
-//     if ($_SESSION['datei']['size'] > 0)
-//     {
-//         // Dateiendung der hochgeladenen Datei abtrennen
-//         $file_ext = array_pop( explode( ".", strtolower( $_SESSION['datei']['name'] ) ) );
-//         // Schauen ob die Endung der hochgeladenen Datei in der Whitelist steht
-//         if (!in_array( $file_ext, $allowed_ext ))
-//         {
-//             die( "Die angeh&auml;ngte Datei hat eine nicht erlaubte Dateiendung!" );
-//         }
-//         // Neuer Dateiname erzeugen indem Umlaute und Leerzeichen umgewandelt werden
-//         $filename_new = strtr( strtolower( $_SESSION['modelName'] ), $replacements );
-// 
-//         /** clean up the modelname */
-//         $modelname = strtr( strtolower( $_POST['datei']['name'] ), $replacements );
-//         $modelname = $cleaninput( $modelname );
-// 
-//         $pathname = STRG_PATH."/".$_POST['type']."/".$modelid."_".$modelname."/".$_POST['date']."/";
-//         $target = $pathname."/".$filename_new;
-//         echo $target;
-//         // UMASK resetten um Dateirechte zu ändern (wird nur fuer Linux benoetigt, Windows ignoriert das)
-//         $umask_alt = umask( 0 );
-//         // Hochgeladenen Datei verschieben
-//         if (@move_uploaded_file( $arr['datei']['tmp_name'], $target ))
-//         {
-//             // Die Datei wurde erfolgreich an ihren Bestimmungsort verschoben
-//             /* ***************************************************************************************** */
-//             /* *** Hier koennte Code stehen um Email zu versenden oder Datenbank-Eintraege zu machen *** */
-//             /* ***************************************************************************************** */
-// 
-//             // Dateirechte setzen, damit man später die Datei wieder vom FTP bekommt und die UMASK auf den alten Wert setzen
-//             @chmod( $filename_new, 0755 );
-//             umask( $umask_alt );
-//         }
-//         else
-//         {
-//             // UMASK resetten
-//             umask( $umask_alt );
-//             // Hier steht Code der ausgefuehrt wird, wenn der Upload fehl schlug
-//         }
-//     }
-// 
-// }
 ?>

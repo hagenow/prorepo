@@ -19,6 +19,7 @@ if(isset($_GET['show']))
         case "newlog": require 'pages/log_new.php'; break;
         //case "newlog2": require 'pages/log_new2.php'; break;
         
+        case "uc": require 'pages/under_construction.php'; break;
         default: require 'pages/start.php'; break;
     }
 }

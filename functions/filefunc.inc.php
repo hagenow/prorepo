@@ -134,4 +134,28 @@ function uploadfiles_new()
     	}
     }
 }
+
+function getversions($type,$typeid)
+{
+    $conid = db_connect();
+
+    $sql = "SELECT timestamp
+            FROM ".TBL_PREFIX."files
+            WHERE type = '$type' AND foreignID = '$typeid'";
+
+    if( $res = $conid->query($sql) ){
+
+        while( $row = $res->fetch_assoc() )
+        {
+            $html = "";
+            $html .= date("d.m.Y - H:i:s", strtotime($row['timestamp']));
+            $html .= "<br/>";
+
+            echo $html;
+        }
+    }
+    $conid->close();
+}
+
+
 ?>

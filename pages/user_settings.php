@@ -1,9 +1,12 @@
 <?php
 require 'includes/authcheck.inc.php';
 $userdata = getuserdata();
-echo "<pre>";
-print_r($userdata);
-echo "</pre>";
+if(DEBUG)
+{
+    echo "<pre>";
+    print_r($userdata);
+    echo "</pre>";
+}
 ?>
 <form class="form-horizontal" name="update" id="update" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>?show=updateuser">
     <fieldset>

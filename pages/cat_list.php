@@ -4,7 +4,7 @@ require_once 'functions.inc.php';
 
 ?>
 
-<div class="panel panel-default">
+<div class="panel panel-primary">
     <!-- Default panel contents -->
     <div class="panel-heading"><h4>Category list</h4></div>
     <!--<div class="panel-body">

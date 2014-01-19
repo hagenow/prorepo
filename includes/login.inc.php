@@ -57,7 +57,7 @@ if(!isset($_SESSION['angemeldet']) || !$_SESSION['angemeldet'])
 <?php } else {?>
 <ul class="nav navbar-nav navbar-right">
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Hallo <?php echo $_SESSION['user']; ?> <b class="caret"></b></a>
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Signed in as <?php echo $_SESSION['user']; ?> <b class="caret"></b></a>
         <ul class="dropdown-menu">
         <li><a href="<?php echo $_SERVER['PHP_SELF']; ?>?show=usersettings">Edit settings</a></li>
           <li class="divider"></li>

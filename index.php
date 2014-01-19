@@ -54,11 +54,9 @@ require_once 'functions.inc.php';
 <div class="container">
         <div class="row">
             <div class="col-xs-12 col-sm-6 col-md-9">
-                <h3>Main Content</h3>
                 <?php require_once 'includes/inhalt.inc.php'; ?>
             </div>
             <div class="col-xs-6 col-md-3">
-                <h3>Usermenu</h3>
             </div>
 </div>
 

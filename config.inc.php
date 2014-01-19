@@ -21,7 +21,7 @@ define ('DEBUG', TRUE);
 /** define max. size of an uploaded file 
  * here 1024*500 are 500 kilobytes. 
  * The value have to be in bytes */
-define ('FILESIZE', '512000');
+define ('FILESIZE', '51200000');
 
 /** Storage for placing the repository files
  * possible options
@@ -49,7 +49,7 @@ define ('STRG_PATH', 'repository');
 /** PHP Settings */
 /** suppress errors with 0, else -1 will display all errors in the apache log 
     * file*/
-error_reporting(-1);
+error_reporting(E_ALL);
 
 /** Timezone */
 date_default_timezone_set('Europe/Berlin');

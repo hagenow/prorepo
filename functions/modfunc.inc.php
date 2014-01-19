@@ -9,11 +9,13 @@ function createmod()
 
     /* special treatment for comments */
     $comment = $_POST['comment'];
-    $comment = filter_var($comment ,FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW | FILTER_FLAG_STRIP_HIGH);
+    // $comment = filter_var($comment ,FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW | FILTER_FLAG_STRIP_HIGH);
     // falls es in die Datenbank kommen soll, wird es noch mal escaped
     $conid->real_escape_string( $comment );
     // slashes entfernen, falls noch welche vorhanden oder anders codiert
     $comment = stripslashes( $comment );
+    // TAGs entfernen
+    $comment = strip_tags($comment);
     // Zeilenumbrüche hinzufügen
     $comment = nl2br($comment);
 
@@ -51,13 +53,24 @@ function getmodels($catid)
 
     if( $res = $conid->query($sql) ){
 
-        while( $row = $res->fetch_assoc())
+        while( $row = $res->fetch_assoc() )
         {
-            echo "<a href=\"".echo $_SERVER['PHP_SELF']."?show=cat2\"  class=\"list-group-item\">".$row['modelName']."</a>";
+            $date = date("d.m.Y", strtotime($row['timestamp']));
+            $html = "";
+            $html .= "<tr>";
+            $html .= "<td><a href=\"".$_SERVER['PHP_SELF']."?show=mod&catID=".$_GET['catID']."&modelID=".$row['modelID']."\">".$row['modelName']."</a></td>";
+            $html .= "<td>".$date."</td>";
+            $html .= "<td><a href=\"".$_SERVER['PHP_SELF']."?show=user&name=".$row['creator']."\">".$row['creator']."</td>";
+            $html .= "</tr>";
+
+            echo $html;
         }
     }
-
+    $conid->close();
 }
 
+function viewmodel($modelid)
+{
 
+}
 ?>

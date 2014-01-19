@@ -4,20 +4,75 @@ function getcategories()
 {
     $conid = db_connect();
     $sql = "SELECT
-                catName
+                catID, catName
             FROM 
                 ".TBL_PREFIX."categories";
 
     if( $res = $conid->query($sql) ){
 
-        while( $row = $res->fetch_assoc())
+        while( $row = $res->fetch_assoc() )
         {
-            echo "<a href=\"".$_SERVER['PHP_SELF']."?getmodels=".$row['catID']."\" class=\"list-group-item\">".$row['catName']."</a>";
+            $modelcnt = countmodels($row['catID']);
+            $logcnt = countlogs($row['catID']);
+
+            $html = "";
+            $html .= "<tr>";
+            $html .= "<td>".$row['catName']."</td>";
+            $html .= "<td><a href=\"".$_SERVER['PHP_SELF']."?show=mod&catID=".$row['catID']."\">".$modelcnt." Models</a></td>";
+            $html .= "<td><a href=\"".$_SERVER['PHP_SELF']."?show=log&catID=".$row['catID']."\">".$logcnt." Logs</a></td>";
+            $html .= "</tr>";
+
+            echo $html;
         }
     }
-
+    else
     $conid->close();
+}
 
+function countmodels($catID)
+{
+    $conid = db_connect();
+    $sql = "SELECT COUNT(catID)
+            FROM ".TBL_PREFIX."models 
+            WHERE catID = '$catID'";
+
+    if($res = $conid->prepare($sql))
+    {
+        $res->execute();
+        $res->store_result();
+        $res->bind_result($count);
+        $res->fetch();
+
+        return $count;
+    }
+    else
+    {
+        echo $conid->error;
+    }
+    $conid->close();
+}
+
+function countlogs($catID)
+{
+    $conid = db_connect();
+    $sql = "SELECT COUNT(catID) 
+            FROM ".TBL_PREFIX."logs 
+            WHERE catID = '$catID'";
+
+    if($res = $conid->prepare($sql))
+    {
+        $res->execute();
+        $res->store_result();
+        $res->bind_result($count);
+        $res->fetch();
+
+        return $count;
+    }
+    else
+    {
+        echo $conid->error;
+    }
+    $conid->close();
 }
 
 function cleancatname($conid)

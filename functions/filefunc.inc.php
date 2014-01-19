@@ -88,9 +88,13 @@ function uploadfiles_new()
                     /** clean up the filename */
                     $filename = pathinfo($filename, PATHINFO_FILENAME);
                     $filename = strtr( $filename , $replacements );
-                    $filename = cleaninput($filename);
+                    $filename = preg_replace('/[^-a-zA-Z_]/', '',$filename);
+                    $name = preg_replace('/[^-a-zA-Z_]/', '',$name);
                     
                     $size = $_FILES['files']['size'][$f];
+
+                    // set filetype for download
+                    $fileType = $_FILES['files']['type'][$f];
 
                     /** create the filename */ 
                     $path = STRG_PATH."/".$type."/".$id."_".$name."/".$timestamp."/";
@@ -101,12 +105,13 @@ function uploadfiles_new()
                     }
 
                     $filename_w_ext = $filename.".".$ext;
+                    $uniqid =  uniqid('f', TRUE);
                     /** create entry in the files table */
                     $sql = "INSERT INTO
                                         ".TBL_PREFIX."files
-                                        (fileName, path, type, foreignID, fileType, uploader, timestamp, size)
+                                        (fileName, path, type, foreignID, ext, fileType, uploader, timestamp, uniqid, size)
                                    VALUES
-                                        ('$filename_w_ext','$path','$type','$id','$ext','$creator','$timestamp','$size')"; 
+                                        ('$filename_w_ext','$path','$type','$id','$ext','$fileType','$creator','$timestamp','$uniqid','$size')"; 
 
                     if($res = $conid->prepare($sql)){
                         $res->execute();

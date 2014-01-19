@@ -25,5 +25,6 @@ require_once 'functions/modfunc.inc.php';
 /* Alle Funktionen für das Handling mit Logs */
 require_once 'functions/logfunc.inc.php';
 
-
+/* Alle Funktionen für den Download einer Datei */
+require_once 'functions/dwndfunc.inc.php';
 ?>

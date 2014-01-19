@@ -27,8 +27,7 @@ function createlog()
                 ".TBL_PREFIX."logs
                 (logName, timestamp, comment, catID, modelID, creator)
                 VALUES
-                ('$logName','$timestamp','$comment','$catid', '$modelID',
-                (SELECT userID from ".TBL_PREFIX."users WHERE login ='$creator'))";
+                ('$logName','$timestamp','$comment','$catid', '$modelID','$creator')";
 
     if($res = $conid->prepare($sql)){
         $res->execute();
@@ -43,3 +42,35 @@ function createlog()
 
     return $typeinfo;
 }
+
+function getlogs($catid)
+{
+    $conid = db_connect();
+
+    $sql = "SELECT *
+            FROM ".TBL_PREFIX."logs
+            WHERE catID = '$catid'";
+
+    if( $res = $conid->query($sql) ){
+
+        while( $row = $res->fetch_assoc() )
+        {
+            $date = date("d.m.Y", strtotime($row['timestamp']));
+            $html = "";
+            $html .= "<tr>";
+            $html .= "<td><a href=\"".$_SERVER['PHP_SELF']."?show=log&catID=".$_GET['catID']."&logID=".$row['logID']."\">".$row['logName']."</a></td>";
+            $html .= "<td>".$date."</td>";
+            $html .= "<td><a href=\"".$_SERVER['PHP_SELF']."?show=user&name=".$row['creator']."\">".$row['creator']."</td>";
+            $html .= "</tr>";
+
+            echo $html;
+        }
+    }
+    $conid->close();
+}
+
+function viewlog($modelid)
+{
+
+}
+?>

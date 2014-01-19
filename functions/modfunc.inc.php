@@ -58,7 +58,7 @@ function getmodels($catid)
             $date = date("d.m.Y", strtotime($row['timestamp']));
             $html = "";
             $html .= "<tr>";
-            $html .= "<td><a href=\"".$_SERVER['PHP_SELF']."?show=mod&catID=".$_GET['catID']."&modelID=".$row['modelID']."\">".$row['modelName']."</a></td>";
+            $html .= "<td><a href=\"".$_SERVER['PHP_SELF']."?show=modview&modelID=".$row['modelID']."\">".$row['modelName']."</a></td>";
             $html .= "<td>".$date."</td>";
             $html .= "<td><a href=\"".$_SERVER['PHP_SELF']."?show=user&name=".$row['creator']."\">".$row['creator']."</td>";
             $html .= "</tr>";
@@ -71,6 +71,27 @@ function getmodels($catid)
 
 function viewmodel($modelid)
 {
+    $conid = db_connect();
 
+    $modvalues = array();
+
+    $sql = "SELECT modelName, timestamp, comment, creator
+            FROM ".TBL_PREFIX."models
+            WHERE modelID = '$modelid'";
+
+    $res = $conid->prepare($sql);
+    $res->execute();
+    $res->store_result();
+    $res->bind_result($modvalues['modelName'],$modvalues['timestamp'],$modvalues['comment'],$modvalues['creator']);
+    $res->fetch();
+
+
+    if($res->affected_rows == 1)
+    {
+        $res->fetch();
+        $modvalues['timestamp'] = date("d.m.Y", strtotime($modvalues['timestamp']));
+        $conid->close();
+        return $modvalues;
+    }
 }
 ?>

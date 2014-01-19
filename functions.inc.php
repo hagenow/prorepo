@@ -3,8 +3,7 @@
 require_once 'functions/genfunc.inc.php';
 
 /* Including the password_compat
- * https://github.com/ircmaxell/password_compat
- * */
+ * https://github.com/ircmaxell/password_compat */
 require_once 'functions/pwdfunc.inc.php';
 
 /* Alle Funktionen für das Handling mit Login und Sessions sind hier ausgelagert

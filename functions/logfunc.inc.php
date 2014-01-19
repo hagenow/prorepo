@@ -58,7 +58,7 @@ function getlogs($catid)
             $date = date("d.m.Y", strtotime($row['timestamp']));
             $html = "";
             $html .= "<tr>";
-            $html .= "<td><a href=\"".$_SERVER['PHP_SELF']."?show=log&catID=".$_GET['catID']."&logID=".$row['logID']."\">".$row['logName']."</a></td>";
+            $html .= "<td><a href=\"".$_SERVER['PHP_SELF']."?show=logview&catID=".$_GET['catID']."&logID=".$row['logID']."\">".$row['logName']."</a></td>";
             $html .= "<td>".$date."</td>";
             $html .= "<td><a href=\"".$_SERVER['PHP_SELF']."?show=user&name=".$row['creator']."\">".$row['creator']."</td>";
             $html .= "</tr>";

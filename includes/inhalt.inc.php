@@ -10,16 +10,20 @@ if(isset($_GET['show']))
         case "logout": require 'pages/user_logout.php'; break;
         case "notloggedin": require 'pages/user_notloggedin.php'; break;
 
-        case "cat2": require 'pages/cat.php'; break;
         case "cat": require 'pages/cat_list.php'; break;
-        case "mod": require 'pages/model_list.php'; break;
-        case "newmod": require 'pages/model_new.php'; break;
-        //case "newmod2": require 'pages/model_new2.php'; break;
-        case "log": require 'pages/log_list.php'; break;
-        case "newlog": require 'pages/log_new.php'; break;
-        //case "newlog2": require 'pages/log_new2.php'; break;
+
+        case "modlist": require 'pages/model_list.php'; break;
+        case "modview": require 'pages/model_view.php'; break;
+        case "modnew": require 'pages/model_new.php'; break;
+        case "modbatch": require 'pages/under_construction.php'; break;
+
+        case "loglist": require 'pages/log_list.php'; break;
+        case "logview": require 'pages/log_view.php'; break;
+        case "lognew": require 'pages/log_new.php'; break;
+        case "logbatch": require 'pages/under_construction.php'; break;
         
         case "uc": require 'pages/under_construction.php'; break;
+
         default: require 'pages/start.php'; break;
     }
 }

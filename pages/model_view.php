@@ -10,7 +10,7 @@ $modvalues = viewmodel($_GET['modelID']);
   <div class="panel-heading">
   <h3 class="panel-title"><?php echo $modvalues['modelName']. " @ " .$modvalues['timestamp']. " by: ".$modvalues['creator']; ?>
     <div class="btn-group pull-right">
-    <button type="button" class="btn btn-default btn-xs" onclick="location.href='<?php echo $_SERVER['PHP_SELF']; ?>?show=modupload';">
+    <button type="button" class="btn btn-default btn-xs" onclick="location.href='<?php echo $_SERVER['PHP_SELF']."?show=modupload&modelID=".$_GET['modelID']; ?>'">
        <span class="glyphicon glyphicon-circle-arrow-up"></span> Upload new files
     </button>
     <button type="button" class="btn btn-default btn-xs" onclick="location.href='<?php echo $_SERVER['PHP_SELF']; ?>?show=modedit';">

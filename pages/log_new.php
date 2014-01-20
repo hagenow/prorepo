@@ -41,7 +41,7 @@ if(!isset($_POST['submit_log']) || !$_POST['submit_log']) {
 <?php if(!isset($_SESSION['cname']) || !$_SESSION['cname']) { ?>
 <legend>Choose a category</legend>
 <!-- Search input-->
-<form class="form-horizontal" method="post" name"cat" id="cat" action="<?php echo $_SERVER['PHP_SELF']; ?>?show=newlog">
+<form class="form-horizontal" method="post" name"cat" id="cat" action="<?php echo $_SERVER['PHP_SELF']; ?>?show=lognew">
 <div class="form-group">
   <label class="control-label col-sm-3" for="search_cat">Search Category</label>
   <div class="col-sm-6">
@@ -58,7 +58,7 @@ if(!isset($_POST['submit_log']) || !$_POST['submit_log']) {
 <?php if(!isset($_SESSION['modelname']) || !$_SESSION['modelname']) { ?>
 <legend>Choose a model</legend>
 <!-- Search input-->
-<form class="form-horizontal" method="post" name"mod" id="mod" action="<?php echo $_SERVER['PHP_SELF']; ?>?show=newlog">
+<form class="form-horizontal" method="post" name"mod" id="mod" action="<?php echo $_SERVER['PHP_SELF']; ?>?show=lognew">
 <div class="form-group">
   <label class="control-label col-sm-3" for="search_mod">Search models</label>
   <div class="col-sm-6">
@@ -72,7 +72,7 @@ if(!isset($_POST['submit_log']) || !$_POST['submit_log']) {
 </form>
 <?php } ?>
 
-<form class="form-horizontal" name="logupload" id="logupload" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>?show=newlog" enctype="multipart/form-data">
+<form class="form-horizontal" name="logupload" id="logupload" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>?show=lognew" enctype="multipart/form-data">
 <fieldset>
 
 <!-- Form Name -->

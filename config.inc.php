@@ -49,7 +49,7 @@ define ('STRG_PATH', 'repository');
 /** PHP Settings */
 /** suppress errors with 0, else -1 will display all errors in the apache log 
     * file*/
-error_reporting(E_ALL);
+error_reporting(-1);
 
 /** Timezone */
 date_default_timezone_set('Europe/Berlin');

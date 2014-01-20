@@ -25,9 +25,9 @@ function createlog()
 
     $sql = "INSERT INTO
                 ".TBL_PREFIX."logs
-                (logName, timestamp, comment, catID, modelID, creator)
+                (logName, timestamp, lastupdate, comment, catID, modelID, creator)
                 VALUES
-                ('$logName','$timestamp','$comment','$catid', '$modelID','$creator')";
+                ('$logName','$timestamp','$timestamp','$comment','$catid', '$modelID','$creator')";
 
     if($res = $conid->prepare($sql)){
         $res->execute();

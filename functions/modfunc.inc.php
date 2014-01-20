@@ -24,20 +24,21 @@ function createmod()
 
     $sql = "INSERT INTO
                 ".TBL_PREFIX."models
-                (modelName, timestamp, comment, catID, creator)
+                (modelName, timestamp, lastupdate, comment, path, creator)
                 VALUES
-                ('$modelName','$timestamp','$comment','$catid','$creator')";
+                ('$modelName','$timestamp','$timestamp','$comment','$catid','$creator')";
 
     if($res = $conid->prepare($sql)){
         $res->execute();
         $res->store_result();
+        $id = $conid->insert_id;
     }
     else
     {
         echo $conid->error;
     }
 
-    $typeinfo = array('name' => $modelName, 'timestamp' => $timestamp, 'id' => mysqli_insert_id($conid));
+    $typeinfo = array('name' => $modelName, 'timestamp' => $timestamp, 'id' => $id);
 
     $conid->close();
     return $typeinfo;
@@ -75,14 +76,14 @@ function viewmodel($modelid)
 
     $modvalues = array();
 
-    $sql = "SELECT modelName, timestamp, comment, creator
+    $sql = "SELECT modelName, timestamp, lastupdate, comment, creator
             FROM ".TBL_PREFIX."models
             WHERE modelID = '$modelid'";
 
     $res = $conid->prepare($sql);
     $res->execute();
     $res->store_result();
-    $res->bind_result($modvalues['modelName'],$modvalues['timestamp'],$modvalues['comment'],$modvalues['creator']);
+    $res->bind_result($modvalues['modelName'],$modvalues['timestamp'],$modvalues['lastupdate'],$modvalues['comment'],$modvalues['creator']);
     $res->fetch();
 
 
@@ -90,8 +91,39 @@ function viewmodel($modelid)
     {
         $res->fetch();
         $modvalues['timestamp'] = date("d.m.Y", strtotime($modvalues['timestamp']));
+        $modvalues['lastupdate'] = date("d.m.Y - H:i:s", strtotime($modvalues['lastupdate']));
         $conid->close();
         return $modvalues;
     }
+}
+
+function editmodel($modelid)
+{
+    $conid = db_connect();
+
+    $sql = "UPDATE ".TBL_PREFIX."models
+            SET lastupdate = '".$_POST['lastupdate']."', comment = '".$_POST['comment']."'
+            WHERE modelID = '$modelid'";
+
+    $res = $conid->prepare(sql);
+    $res->execute();
+
+    $conid->close();
+    return ($res->affected_rows==1) ? true : false;
+}
+
+function updatemodel($modelid)
+{
+    $conid = db_connect();
+
+    $sql = "UPDATE ".TBL_PREFIX."models
+            SET lastupdate = '".$_POST['lastupdate']."'
+            WHERE modelID = '$modelid'";
+
+    $res = $conid->prepare(sql);
+    $res->execute();
+
+    $conid->close();
+    return ($res->affected_rows==1) ? true : false;
 }
 ?>

@@ -96,12 +96,15 @@ function uploadfiles_new()
                     // set filetype for download
                     $fileType = $_FILES['files']['type'][$f];
 
-                    /** create the filename */ 
-                    $path = STRG_PATH."/".$type."/".$id."_".$name."/".$timestamp."/";
+                    /** create the pathname for the file*/ 
+                    $filepath = STRG_PATH."/".$type."/".$id."_".$name."/".$timestamp."/";
 
-                    if(!file_exists($path) && !is_dir($path))
+                    /** create the pathname for the type*/ 
+                    $typepath = STRG_PATH."/".$type."/".$id."_".$name."/";
+
+                    if(!file_exists($filepath) && !is_dir($filepath))
                     {
-                        mkdir($path, 0755, true);
+                        mkdir($filepath, 0755, true);
                     }
 
                     $filename_w_ext = $filename.".".$ext;
@@ -111,18 +114,19 @@ function uploadfiles_new()
                                         ".TBL_PREFIX."files
                                         (fileName, path, type, foreignID, ext, fileType, uploader, timestamp, uniqid, size)
                                    VALUES
-                                        ('$filename_w_ext','$path','$type','$id','$ext','$fileType','$creator','$timestamp','$uniqid','$size')"; 
+                                        ('$filename_w_ext','$filepath','$type','$id','$ext','$fileType','$creator','$timestamp','$uniqid','$size')"; 
 
                     if($res = $conid->prepare($sql)){
                         $res->execute();
                         $res->store_result();
+                        updatetypepath($type,$id,$typepath);
                     }
                     else
                     {
                         echo $conid->error;
                     }
 
-                    $target = $path.$filename.".".$ext;
+                    $target = $filepath.$filename.".".$ext;
 
     	            if(move_uploaded_file($_FILES["files"]["tmp_name"][$f], $target))
                     {
@@ -135,6 +139,49 @@ function uploadfiles_new()
     }
 }
 
+function updatetypepath($type,$id,$typepath)
+{
+    $conid = db_connect();
+
+    if($type == "model")
+    {
+    $sql = "UPDATE ".TBL_PREFIX."models
+            SET path = '$typepath'
+            WHERE modelID = '$id'";
+    }
+    elseif($type == "log")
+    {
+    $sql = "UPDATE ".TBL_PREFIX."logs
+            SET path = '$typepath'
+            WHERE logID = '$id'";
+    }
+    else
+    {
+        $conid->close();
+        return false;
+    }
+
+    $res = $conid->prepare($sql);
+    $res->execute();
+
+    if ($res->affected_rows==1) 
+    {
+        $conid->close();
+        return true;
+    }
+    else
+    {
+        $conid->close();
+        return false;
+    }
+}
+
+/* nearly complex as the function above, but it updates an existing model or log 
+ * with new files
+ * */
+
+
+/* get versions of a model or log */
 function getversions($type,$typeid)
 {
     $conid = db_connect();

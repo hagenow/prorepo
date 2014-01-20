@@ -37,21 +37,11 @@ if (strlen($search_string) >= 1 && $search_string !== ' ') {
 	// Check If We Have Results
 	if (isset($result_array)) {
 		foreach ($result_array as $result) {
-
-			// Format Output Strings And Hightlight Matches
-			// $display_catname = preg_replace("/".$search_string."/i", "<b class='highlight'>".$search_string."</b>", $result['catName']);
-			//$display_catid = $result['catID'];
-            //$display_url = '?show=newmod&catID='.urlencode($result['catID']).'&catName='.urlencode($result['catName']);
-
-
 			// Insert Name
 			$output = str_replace('catName', $result['catName'], $html);
 
 			// Insert ID
 			$output = str_replace('catID', $result['catID'], $output);
-
-            // Insert URL
-            // $output = str_replace('urlString', $display_url, $output);
 
 			// Output
 			echo($output);

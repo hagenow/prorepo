@@ -1,20 +1,8 @@
 <?php
 require 'includes/authcheck.inc.php';
 
-/** wurden Category ID und Name bereits ermittelt? Falls nein, dann setze $cid 
- * und $cname auf einen leeren String - ist das obsolet? */
-if((!isset($_POST['cid']) || !$_POST['cid'] ) && ( !isset($_POST['cname']) || !$_POST['cname'])) {
-    $cid = "";
-    $cname = "";
-}
-else
-{
-    /** transfer sumbitted values to _SESSION and set a semaphore for exclusive 
-     * access to the submitted variables */
-    $_SESSION['cid'] = $_POST['cid'];
-    $_SESSION['cname'] = $_POST['cname'];
-    $_SESSION['mod_semaphore'] = true;
-}
+$_SESSION['mod_semaphore'] = true;
+
 if(isset($_SESSION['log_semaphore']))
 {
         unset($_SESSION['cid']);
@@ -24,50 +12,41 @@ if(isset($_SESSION['log_semaphore']))
         unset($_SESSION['log_semaphore']);
 }
 
-/** Wurde das Formular abgeschickt? */
+/* Daten auf Grund der übermittelten ID aus dem System auslesen */
+$modvalues = array();
+$modvalues = viewmodel($_GET['modelID']);
+$modvalues['catName'] = getcatname($modvalues['catID']);
+$catname = getcatname($modvalues['catID']);
+
+/* Wurde das Formular abgeschickt? */
 if(!isset($_POST['submit_model']) || !$_POST['submit_model']) { 
 ?>
-    <?php if(!isset($_POST['cname']) || !$_POST['cname']) { ?>
-        <legend>Choose a category</legend>
-        <!-- Search input-->
-        <form class="form-horizontal" method="post" name"cat" id="cat" action="<?php echo $_SERVER['PHP_SELF']; ?>?show=modnew">
-        <div class="form-group">
-          <label class="control-label col-sm-3" for="search_cat">Search Category</label>
-          <div class="col-sm-6">
-            <input id="search_cat" name="search_cat" type="text" placeholder="Name of category" class="form-control search-query" autocomplete="off">
-            <!-- Show Results -->
-            <h5 id="results-cat-text">Showing results for: <b id="catsearch-string">Category</b></h5>
-            <ul id="results-cat"></ul>
-            
-          </div>
-        </div>
-        </form>
-    <?php } ?>
-    
-    <form class="form-horizontal" name="modelupload" id="modelupload" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>?show=modnew" enctype="multipart/form-data">
+    <form class="form-horizontal" name="modelupload" id="modelupload" method="post" action="<?php echo $_SERVER['PHP_SELF']."?show=modupload&modelID=".$_GET['modelID']; ?>" enctype="multipart/form-data">
     <fieldset>
     
     <!-- Form Name -->
-    <legend>New model</legend>
+    <legend>Upload to existing model</legend>
+
+    <!-- hidden field for model id -->
+    <input type="hidden" name="modid" value="<?php echo $modvalues['id']; ?>">
     
     <!-- Text input-->
     <div class="form-group">
       <label class="control-label col-sm-3" for="modelName">Modelname</label>
       <div class="col-sm-6">
-        <input id="modelName" name="modelName" type="text" placeholder="" class="form-control" required="">
-        
+          <input id="name" name="name" type="text" placeholder="<?php echo $modvalues['name']?>" value="<?php echo $modvalues['name']?>" class="form-control" disabled>
       </div>
     </div>
     
     <!-- hidden field for setting category id -->
-    <input type="hidden" name="catid" value="<?php if(isset($_SESSION['cid'])) echo $_SESSION['cid']; ?>">
+    <input type="hidden" name="catid" value="<?php echo $modvalues['catID'];  ?>">
     
     <!-- Search input-->
     <div class="form-group">
       <label class="control-label col-sm-3" for="category">Category</label>
       <div class="col-sm-6">
-      <input id="category" name="category" type="text" placeholder="<?php if(isset($_SESSION['cname'])) echo $_SESSION['cname']; ?>" value="<?php if(isset($_SESSION['cname'])) echo $_SESSION['cname']; ?>" class="form-control search-query" disabled>
-      <input type="hidden" name="catname" value="<?php if(isset($_SESSION['cname'])) echo $_SESSION['cname']; ?>">
+      <input id="category" name="category" type="text" placeholder="<?php echo $modvalues['catName']; ?>" value="<?php echo $modvalues['catName']; ?>" class="form-control search-query" disabled>
+      <input type="hidden" name="catname" value="<?php echo $modvalues['catName']; ?>">
       </div>
     </div>
     
@@ -91,13 +70,8 @@ if(!isset($_POST['submit_model']) || !$_POST['submit_model']) {
       </div>
     </div>
     
-    <!-- Textarea -->
-    <div class="form-group">
-      <label class="control-label col-sm-3" for="comment">Comment</label>
-      <div class="col-sm-6">                     
-        <textarea id="comment" name="comment" class="form-control" rows="4" placeholder="Write something about this model!"></textarea>
-      </div>
-    </div>
+    <!-- hidden field for old comment-->
+    <input type="hidden" name="oldcomment" value="<?php echo $modvalues['comment']?>">
     
     <!-- hidden field for marking up as model -->
     <input type="hidden" name="type" value="model">
@@ -137,7 +111,7 @@ else {
             echo "<pre>" .print_r( $_FILES, true ). "</pre>";
         }
         
-        uploadfiles_new();
+        uploadfiles_existing();
     }
 } 
 ?>

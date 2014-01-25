@@ -37,6 +37,9 @@ require_once 'functions.inc.php';
     <!-- search css -->
     <link href="template/css/search.css" rel="stylesheet">
 
+    <!-- search css -->
+    <link href="template/css/layout.css" rel="stylesheet">
+
     <!-- Just for debugging purposes. Don't actually copy this line! -->
     <!--[if lt IE 9]><script src="../../docs-assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
 
@@ -50,14 +53,22 @@ require_once 'functions.inc.php';
   <body>
 
     <?php require_once 'includes/menu.inc.php'; ?>
-
-<div class="container">
-        <div class="row">
-            <div class="col-xs-12 col-sm-6 col-md-9">
-                <?php require_once 'includes/inhalt.inc.php'; ?>
+<div id="wrap">
+    <div class="container">
+            <div class="row">
+                <div class="col-xs-12 col-sm-6 col-md-9">
+                    <?php require_once 'includes/inhalt.inc.php'; ?>
+                </div>
+                <div class="col-xs-6 col-md-3">
+                    <?php require_once 'includes/usermenu.inc.php'; ?>
+                </div>
             </div>
-            <div class="col-xs-6 col-md-3">
-            </div>
+    </div>
+</div>
+<div id="footer">
+    <div class="container">
+            <?php require_once 'includes/footer.inc.php'; ?>
+    </div>
 </div>
 
 <?php 

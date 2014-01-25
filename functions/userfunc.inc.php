@@ -503,4 +503,33 @@ function resetsession()
     exit;
 }
 
+function getuseruploads($type)
+{
+    $conid = db_connect();
+
+    $sql = "SELECT *
+            FROM ".TBL_PREFIX.$type."s
+            WHERE creator ='".$_SESSION['user']."'
+            GROUP BY timestamp
+            DESC";
+
+    if( $res = $conid->query($sql) ){
+
+        while( $row = $res->fetch_assoc() )
+        {
+            $date = date("d.m.Y - H:i:s", strtotime($row['timestamp']));
+            $html = "";
+            $html .= "<tr>";
+            if($type == "model")
+                $html .= "<td><a href=\"".$_SERVER['PHP_SELF']."?show=modview&modelID=".$row['modelID']."\">".$row['modelName']."</a></td>";
+            if($type == "log")
+                $html .= "<td><a href=\"".$_SERVER['PHP_SELF']."?show=logview&logID=".$row['logID']."\">".$row['logName']."</a></td>";
+            $html .= "<td>".$date."</td>";
+            $html .= "</tr>";
+
+            echo $html;
+        }
+    }
+    $conid->close();
+}
 ?>

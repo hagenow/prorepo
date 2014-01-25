@@ -17,6 +17,8 @@
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">Repository<b class="caret"></b></a>
               <ul class="dropdown-menu">
               <li><a href="<?php echo $_SERVER['PHP_SELF']; ?>?show=cat">Browse</a></li>
+    <?php if(isset($_SESSION['angemeldet']) || $_SESSION['angemeldet']) : ?>
+              <li><a href="<?php echo $_SERVER['PHP_SELF']; ?>?show=groupnew">Create a group</a></li>
                 <li class="divider"></li>
                 <li class="dropdown-header">Upload new files</li>
                 <li><a href="<?php echo $_SERVER['PHP_SELF']; ?>?show=modnew">New model</a></li>
@@ -25,9 +27,10 @@
                 <li class="dropdown-header">Batch upload</li>
                 <li><a href="<?php echo $_SERVER['PHP_SELF']; ?>?show=modbatch">New models</a></li>
                 <li><a href="<?php echo $_SERVER['PHP_SELF']; ?>?show=logbatch">New logs</a></li>
+    <?php endif; ?>
               </ul>
             </li>
-            <li><a href="#contact">Contact</a></li>
+            <li><a href="<?php echo $_SERVER['PHP_SELF']; ?>?show=contact">Contact</a></li>
 	</ul>
           </ul>
         <?php require_once 'includes/login.inc.php'; ?>

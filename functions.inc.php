@@ -26,4 +26,7 @@ require_once 'functions/logfunc.inc.php';
 
 /* Alle Funktionen für den Download einer Datei */
 require_once 'functions/dwndfunc.inc.php';
+
+/* Alle Funktionen für das Handling von Gruppen */
+require_once 'functions/grpfunc.inc.php';
 ?>

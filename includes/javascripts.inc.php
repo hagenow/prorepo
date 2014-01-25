@@ -1,5 +1,5 @@
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://code.jquery.com/jquery.js"></script>
+    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="template/js/bootstrap.min.js"></script>
     <!-- Suche -->
@@ -10,3 +10,5 @@
     <script src="template/js/register.js"></script>
     <!-- Password Check -->
     <script src="template/js/passcheck.js"></script>
+    <!-- Group functions -->
+    <script src="template/js/group.js"></script>

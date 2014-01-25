@@ -18,7 +18,7 @@ function uploadfiles_new()
     if($_POST['type'] == "model")
     {
         $type = "model";
-        $typeinfo = createmod();
+        $typeinfo = createmodel();
         $valid_formats = array("pdf", "png", "pnml", "xml", "svg", "eps");
     }
     elseif($_POST['type'] == "log")
@@ -139,6 +139,141 @@ function uploadfiles_new()
     }
 }
 
+/* nearly complex like uploadfiles_new .
+ * This function uploads files and link them to the given model, it updates 
+ * values from the model */
+function uploadfiles_existing()
+{
+    $conid = db_connect();
+
+    /** define the allowed extensions to prevent an attack */
+    $valid_formats =array();
+    $type = '';
+    $typeinfo = array();
+
+    // check type of submitted files
+    if($_POST['type'] == "model")
+    {
+        $type = "model";
+        editmodel($_GET['modelID']);
+        $typeinfo = viewmodel($_GET['modelID']);
+        $valid_formats = array("pdf", "png", "pnml", "xml", "svg", "eps");
+    }
+    elseif($_POST['type'] == "log")
+    {
+        $type = "log";
+        editlog($_GET['logID']);
+        $typeinfo = viewlog($_GET['logID']);
+        $valid_formats = array("xes", "mxml", "csv");
+    }
+    else
+    {
+        $message[] = "something wrent wrong with the type of the uploaded files!";
+    }    
+
+    /** replace the given chars with their equivalents */
+    $replacements = array( 'ä' => 'ae', 'ö' => 'oe', 'ü' => 'ue', 'ß' => 'ss', ' ' => '_' );
+
+    /** use the FILESIZE from config.inc.php */
+    $max_file_size = FILESIZE;
+
+    /** init submitted file-conuter to zero */
+    $count = 0;
+
+    /** get category ID */
+    $catid = $typeinfo['catID'];
+
+    /** get submitted date */
+    $timestamp = $_POST['timestamp'];
+
+    /** get model or log ID */
+    $id = $typeinfo['id'];
+    $name = $typeinfo['name'];
+
+    /** set creator to current logged in user */
+    $creator = $typeinfo['creator'];
+
+    
+    /** if the form is sending input data, then execute the following if-stmt */
+    if(isset($_POST) && $_SERVER['REQUEST_METHOD'] == "POST")
+    {
+    	// Loop $_FILES to execute all files
+        foreach ($_FILES['files']['name'] as $f => $filename) 
+        {     
+            if ($_FILES['files']['error'][$f] == 4) 
+            {
+    	        continue; // Skip file if any error found
+            }
+            /** if a error occurs, then go to the next file */
+            if ($_FILES['files']['error'][$f] == 0) 
+            {	           
+                /** if the file is to large, then go to the next file */
+                if ($_FILES['files']['size'][$f] > $max_file_size) 
+                {
+    	            $message[] = "$filename is too large!.";
+    	            continue; // Skip large files
+    	        }
+                elseif( ! in_array(pathinfo($filename, PATHINFO_EXTENSION), $valid_formats) )
+                {
+    				$message[] = "$filename is not a valid format";
+    				continue; // Skip invalid file formats
+    			}
+                else // No error found! Move uploaded files 
+                {
+                    // extract extension
+                    $ext = pathinfo($filename, PATHINFO_EXTENSION);
+
+                    /** clean up the filename */
+                    $filename = pathinfo($filename, PATHINFO_FILENAME);
+                    $filename = strtr( $filename , $replacements );
+                    $filename = preg_replace('/[^-a-zA-Z_]/', '',$filename);
+                    $name = preg_replace('/[^-a-zA-Z_]/', '',$name);
+                    
+                    $size = $_FILES['files']['size'][$f];
+
+                    // set filetype for download
+                    $fileType = $_FILES['files']['type'][$f];
+
+                    /** filepath from given parameters */ 
+                    
+                    $filepath = $typeinfo['path']."/".$timestamp."/";
+
+                    if(!file_exists($filepath) && !is_dir($filepath))
+                    {
+                        mkdir($filepath, 0755, true);
+                    }
+
+                    $filename_w_ext = $filename.".".$ext;
+                    $uniqid =  uniqid('f', TRUE);
+                    /** create entry in the files table */
+                    $sql = "INSERT INTO
+                                        ".TBL_PREFIX."files
+                                        (fileName, path, type, foreignID, ext, fileType, uploader, timestamp, uniqid, size)
+                                   VALUES
+                                        ('$filename_w_ext','$filepath','$type','$id','$ext','$fileType','$creator','$timestamp','$uniqid','$size')"; 
+
+                    if($res = $conid->prepare($sql)){
+                        $res->execute();
+                        $res->store_result();
+                    }
+                    else
+                    {
+                        echo $conid->error;
+                    }
+
+                    $target = $filepath.$filename.".".$ext;
+
+    	            if(move_uploaded_file($_FILES["files"]["tmp_name"][$f], $target))
+                    {
+                        $count++; // Number of successfully uploaded file
+                    }
+
+    	        }
+    	    }
+    	}
+    }
+}
+
 function updatetypepath($type,$id,$typepath)
 {
     $conid = db_connect();
@@ -186,9 +321,11 @@ function getversions($type,$typeid)
 {
     $conid = db_connect();
 
-    $sql = "SELECT timestamp
+    $sql = "SELECT DISTINCT(timestamp)
             FROM ".TBL_PREFIX."files
-            WHERE type = '$type' AND foreignID = '$typeid'";
+            WHERE type = '$type' AND foreignID = '$typeid'
+            ORDER BY timestamp
+            DESC";
 
     if( $res = $conid->query($sql) ){
 
@@ -204,5 +341,58 @@ function getversions($type,$typeid)
     $conid->close();
 }
 
+/* returns files by given type (model/log), the foreignID als typeid, the 
+    * fileextension for filtering and the upper bound as date, if no date is 
+    * given, then all files will be displayed
+    * */
+function viewfiles($type,$typeid,$ext,$date)
+{
+    $conid = db_connect();
 
+    $sql = "SELECT *
+            FROM ".TBL_PREFIX."files
+            WHERE type = '$type' AND foreignID = '$typeid' AND ext = '$ext'
+            ORDER BY timestamp
+            DESC";
+
+    $validation_type = array("pnml","mxml","xes");
+    $other_type = array("xml","png","jpg","pdf","eps","svg","csv");
+
+    if( $res = $conid->query($sql) ){
+
+        while( $row = $res->fetch_assoc() )
+        {
+            $date = date("d.m.Y - H:i:s", strtotime($row['timestamp']));
+            $html = "";
+            $html .= "<tr>";
+            $html .= "<td><a href=\"".$_SERVER['PHP_SELF']."?show=download&id=".$row['uniqid']."\">".$row['fileName']."</a></td>";
+            if(in_array($ext, $validation_type))
+            {
+                if($row['valid'] == 0)
+                {
+                    $html .= "<td class=\"text-center\"><span class=\"label label-warning\">invalid</span></td>";
+                }
+                elseif($row['valid'] == 1)
+                {
+                    $html .= "<td class=\"text-center\"><span class=\"label label-success\">valid</span></td>";
+                }
+                elseif($row['valid'] == 2)
+                {
+                    $html .= "<td class=\"text-center\"><span class=\"label label-primary\">unknown</span></td>";
+                }
+            }
+            if(in_array($ext, $other_type))
+            {
+                $html .= "<td class=\"text-center\"></td>";
+            }
+            $html .= "<td class=\"text-center\">".round(($row['size'] / 1024), 2)." KB</td>";
+            $html .= "<td class=\"text-center\">".$date."</td>";
+            $html .= "<td class=\"text-center\"><a href=\"#\">".$row['uploader']."</a></td>";
+            $html .= "</tr>";
+
+            echo $html;
+        }
+    }
+    $conid->close();
+}
 ?>

@@ -1,5 +1,6 @@
-<?php
-require 'includes/authcheck.inc.php';
+<?php require 'includes/authcheck.inc.php'; 
+/** wurden Category ID und Name bereits ermittelt? Falls nein, dann setze $cid
+ * und $cname auf einen leeren String - ist das obsolet? */ 
 
 if((!isset($_POST['cid']) || !$_POST['cid'] ) && ( !isset($_POST['cname']) || !$_POST['cname'])) {
     $cid = "";
@@ -10,37 +11,25 @@ else {
      * access to the submitted variables */
     $_SESSION['cid'] = $_POST['cid'];
     $_SESSION['cname'] = $_POST['cname'];
-    $modvalues['catID'] = $_SESSION['cid'];
-    $modvalues['catName'] = $_SESSION['cname'];
     $_SESSION['mod_semaphore'] = true;
 }
-
-if(isset($_SESSION['log_semaphore']))
-{
+if(isset($_SESSION['log_semaphore'])) {
         unset($_SESSION['cid']);
         unset($_SESSION['cname']);
         unset($_SESSION['modelid']);
         unset($_SESSION['modelname']);
         unset($_SESSION['log_semaphore']);
 }
-
-/* Daten auf Grund der übermittelten ID aus dem System auslesen */
-$modvalues = array();
-$modvalues = viewmodel($_GET['modelID']);
-$modvalues['catName'] = getcatname($modvalues['catID']);
-$catname = getcatname($modvalues['catID']);
-
-/** Wurde das Formular abgeschickt? */
-if(!isset($_POST['submit_model']) || !$_POST['submit_model']) { 
-?>
-    <?php if(!isset($_SESSION['cname']) || !$_SESSION['cname']) { ?>
+/** Wurde das Formular abgeschickt? */ 
+if(!isset($_POST['submit_model']) || !$_POST['submit_model']) { ?>
+    <?php if(!isset($_POST['cname']) || !$_POST['cname']) { ?>
         <legend>Choose a category</legend>
         <!-- Search input-->
-        <form class="form-horizontal" method="post" name"cat" id="cat" action="<?php echo $_SERVER['PHP_SELF']."?show=modedit&modelID=".$_GET['modelID']; ?>">
+        <form class="form-horizontal" method="post" name"cat" id="cat" action="<?php echo $_SERVER['PHP_SELF']; ?>?show=modnew">
         <div class="form-group">
-          <label class="control-label col-sm-3" for="search_cat">Change Category</label>
+          <label class="control-label col-sm-3" for="search_cat">Search Category</label>
           <div class="col-sm-6">
-          <input id="search_cat" name="search_cat" type="text" placeholder="Select another category" class="form-control search-query" autocomplete="off">
+            <input id="search_cat" name="search_cat" type="text" placeholder="Name of category" class="form-control search-query" autocomplete="off">
             <!-- Show Results -->
             <h5 id="results-cat-text">Showing results for: <b id="catsearch-string">Category</b></h5>
             <ul id="results-cat"></ul>
@@ -50,45 +39,60 @@ if(!isset($_POST['submit_model']) || !$_POST['submit_model']) {
         </form>
     <?php } ?>
     
-    <form class="form-horizontal" name="modelupload" id="modelupload" method="post" action="<?php echo $_SERVER['PHP_SELF']."?show=modedit&modelID=".$_GET['modelID']; ?>" enctype="multipart/form-data">
+    <form class="form-horizontal" name="modelupload" id="modelupload" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>?show=modnew" enctype="multipart/form-data">
     <fieldset>
     
     <!-- Form Name -->
     <legend>New model</legend>
-
-    <!-- hidden field for model id -->
-    <input type="hidden" name="modid" value="<?php echo $modvalues['id']; ?>">
     
     <!-- Text input-->
     <div class="form-group">
       <label class="control-label col-sm-3" for="modelName">Modelname</label>
       <div class="col-sm-6">
-          <input id="name" name="name" type="text" placeholder="<?php echo $modvalues['name']?>" value"<?php echo $modvalues['name']?>" class="form-control" disabled>
+        <input id="modelName" name="modelName" type="text" placeholder="" class="form-control" required="">
+        
       </div>
     </div>
     
     <!-- hidden field for setting category id -->
-    <input type="hidden" name="catid" value="<?php if(isset($_SESSION['cid'])) { echo $_SESSION['cid']; } else { echo $modvalues['catID']; } ?>">
+    <input type="hidden" name="catid" value="<?php if(isset($_SESSION['cid'])) echo $_SESSION['cid']; ?>">
     
     <!-- Search input-->
     <div class="form-group">
       <label class="control-label col-sm-3" for="category">Category</label>
       <div class="col-sm-6">
-      <input id="category" name="category" type="text" placeholder="<?php if(isset($_SESSION['cname'])) { echo $_SESSION['cname'];} else {echo $modvalues['catName']; } ?>" value="<?php if(isset($_SESSION['cname'])) {echo $_SESSION['cname'];} else {echo $modvalues['catName'];} ?>" class="form-control search-query" disabled>
-      <input type="hidden" name="catname" value="<?php if(isset($_SESSION['cname'])) { echo $_SESSION['cname'];} else { echo $modvalues['catName']; } ?>">
+      <input id="category" name="category" type="text" placeholder="<?php if(isset($_SESSION['cname'])) echo $_SESSION['cname']; ?>" value="<?php if(isset($_SESSION['cname'])) echo 
+$_SESSION['cname']; ?>" class="form-control search-query" disabled>
+      <input type="hidden" name="catname" value="<?php if(isset($_SESSION['cname'])) echo $_SESSION['cname']; ?>">
+      </div>
+    </div>
+    
+    <!-- File Button -->
+    <div class="form-group">
+      <label class="control-label col-sm-3" for="file_xes">Choose files<br><h6>(.pnml,.png,.jpg,.pdf,.eps,.svg,.xml)</h6></label>
+      <div class="col-sm-6">
+        <input id="files" name="files[]" class="input-file" multiple="multiple" type="file" accept=".pnml,.png,.jpg,.pdf,.eps,.svg,.xml">
+      </div>
+    </div>
+    
+    <!-- Multiple Checkboxes (inline) -->
+    <div class="form-group">
+      <label class="control-label col-sm-3" for="checkboxes">Validate PNML file</label>
+      <div class="col-sm-6">
+        <label class="checkbox-inline" for="checkboxes-0">
+          <input type="checkbox" name="checkboxes" id="checkboxes-0" value="validate">
+          validate
+        </label>
       </div>
     </div>
     
     <!-- Textarea -->
     <div class="form-group">
       <label class="control-label col-sm-3" for="comment">Comment</label>
-      <div class="col-sm-6">                     
-      <textarea id="comment" name="comment" class="form-control" rows="4" placeholder="<?php echo $modvalues['comment']?>" value"<?php echo $modvalues['comment']?>"></textarea>
+      <div class="col-sm-6">
+        <textarea id="comment" name="comment" class="form-control" rows="4" placeholder="Write something about this model!"></textarea>
       </div>
     </div>
-
-    <!-- hidden field for old comment-->
-    <input type="hidden" name="oldcomment" value="<?php echo $modvalues['comment']?>">
     
     <!-- hidden field for marking up as model -->
     <input type="hidden" name="type" value="model">
@@ -108,34 +112,23 @@ if(!isset($_POST['submit_model']) || !$_POST['submit_model']) {
     </div>
     
     </fieldset>
-    </form>
-
-<?php } 
-else {
+    </form> <?php } else {
     if (isset( $_POST['submit_model'] ))
     {
-        /** if(!isset($_POST['filetype'])) die("Der Dateityp wurde nicht 
+        /** if(!isset($_POST['filetype'])) die("Der Dateityp wurde nicht
          * angegeben!"); */
         
         unset($_SESSION['cid']);
         unset($_SESSION['cname']);
         unset($_SESSION['mod_semaphore']);
-
         if(DEBUG)
         {
             echo "<pre>" .print_r( $_SESSION, true ). "</pre>";
             echo "<pre>" .print_r( $_POST, true ). "</pre>";
             echo "<pre>" .print_r( $_FILES, true ). "</pre>";
         }
-
-        if(editmodel($_POST['modid']))
-        {
-            echo "Das Modell wurde aktualisiert!";
-        }
-        else
-        {
-            echo "Bei der Aktualisierung ist was schief gelaufen!";
-        }
+        
+        uploadfiles_new();
     }
 } 
 ?>

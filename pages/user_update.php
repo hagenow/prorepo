@@ -1,9 +1,12 @@
 <?php 
+    require 'includes/authcheck.inc.php';
+
     if(updateuserdata())
     {
-        echo "erfolg";
+        echo "Your user was successfully updated!";
     }
     else
     {
-        echo "misserfolg!";
+        echo "There was an error, please go back and start again!";
     }
+?>

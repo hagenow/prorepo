@@ -108,4 +108,27 @@ function createcat($conid, $catname, $user)
     return ($res->affected_rows == 1)? true : false;
 }
 
+function getcatname($catid)
+{
+    $conid = db_connect();
+
+    $sql = "SELECT catName
+            FROM ".TBL_PREFIX."categories
+            WHERE catID = '$catid'";
+
+    if($res = $conid->prepare($sql))
+    {
+        $res->execute();
+        $res->store_result();
+        $res->bind_result($id);
+        $res->fetch();
+
+        return $id;
+    }
+    else
+    {
+        echo $conid->error;
+    }
+    $conid->close();
+}
 ?>

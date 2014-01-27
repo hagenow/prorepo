@@ -4,6 +4,22 @@ require_once 'functions.inc.php';
 
 $modvalues = array(); 
 $modvalues = viewmodel($_GET['modelID']);
+
+// if not set via menu
+if(isset($_GET['timestamp']))
+{
+    $date = $_GET['timestamp'];
+    $date = date("Y-m-d H:i:s", strtotime($date));
+}
+elseif(isset($_POST['timestamp']))
+{
+    $date = $_POST['timestamp'];
+    $date = date("Y-m-d H:i:s", strtotime($date));
+}
+else
+{
+    $date = date("Y-m-d H:i:s");
+}
 ?>
 
 <div class="panel panel-success">
@@ -16,17 +32,20 @@ $modvalues = viewmodel($_GET['modelID']);
         <button type="button" class="btn btn-default btn-sm" onclick="location.href='<?php echo $_SERVER['PHP_SELF']."?show=modedit&modelID=".$_GET['modelID']; ?>'">
            <span class="glyphicon glyphicon-wrench"></span> Edit model
         </button>
-        <button type="button" class="btn btn-default btn-sm" id="addmodel2group" value="<?php echo $_GET['modelID']; ?>">
+    <?php if(isset($_SESSION['groupID'])) : ?>
+        <button type="button" class="btn btn-default btn-sm" id="addmodel2group" value="<?php echo $_GET['modelID']."|".$date; ?>">
            <span class="glyphicon glyphicon-plus"></span> Add to group
         </button>
+    <?php endif; ?>
         </div>
     <?php endif; ?>
-  <h3 class="panel-title"><h3><?php echo $modvalues['name']. "</h3> Added: " .$modvalues['timestamp']. " ( by ".$modvalues['creator']." )" ?></h3>
-  </h3>
-  </div>
+  <h3 class="panel-title"><h3><?php echo $modvalues['name']; ?></h3></div>
   <div class="panel-body">
-    Comment: <br>
-    <?php echo $modvalues['comment']; ?>
+    <h4>Comment:</h4>
+    <blockquote>
+    <p><?php echo $modvalues['comment']; ?></p>
+    </blockquote>
+    <small>Added: <?php echo $modvalues['timestamp']. " (".$modvalues['creator'].")" ?></small>
   </div>
 </div>
 
@@ -34,8 +53,18 @@ $modvalues = viewmodel($_GET['modelID']);
   <div class="panel-heading">
   <h3 class="panel-title">View versions</h3>
   </div>
-  <div class="panel-body">
-    <?php getversions('model',$_GET['modelID']); ?>
+  <div class="panel-body row">
+    <div class="col-xs-5">
+        Show files with selected timestamp and below.
+    </div>
+    <div class="col-xs-5">
+        <form method="post" action="<?php echo $_SERVER['PHP_SELF']."?show=modview&modelID=".$_GET['modelID']; ?>" name="timestampchooser" id="timestampchooser">
+            <select name="timestamp" onchange="this.form.submit()" class="form-control">
+                <option></option>
+                <?php getversions('model',$_GET['modelID']); ?>
+            </select>
+        </form>
+    </div>
   </div>
 </div>
 

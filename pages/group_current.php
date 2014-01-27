@@ -1,7 +1,7 @@
 <?php
 echo "<pre>".print_r($_SESSION, true)."</pre>";
 ?>
-<?php if(!isset($_GET['action']) && !$_GET['action']) : ?>
+<?php if(!isset($_GET['action']) || !$_GET['action']) : ?>
 
     <h4>In this Group included:</h4>
 
@@ -53,19 +53,21 @@ echo "<pre>".print_r($_SESSION, true)."</pre>";
     </table>
 </div>
 
-        <button type="button" class="btn btn-primary btn pull-right" onclick="location.href='<?php echo $_SERVER['PHP_SELF']."?show=groupcurrent&action=save"; ?>'">
+        <button type="button" class="btn btn-primary pull-right" onclick="location.href='<?php echo $_SERVER['PHP_SELF']."?show=groupcurrent&action=save"; ?>'">
            <span class="glyphicon glyphicon-circle-arrow-down"></span> Save group and create permanent link
         </button>
 
 <?php endif; ?>
-<?php if(isset($_GET['action']) && $_GET['action'] == "save" && isset($_SESSION['groupID']) && $_SESSION['groupID']) : ?>
+
+<?php if(isset($_GET['action']) && $_GET['action'] == "save" && !isset($_SESSION['groupID'])) : ?>
+<div class="alert alert-warning">
+    Illegal function call - please create a group first!
+</div>
+<?php endif; ?>
+
+<?php if(isset($_GET['action']) && $_GET['action'] == "save" && isset($_SESSION['groupID'])) : ?>
 
 The group will be saved as:<br />
 <?php savegroup(); ?>
 
-<?php endif; ?>
-<?php if(isset($_GET['action']) && $_GET['action'] == "save" && !isset($_SESSION['groupID']) && !$_SESSION['groupID']) : ?>
-<div class="alert alert-warning">
-Illegal function call - please create a group first!
-</div>
 <?php endif; ?>

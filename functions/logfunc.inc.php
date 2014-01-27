@@ -55,11 +55,10 @@ function getlogs($catid)
 
         while( $row = $res->fetch_assoc() )
         {
-            $date = date("d.m.Y", strtotime($row['timestamp']));
             $html = "";
             $html .= "<tr>";
             $html .= "<td><a href=\"".$_SERVER['PHP_SELF']."?show=logview&logID=".$row['logID']."\">".$row['logName']."</a></td>";
-            $html .= "<td>".$date."</td>";
+            $html .= "<td>".date("d.m.Y - H:i:s", strtotime($row['timestamp']))."</td>";
             $html .= "<td><a href=\"".$_SERVER['PHP_SELF']."?show=user&name=".$row['creator']."\">".$row['creator']."</td>";
             $html .= "</tr>";
 
@@ -89,8 +88,6 @@ function viewlog($logid)
     if($res->affected_rows == 1)
     {
         $res->fetch();
-        $logvalues['timestamp'] = date("d.m.Y", strtotime($logvalues['timestamp']));
-        $logvalues['lastupdate'] = date("d.m.Y - H:i:s", strtotime($logvalues['lastupdate']));
         $conid->close();
         return $logvalues;
     }

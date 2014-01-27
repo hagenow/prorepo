@@ -7,7 +7,7 @@
         <thead>
             <tr>
                 <th>Modelname</th>
-                <th>Creation date</th>
+                <th class="text-center">Creation date</th>
             </tr>
         </thead>
         <tbody>

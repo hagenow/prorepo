@@ -75,37 +75,56 @@ function countlogs($catID)
     $conid->close();
 }
 
-function cleancatname($conid)
+function cleancatname()
 {
+    $conid = db_connect();
+
     $catname = $_POST['catname'];
 
     $conid->real_escape_string( $catname );
 
     // slashes entfernen
-     $catname = stripslashes( $catname );
+    $catname = stripslashes( $catname );
+    
+    // tags entfernen
+    $catname = strip_tags( $catname );
 
     /** Trimmen - entfernt Leerzeichen, Zeilenvorschub, Tabulator, binäres
      * Leerzeichen, \, / ", ', ,, ., usw.
      * */
     $catname = trim( $catname, "\n\r\0\x0B\t,\='\\\/\"!?§$%&{}´`" );
 
+    // DB Verbindung schließen
+    $conid->close();
+
     // Eingabe zurückgeben
     return $catname;
 
 }
 
-function createcat($conid, $catname, $user)
+function createcat($catname)
 {
+    $conid = db_connect();
+
+    $user = $_SESSION['user'];
+
     $sql = "INSERT INTO
-                ".TBL_PREFIX."categories (`catName`, `date`, `creator`)
+                ".TBL_PREFIX."categories (`catName`, `timestamp`, `creator`)
             VALUES
             ('$catname', NOW(), '$user')";
 
-    $res = $conid->prepare($sql);
-    $res->execute();
-    $res->store_result();
-
-    return ($res->affected_rows == 1)? true : false;
+    if($res = $conid->prepare($sql))
+    {
+        $res->execute();
+        $res->store_result();
+        $conid->close();
+        return ($res->affected_rows == 1)? true : false;
+    }
+    else
+    {
+        echo $conid->error;
+    }
+    $conid->close();
 }
 
 function getcatname($catid)

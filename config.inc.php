@@ -19,9 +19,15 @@ define ('TBL_PREFIX', 'repo_');
 define ('DEBUG', TRUE);
 
 /** define max. size of an uploaded file 
- * here 1024*500 are 500 kilobytes. 
+ * here 1024*100000 are 100 Megabytes. 
  * The value have to be in bytes */
-define ('FILESIZE', '51200000');
+define ('FILESIZE', '102400000');
+
+/** Schemas for XML checking */
+define ('XESSchema' , 'schemas/xes.xsd');
+define ('MXMLSchema' , 'schemas/WorkflowLog.xsd');
+define ('PNMLSchema' , 'schemas/validatePNMLDocument.sh');
+define ('PNMLReport' , 'schemas/pnmlValidationReport.html');
 
 /** Storage for placing the repository files
  * possible options

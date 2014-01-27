@@ -107,14 +107,31 @@ function uploadfiles_new()
                         mkdir($filepath, 0755, true);
                     }
 
+                    // run validation process
+                    $valid = "2";
+
+                    if(isset($_POST['checkboxes']) && $_POST['checkboxes'] == "validatepnml" && $ext == "pnml")
+                    {
+                        $valid = validatePNML($_FILES["files"]["tmp_name"][$f]);
+                    }
+                    if(isset($_POST['checkboxes-0']) && $_POST['checkboxes-0'] == "validatexes" && $ext == "mxml")
+                    {
+                        $valid = validateMXML($_FILES["files"]["tmp_name"][$f]);
+                    }
+                    if(isset($_POST['checkboxes-1']) && $_POST['checkboxes-1'] == "validatemxml" && $ext == "xes")
+                    {
+                        $valid = validateXES($_FILES["files"]["tmp_name"][$f]);
+                    }
+
+
                     $filename_w_ext = $filename.".".$ext;
                     $uniqid =  uniqid('f', TRUE);
                     /** create entry in the files table */
                     $sql = "INSERT INTO
                                         ".TBL_PREFIX."files
-                                        (fileName, path, type, foreignID, ext, fileType, uploader, timestamp, uniqid, size)
+                                        (fileName, path, type, foreignID, ext, fileType, uploader, timestamp, uniqid, size, valid)
                                    VALUES
-                                        ('$filename_w_ext','$filepath','$type','$id','$ext','$fileType','$creator','$timestamp','$uniqid','$size')"; 
+                                        ('$filename_w_ext','$filepath','$type','$id','$ext','$fileType','$creator','$timestamp','$uniqid','$size','$valid')"; 
 
                     if($res = $conid->prepare($sql)){
                         $res->execute();
@@ -243,14 +260,30 @@ function uploadfiles_existing()
                         mkdir($filepath, 0755, true);
                     }
 
+                    // run validation process
+                    $valid = "2";
+
+                    if(isset($_POST['checkboxes']) && $_POST['checkboxes'] == "validatepnml" && $ext == "pnml")
+                    {
+                        $valid = validatePNML($_FILES["files"]["tmp_name"][$f]);
+                    }
+                    if(isset($_POST['checkboxes-0']) && $_POST['checkboxes-0'] == "validatexes" && $ext == "mxml")
+                    {
+                        $valid = validateMXML($_FILES["files"]["tmp_name"][$f]);
+                    }
+                    if(isset($_POST['checkboxes-1']) && $_POST['checkboxes-1'] == "validatemxml" && $ext == "xes")
+                    {
+                        $valid = validateXES($_FILES["files"]["tmp_name"][$f]);
+                    }
+
                     $filename_w_ext = $filename.".".$ext;
                     $uniqid =  uniqid('f', TRUE);
                     /** create entry in the files table */
                     $sql = "INSERT INTO
                                         ".TBL_PREFIX."files
-                                        (fileName, path, type, foreignID, ext, fileType, uploader, timestamp, uniqid, size)
+                                        (fileName, path, type, foreignID, ext, fileType, uploader, timestamp, uniqid, size, valid)
                                    VALUES
-                                        ('$filename_w_ext','$filepath','$type','$id','$ext','$fileType','$creator','$timestamp','$uniqid','$size')"; 
+                                        ('$filename_w_ext','$filepath','$type','$id','$ext','$fileType','$creator','$timestamp','$uniqid','$size','$valid')"; 
 
                     if($res = $conid->prepare($sql)){
                         $res->execute();
@@ -332,8 +365,7 @@ function getversions($type,$typeid)
         while( $row = $res->fetch_assoc() )
         {
             $html = "";
-            $html .= date("d.m.Y - H:i:s", strtotime($row['timestamp']));
-            $html .= "<br/>";
+            $html .= "<option>".$row['timestamp']."</option>";
 
             echo $html;
         }
@@ -349,9 +381,11 @@ function viewfiles($type,$typeid,$ext,$date)
 {
     $conid = db_connect();
 
+    // $date = date("d.m.Y - H:i:s", $date);
+
     $sql = "SELECT *
             FROM ".TBL_PREFIX."files
-            WHERE type = '$type' AND foreignID = '$typeid' AND ext = '$ext'
+            WHERE type = '$type' AND foreignID = '$typeid' AND ext = '$ext' AND timestamp <= '$date'
             ORDER BY timestamp
             DESC";
 

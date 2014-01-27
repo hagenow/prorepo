@@ -9,13 +9,11 @@ function createmodel()
 
     /* special treatment for comments */
     $comment = $_POST['comment'];
-    // $comment = filter_var($comment ,FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW | FILTER_FLAG_STRIP_HIGH);
+    $comment = filter_var($comment ,FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW | FILTER_FLAG_STRIP_HIGH);
     // falls es in die Datenbank kommen soll, wird es noch mal escaped
     $conid->real_escape_string( $comment );
     // slashes entfernen, falls noch welche vorhanden oder anders codiert
     $comment = stripslashes( $comment );
-    // TAGs entfernen
-    $comment = strip_tags($comment);
     // Zeilenumbrüche hinzufügen
     $comment = nl2br($comment);
 
@@ -56,11 +54,10 @@ function getmodels($catid)
 
         while( $row = $res->fetch_assoc() )
         {
-            $date = date("d.m.Y", strtotime($row['timestamp']));
             $html = "";
             $html .= "<tr>";
             $html .= "<td><a href=\"".$_SERVER['PHP_SELF']."?show=modview&modelID=".$row['modelID']."\">".$row['modelName']."</a></td>";
-            $html .= "<td>".$date."</td>";
+            $html .= "<td>".date("d.m.Y - H:i:s", strtotime($row['timestamp']))."</td>";
             $html .= "<td><a href=\"".$_SERVER['PHP_SELF']."?show=user&name=".$row['creator']."\">".$row['creator']."</td>";
             $html .= "</tr>";
 
@@ -90,8 +87,6 @@ function viewmodel($modelid)
     if($res->affected_rows == 1)
     {
         $res->fetch();
-        $modvalues['timestamp'] = date("d.m.Y", strtotime($modvalues['timestamp']));
-        $modvalues['lastupdate'] = date("d.m.Y - H:i:s", strtotime($modvalues['lastupdate']));
         $conid->close();
         return $modvalues;
     }

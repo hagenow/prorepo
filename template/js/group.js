@@ -40,7 +40,38 @@ $(document).ready(function () {
         var id = $( this ).val();
     	$.get("includes/groupdel.inc.php",
     		{
-    			logID: id
+    			logID: id,
+                ref: document.referrer
+
+    		},
+    		function(){
+    			window.location.reload(true);
+    		}
+    	);
+    });
+
+    $("button[name^=removegroupmodel]").click(function(){
+        var id = $( this ).val();
+        var ref = document.referrer ;
+    	$.get("includes/groupdel.inc.php",
+    		{
+    			modelID: id,
+                referrer: ref 
+    		},
+    		function(data){
+    			$("#removemodelfromgroup").html(data);
+    			window.location.reload(true);
+    		}
+    	);
+    });
+    
+    $("button[name^=removegrouplog]").click(function(){
+        var id = $( this ).val();
+        var ref = document.referrer ;
+    	$.get("includes/groupdel.inc.php",
+    		{
+    			logID: id,
+                referrer: ref 
     		},
     		function(){
     			window.location.reload(true);

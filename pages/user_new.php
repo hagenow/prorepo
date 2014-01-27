@@ -48,7 +48,7 @@
         <label class="control-label col-sm-3"></label>
         <div class="col-sm-8">
             <button type="submit" id="submit_user" name="submit_user" value="Submit "class="btn btn-success">Register</button>
-            <button type="reset" id="close_modal" name="close_modal" value"Reset and Close" class="btn btn-danger" data-dismiss="modal">Reset &amp; Close</button>
+            <button type="reset" id="close_modal" name="close_modal" value="Reset and Close" class="btn btn-danger" data-dismiss="modal">Reset &amp; Close</button>
         </div>
     </div>
     <!-- place captcha here -->

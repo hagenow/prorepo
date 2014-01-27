@@ -17,7 +17,7 @@
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">Repository<b class="caret"></b></a>
               <ul class="dropdown-menu">
               <li><a href="<?php echo $_SERVER['PHP_SELF']; ?>?show=cat">Browse</a></li>
-    <?php if(isset($_SESSION['angemeldet']) || $_SESSION['angemeldet']) : ?>
+    <?php if(isset($_SESSION['angemeldet']) && $_SESSION['angemeldet']) : ?>
               <li><a href="<?php echo $_SERVER['PHP_SELF']; ?>?show=groupnew">Create a group</a></li>
                 <li class="divider"></li>
                 <li class="dropdown-header">Upload new files</li>

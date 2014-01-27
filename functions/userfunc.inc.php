@@ -220,6 +220,7 @@ function checkadmin($usergroup)
     {
         $res->fetch();
         $conid->close();
+        $_SESSION['usergroup'] = $groupname;
         return ($groupname == "admin") ? true : false;
     }
 }
@@ -513,18 +514,31 @@ function getuseruploads($type)
             GROUP BY timestamp
             DESC";
 
-    if( $res = $conid->query($sql) ){
-
+    if( $res = $conid->query($sql) )
+    {
         while( $row = $res->fetch_assoc() )
         {
             $date = date("d.m.Y - H:i:s", strtotime($row['timestamp']));
+
             $html = "";
             $html .= "<tr>";
             if($type == "model")
                 $html .= "<td><a href=\"".$_SERVER['PHP_SELF']."?show=modview&modelID=".$row['modelID']."\">".$row['modelName']."</a></td>";
             if($type == "log")
                 $html .= "<td><a href=\"".$_SERVER['PHP_SELF']."?show=logview&logID=".$row['logID']."\">".$row['logName']."</a></td>";
-            $html .= "<td>".$date."</td>";
+            if($type == "group")
+            {
+                $html .= "<td><a href=\"".$_SERVER['PHP_SELF']."?show=groupview&groupID=".$row['groupID']."\">".$row['groupName']."</a></td>";
+                if($row['state'] == "0") 
+                {
+                    $html .= "<td class=\"text-center\"><span class=\"label label-danger\">closed<span></td>";
+                } 
+                else 
+                { 
+                    $html .= "<td class=\"text-center\"><span class=\"label label-success\">open</span></td>";
+                }
+            }
+            $html .= "<td class=\"text-center\">".$date."</td>";
             $html .= "</tr>";
 
             echo $html;

@@ -125,11 +125,11 @@ if(!isset($_POST['submit_log']) || !$_POST['submit_log']) {
   <label class="control-label col-sm-3" for="checkboxes">Validate files</label>
   <div class="col-sm-6">
     <label class="checkbox-inline" for="checkboxes-0">
-      <input type="checkbox" name="checkboxes" id="checkboxes-0" value="validate">
+      <input type="checkbox" name="checkboxes" id="checkboxes-0" value="validatexes">
       XES
     </label>
     <label class="checkbox-inline" for="checkboxes-1">
-      <input type="checkbox" name="checkboxes" id="checkboxes-1" value="validate">
+      <input type="checkbox" name="checkboxes" id="checkboxes-1" value="validatemxml">
       MXML
     </label>
   </div>

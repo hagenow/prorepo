@@ -95,7 +95,7 @@ if(!isset($_POST['submit_log']) || !$_POST['submit_log']) {
     <div class="form-group">
       <label class="control-label col-sm-3" for="logName">Logname</label>
       <div class="col-sm-6">
-          <input id="name" name="name" type="text" placeholder="<?php echo $logvalues['name']?>" value"<?php echo $logvalues['name']?>" class="form-control" disabled>
+          <input id="name" name="name" type="text" placeholder="<?php echo $logvalues['name']?>" value="<?php echo $logvalues['name']?>" class="form-control" disabled>
       </div>
     </div>
     
@@ -103,7 +103,7 @@ if(!isset($_POST['submit_log']) || !$_POST['submit_log']) {
     <div class="form-group">
       <label class="control-label col-sm-3" for="modelName">Modelname</label>
       <div class="col-sm-6">
-      <input id="name" name="name" type="text" placeholder="<?php if(isset($_SESSION['modelname'])) { echo $_SESSION['modelname'];} else { echo $logvalues['modelName']; } ?>" value"<<?php if(isset($_SESSION['modelname'])) { echo $_SESSION['modelname'];} else { echo $logvalues['modelName']; } ?>" class="form-control" disabled>
+      <input id="name" name="name" type="text" placeholder="<?php if(isset($_SESSION['modelname'])) { echo $_SESSION['modelname'];} else { echo $logvalues['modelName']; } ?>" value="<?php if(isset($_SESSION['modelname'])) { echo $_SESSION['modelname'];} else { echo $logvalues['modelName']; } ?>" class="form-control" disabled>
       </div>
     </div>
 
@@ -126,7 +126,7 @@ if(!isset($_POST['submit_log']) || !$_POST['submit_log']) {
     <div class="form-group">
       <label class="control-label col-sm-3" for="comment">Comment</label>
       <div class="col-sm-6">                     
-      <textarea id="comment" name="comment" class="form-control" rows="4" placeholder="<?php echo $logvalues['comment']?>" value"<?php echo $logvalues['comment']?>"></textarea>
+      <textarea id="comment" name="comment" class="form-control" rows="4" placeholder="<?php echo $logvalues['comment']?>" value="<?php echo $logvalues['comment']?>"></textarea>
       </div>
     </div>
 

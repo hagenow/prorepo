@@ -58,7 +58,7 @@ if(DEBUG)
         <label class="control-label col-sm-3"></label>
         <div class="col-sm-8">
             <button type="submit" id="submit_user" name="submit_user" value="update "class="btn btn-success">Update profile</button>
-            <button type="reset" value"Reset" class="btn btn-danger">Reset</button>
+            <button type="reset" value="Reset" class="btn btn-danger">Reset</button>
         </div>
     </div>
     <!-- place captcha here -->

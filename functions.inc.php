@@ -29,4 +29,10 @@ require_once 'functions/dwndfunc.inc.php';
 
 /* Alle Funktionen für das Handling von Gruppen */
 require_once 'functions/grpfunc.inc.php';
+
+/* Funktionen für die Validierung von XML basierten Dateien */
+require_once 'functions/vldfunc.inc.php';
+
+/* Funktionen für das Zippen von Ordrnerstrukturen mit Pfaderhaltung*/
+require_once 'functions/zipfunc.inc.php';
 ?>

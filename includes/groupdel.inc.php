@@ -4,6 +4,13 @@ require 'authcheck.inc.php';
 require_once '../config.inc.php';
 require_once '../functions.inc.php';
 
+if(isset($_GET['referrer']))
+{
+    if(isset($_GET['modelID']))
+        deletefromgroup("model",$_GET['modelID']);
+    if(isset($_GET['logID']))
+        deletefromgroup("log",$_GET['logID']);
+}
 if(isset($_GET['modelID']))
 {
     $arr = $_SESSION['grpmodels'];

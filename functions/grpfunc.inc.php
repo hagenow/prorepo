@@ -19,10 +19,12 @@ function creategroup()
     $_SESSION['groupName'] = $_POST['groupName'];
 
     $conid = db_connect();
+    
+    $guid = guid();
 
     $sql = "INSERT INTO ".TBL_PREFIX."groups
-                    (`groupName`, `timestamp`, `state`)
-            VALUES  ('".$_POST['groupName']."', NOW(), 0)";
+                    (groupName, timestamp, guid, creator, state)
+            VALUES  ('".$_POST['groupName']."', NOW(), '$guid', '".$_SESSION['user']."','1')";
 
     if($res = $conid->prepare($sql))
     {
@@ -58,34 +60,6 @@ function addmodel2group()
 {
     if(in_array($_GET['modelID'], $_SESSION['grpmodels']))
     {
-        echo "Already added!";
-    }
-    else
-    {
-        array_push($_SESSION['grpmodels'], $_GET['modelID']);
-        echo "Added successfully!";
-    }
-}
-
-function removelogfromgroup()
-{
-    if(in_array($_GET['logID'], $_SESSION['grplogs']))
-    {
-        // place code here to remove the element
-        echo "Already added!";
-    }
-    else
-    {
-        array_push($_SESSION['grplogs'], $_GET['logID']);
-        echo "Added successfully!";
-    }
-}
-
-function removemodelfromgroup()
-{
-    if(in_array($_GET['modelID'], $_SESSION['grpmodels']))
-    {
-        // place code here to remove the element
         echo "Already added!";
     }
     else
@@ -152,33 +126,46 @@ function savegroup()
     $groupid = $_SESSION['groupID'];
 
     $sqlmodels = "INSERT INTO ".TBL_PREFIX."modelgroups
-                    (groupID, modelID)
+                    (groupID, modelID, timestamp)
                   VALUES
-                    ('$groupid', ?)";
-
-    $res = $conid->prepare($sqlmodels);
-    $res->bind_param('i',$modelid);
+                    ('$groupid', ?, ?)";
 
     // execute for all modelids in array
-    foreach($models as $id)
+    if($res = $conid->prepare($sqlmodels))
     {
-        $modelid = $id;
-        $res->execute();
+        $res->bind_param('is',$modelid,$modeltimestamp);
+
+        foreach($models as $entry)
+        {
+            $parts = explode("|",$entry);
+            $modelid = $parts[0];
+            $modeltimestamp = $parts[1];
+            $res->execute();
+        }
     }
+    else
+        echo $conid->error;
 
     $sqllogs = "INSERT INTO ".TBL_PREFIX."loggroups
-                    (groupID, logID)
+                    (groupID, logID, timestamp)
                   VALUES
-                    ('$groupid', ?)";
+                    ('$groupid', ?, ?)";
 
-    $res = $conid->prepare($sqllogs);
-    $res->bind_param('i',$logid);
-
-    // execute for all logids in array
-    foreach($logs as $logid)
+    if($res = $conid->prepare($sqllogs))
     {
-        $res->execute();
+        $res->bind_param('is',$logid, $logtimestamp);
+
+        // execute for all logids in array
+        foreach($logs as $entry)
+        {
+            $parts = explode("|",$entry);
+            $logid = $parts[0];
+            $logtimestamp = $parts[1];
+            $res->execute();
+        }
     }
+    else
+        echo $conid->error;
 
     $conid->close();
 
@@ -191,4 +178,101 @@ function savegroup()
 
     return true;
 }
+
+function viewgroup($groupid)
+{
+    $conid = db_connect();
+
+    $groupvalues = array();
+
+    $sql = "SELECT groupID, groupName, timestamp, guid, creator, state
+            FROM ".TBL_PREFIX."groups
+            WHERE groupID = '$groupid'";
+
+    $res = $conid->prepare($sql);
+    $res->execute();
+    $res->store_result();
+    $res->bind_result($groupvalues['id'],$groupvalues['name'],$groupvalues['timestamp'],$groupvalues['guid'],$groupvalues['creator'],$groupvalues['state']);
+    $res->fetch();
+
+
+    if($res->affected_rows == 1)
+    {
+        $res->fetch();
+        $groupvalues['timestamp'] = date("d.m.Y", strtotime($groupvalues['timestamp']));
+        $conid->close();
+        return $groupvalues;
+    }
+}
+
+function linkedtypes($id,$type)
+{
+    $conid = db_connect();
+
+    $sql = "SELECT ".$type."ID
+            FROM ".TBL_PREFIX.$type."groups
+            WHERE groupID = $id";
+
+    if( $res = $conid->query($sql) )
+    {
+
+        while( $row = $res->fetch_assoc() )
+        {
+            if($type == "model")
+            {
+                $values = viewmodel($row['modelID']);
+
+                $html = "";
+                $html .= "<tr>";
+                $html .= "<td><a href=\"".$_SERVER['PHP_SELF']."?show=modview&modelID=".$values['id']."&timestamp=".date("YmdHis", strtotime($values['timestamp']))."\">".$values['name']."</a></td>";
+                $html .= "<td class=\"text-center\">".date("d.m.Y - H:i:s", strtotime($values['timestamp']))."</td>";
+                $html .= "<td class=\"text-center\">";
+                $html .= "<button type=\"submit\" class=\"btn btn-default btn-sm\" name=\"removegroupmodel\" value=\"".$values['id']."|".$id."\">";
+                $html .= "<span class=\"glyphicon glyphicon-minus\"></span> Remove from group</button>";
+                $html .= "</td>";
+                $html .= "</tr>";
+
+                echo $html;
+            }
+
+            if($type == "log")
+            {
+                $values = viewlog($row['logID']);
+
+                $html = "";
+                $html .= "<tr>";
+                $html .= "<td><a href=\"".$_SERVER['PHP_SELF']."?show=logview&logID=".$values['id']."&timestamp=".date("YmdHis", strtotime($values['timestamp']))."\">".$values['name']."</a></td>";
+                $html .= "<td class=\"text-center\">".date("d.m.Y - H:i:s", strtotime($values['timestamp']))."</td>";
+                $html .= "<td class=\"text-center\">";
+                $html .= "<button type=\"submit\" class=\"btn btn-default btn-sm\" name=\"removegrouplog\" value=\"".$values['id']."|".$id."\">";
+                $html .= "<span class=\"glyphicon glyphicon-minus\"></span> Remove from group</button>";
+                $html .= "</td>";
+                $html .= "</tr>";
+
+                echo $html;
+            }
+        }
+    }
+    echo $conid->error;
+    $conid->close();
+}
+
+function deletefromgroup($type,$id)
+{
+    $conid = db_connect();
+
+    $parts = explode("|",$id);
+    $id = $parts[0];
+    $groupid = $parts[1];
+
+    $sql = "DELETE FROM ".TBL_PREFIX.$type."groups 
+            WHERE groupID = '$groupid'
+            AND ".$type."ID = '$id'";
+
+    $res = $conid->query($sql);
+
+    echo $conid->error;
+    return ($res->affected_rows == 1) ? true : false;
+}
+
 ?>

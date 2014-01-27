@@ -79,8 +79,8 @@ $_SESSION['cname']; ?>" class="form-control search-query" disabled>
     <div class="form-group">
       <label class="control-label col-sm-3" for="checkboxes">Validate PNML file</label>
       <div class="col-sm-6">
-        <label class="checkbox-inline" for="checkboxes-0">
-          <input type="checkbox" name="checkboxes" id="checkboxes-0" value="validate">
+        <label class="checkbox-inline" for="checkboxes">
+          <input type="checkbox" name="checkboxes" id="checkboxes-0" value="validatepnml">
           validate
         </label>
       </div>

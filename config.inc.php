@@ -15,6 +15,9 @@ define('DB_HOST', 'localhost');
 /** prefix of tables */
 define ('TBL_PREFIX', 'repo_');
 
+/** tmp folder */
+define ('TMP', 'tmp/');
+
 /** own debug check */
 define ('DEBUG', TRUE);
 

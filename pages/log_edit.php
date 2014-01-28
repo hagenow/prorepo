@@ -175,11 +175,11 @@ else {
 
         if(editlog($_POST['logid']))
         {
-            echo "Das Modell wurde aktualisiert!";
+            echo "Successfully updated the log!";
         }
         else
         {
-            echo "Bei der Aktualisierung ist was schief gelaufen!";
+            echo "There was an error while update the log!";
         }
     }
 } 

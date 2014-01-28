@@ -130,11 +130,11 @@ else {
 
         if(editmodel($_POST['modid']))
         {
-            echo "Das Modell wurde aktualisiert!";
+            echo "Successfully updated the model!";
         }
         else
         {
-            echo "Bei der Aktualisierung ist was schief gelaufen!";
+            echo "There was an error while update the model!";
         }
     }
 } 

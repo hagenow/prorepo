@@ -1,9 +1,24 @@
 <?php
 echo "<pre>".print_r($_SESSION, true)."</pre>";
 ?>
-<?php if(!isset($_GET['action']) || !$_GET['action']) : ?>
 
-    <h4>In this Group included:</h4>
+<?php if(!isset($_GET['action']) && !isset($_SESSION['groupID'])) : ?>
+<div class="alert alert-warning">
+    Illegal function call - please create or edit a group first!
+<?php 
+    unset($_SESSION['updateflag']);
+    unset($_SESSION['grpmodels']);
+    unset($_SESSION['grplogs']);
+    unset($_SESSION['groupID']);
+    unset($_SESSION['grpnewmodels']);
+    unset($_SESSION['grpnewlogs']);
+?>
+</div>
+<?php endif; ?>
+
+<?php if((!isset($_GET['action']) || !$_GET['action']) && isset($_SESSION['groupID'])) : ?>
+
+    <h4>Temporary set of models and logs:</h4>
 
 <div class="panel panel-success">
   <div class="panel-heading">
@@ -20,9 +35,19 @@ echo "<pre>".print_r($_SESSION, true)."</pre>";
         </thead>
         <tbody>
             <?php 
-                foreach($_SESSION['grpmodels'] as $key => $id)
+                if(isset($_SESSION['updateflag']))
                 {
-                    getnamesfromgroup("model", $key, $id); 
+                    foreach($_SESSION['grpnewmodels'] as $key => $id)
+                    {
+                        getnamesfromgroup("model", $key, $id); 
+                    }
+                }
+                else
+                {
+                    foreach($_SESSION['grpmodels'] as $key => $id)
+                    {
+                        getnamesfromgroup("model", $key, $id); 
+                    }
                 }
             ?>
         </tbody>
@@ -37,16 +62,26 @@ echo "<pre>".print_r($_SESSION, true)."</pre>";
     <table class="table table-striped">
         <thead>
             <tr>
-                <th>Modelname</th>
+                <th>Logname</th>
                 <th class="text-center">Creator</th>
                 <th class="text-center">Action</th>
             </tr>
         </thead>
         <tbody>
             <?php 
-                foreach($_SESSION['grplogs'] as $key => $id)
+                if(isset($_SESSION['updateflag']))
                 {
-                    getnamesfromgroup("log", $key, $id); 
+                    foreach($_SESSION['grpnewlogs'] as $key => $id)
+                    {
+                        getnamesfromgroup("log", $key, $id); 
+                    }
+                }
+                else
+                {
+                    foreach($_SESSION['grplogs'] as $key => $id)
+                    {
+                        getnamesfromgroup("log", $key, $id); 
+                    }
                 }
             ?>
         </tbody>
@@ -54,20 +89,38 @@ echo "<pre>".print_r($_SESSION, true)."</pre>";
 </div>
 
         <button type="button" class="btn btn-primary pull-right" onclick="location.href='<?php echo $_SERVER['PHP_SELF']."?show=groupcurrent&action=save"; ?>'">
-           <span class="glyphicon glyphicon-circle-arrow-down"></span> Save group and create permanent link
+           <span class="glyphicon glyphicon-circle-arrow-down"></span> Save group!
         </button>
 
 <?php endif; ?>
 
-<?php if(isset($_GET['action']) && $_GET['action'] == "save" && !isset($_SESSION['groupID'])) : ?>
+<?php if(isset($_GET['action']) && $_GET['action'] == "load" && isset($_SESSION['groupID']) && !isset($_SESSION['updateflag'])) : ?>
 <div class="alert alert-warning">
-    Illegal function call - please create a group first!
+    Illegal function call - please create or edit a group first!
+<?php 
+    unset($_SESSION['updateflag']);
+    unset($_SESSION['grpmodels']);
+    unset($_SESSION['grplogs']);
+    unset($_SESSION['groupID']);
+    unset($_SESSION['grpnewmodels']);
+    unset($_SESSION['grpnewlogs']);
+?>
 </div>
 <?php endif; ?>
 
+<?php if(isset($_GET['action']) && $_GET['action'] == "load" && isset($_SESSION['groupID']) && isset($_SESSION['updateflag'])) : ?>
+<?php header("Location: ".$_SERVER['PHP_SELF']."?show=groupcurrent"); ?>
+<?php endif; ?>
+
+<?php if(isset($_GET['action']) && $_GET['action'] == "load" && !isset($_SESSION['groupID']) && isset($_SESSION['angemeldet'])) : ?>
+    <?php initgroup($_GET['groupID']); ?>
+    <?php header("Location: ".$_SERVER['PHP_SELF']."?show=groupcurrent"); ?>
+<?php endif; ?>
+
+
 <?php if(isset($_GET['action']) && $_GET['action'] == "save" && isset($_SESSION['groupID'])) : ?>
-
-The group will be saved as:<br />
-<?php savegroup(); ?>
-
+<?php 
+    savegroup(); 
+?>
+Changes saved!
 <?php endif; ?>

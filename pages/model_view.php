@@ -32,7 +32,11 @@ else
         <button type="button" class="btn btn-default btn-sm" onclick="location.href='<?php echo $_SERVER['PHP_SELF']."?show=modedit&modelID=".$_GET['modelID']; ?>'">
            <span class="glyphicon glyphicon-wrench"></span> Edit model
         </button>
-    <?php if(isset($_SESSION['groupID'])) : ?>
+    <?php if(isset($_SESSION['groupID']) && isset($_SESSION['updateflag']) && in_array($_GET['modelID'], $_SESSION['grpmodels'])) : ?>
+        <button type="button" class="btn btn-default btn-sm" id="addmodel2group_donothing" value="<?php echo $_GET['modelID']."|".$date; ?>">
+           <span class="glyphicon glyphicon-flash"></span> Already added, please remove first!
+        </button>
+    <?php elseif(isset($_SESSION['groupID'])) : ?>
         <button type="button" class="btn btn-default btn-sm" id="addmodel2group" value="<?php echo $_GET['modelID']."|".$date; ?>">
            <span class="glyphicon glyphicon-plus"></span> Add to group
         </button>

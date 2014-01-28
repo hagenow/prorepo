@@ -41,6 +41,31 @@ function cleaninput($string)
     return $string;
 }
 
+function cleantags($string)
+{
+    $conid = db_connect();
+
+    // entferne schädlichen Code wie <p>, <script>, etc...
+    // TAGs entfernen
+    $string = strip_tags($string);
+    $string = filter_var($string ,FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW);
+
+    // falls es in die Datenbank kommen soll, wird es noch mal escaped
+    $conid->real_escape_string( $string );
+
+    // slashes entfernen, falls noch welche vorhanden oder anders codiert
+    $string = stripslashes( $string );
+
+    // erlaubt sind nur folgende Zeichen: -,_,a-z,A-Z,0-9,[Leerzeichen] - alles andere
+    // wird escaped
+    $string = preg_replace('/[^-a-zA-Z0-9,]/', '',$string);
+
+    // db-Verbindung schließen
+    $conid->close();
+
+    return $string;
+}
+
 // create guid (UUID) for Groups
 function guid(){
     if (function_exists('com_create_guid')){

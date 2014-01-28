@@ -23,13 +23,16 @@ else
         <button type="button" class="btn btn-default btn-sm" onclick="location.href='<?php echo $_SERVER['PHP_SELF']."?show=groupedit&groupID=".$_GET['groupID']; ?>'">
            <span class="glyphicon glyphicon-wrench"></span> Edit group
         </button>
+        <button type="button" class="btn btn-default btn-sm" onclick="location.href='<?php echo $_SERVER['PHP_SELF']."?show=groupcurrent&groupID=".$_GET['groupID']."&action=load"; ?>'">
+           <span class="glyphicon glyphicon-plus"></span> Add new models or logs
+        </button>
         </div>
     <?php endif; ?>
   <h3 class="panel-title"><h3><?php echo $groupvalues['name']; ?></h3></div>
   <div class="panel-body">
     <h4>Tags:</h4>
     <blockquote>
-    <p><?php // echo $groupvalues['tags']; ?></p>
+    <p><?php  echo $groupvalues['tags']; ?></p>
     </blockquote>
     <small>Added: <?php echo $groupvalues['timestamp']. " (".$groupvalues['creator'].")" ?></small>
   </div>
@@ -84,7 +87,20 @@ else
 
 <?php if(isset($_GET['action']) && $_GET['action'] == "save" && isset($_GET['groupID'])) : ?>
 
-Creating ZIP-file and download... <br/>
-<?php // downloadgroupaszip($_GET['groupID']); ?>
+Creating ZIP-file and serve download... <br/>
+<?php 
+    $zip = array();
+    $zip = createzip($_GET['groupID']); 
+    
+    $z = new ZipArchive();
+    $z->open("".TMP."/group_".$_GET['groupID'].".zip", ZIPARCHIVE::CREATE);
+    foreach($zip as $folder)
+    {
+        folderToZip($folder, $z);
+    }
+    $z->close();
+
+    getzip("group_".$_GET['groupID'].".zip", "".TMP."");
+?>
 
 <?php endif; ?>

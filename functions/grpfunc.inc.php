@@ -17,14 +17,18 @@ function creategroup()
     $_SESSION['grpmodels'] = $models;
     $_SESSION['grplogs'] = $logs;
     $_SESSION['groupName'] = $_POST['groupName'];
+    $_SESSION['groupTags'] = $_POST['groupTags'];
+
+    $_SESSION['groupName'] = cleaninput($_SESSION['groupName']);
+    $_SESSION['groupTags'] = cleantags($_SESSION['groupTags']);
 
     $conid = db_connect();
     
     $guid = guid();
 
     $sql = "INSERT INTO ".TBL_PREFIX."groups
-                    (groupName, timestamp, guid, creator, state)
-            VALUES  ('".$_POST['groupName']."', NOW(), '$guid', '".$_SESSION['user']."','1')";
+                    (groupName, timestamp, guid, creator, state, tags)
+            VALUES  ('".$_SESSION['groupName']."', NOW(), '$guid', '".$_SESSION['user']."','1','".$_SESSION['groupTags']."')";
 
     if($res = $conid->prepare($sql))
     {
@@ -43,11 +47,77 @@ function creategroup()
     }
 }
 
+function initgroup($id)
+{
+    $models = array();
+    $logs = array();
+
+    $_SESSION['grpmodels'] = $models;
+    $_SESSION['grplogs'] = $logs;
+    $_SESSION['groupID'] = $id;
+
+    $models_edit = array();
+    $logs_edit = array();
+
+    $_SESSION['grpnewmodels'] = $models_edit;
+    $_SESSION['grpnewlogs'] = $logs_edit;
+
+    $_SESSION['updateflag'] = true;
+
+    $conid = db_connect();
+
+    $sqllogs = "SELECT logID
+                FROM ".TBL_PREFIX."loggroups
+                WHERE groupID = $id";
+    
+    $sqlmodels = "SELECT modelID
+                  FROM ".TBL_PREFIX."modelgroups
+                  WHERE groupID = $id";
+
+    // read linked logs from group
+    if( $res = $conid->query($sqllogs) )
+    {
+        while( $row = $res->fetch_assoc() )
+        {
+            $val = $row['logID'];
+            array_push($_SESSION['grplogs'], $val); 
+        }
+    }
+    else
+    {
+        echo $conid-error;
+        $conid->close();
+    }
+
+    // read linked models from group
+    if( $res = $conid->query($sqlmodels) )
+    {
+        while( $row = $res->fetch_assoc() )
+        {
+            $val = $row['modelID'];
+            array_push($_SESSION['grpmodels'], $val); 
+        }
+    }
+    else
+    {
+        echo $conid-error;
+        $conid->close();
+    }
+
+    $conid->close();
+}
+
 function addlog2group()
 {
-    if(in_array($_GET['logID'], $_SESSION['grplogs']))
+    if(in_array($_GET['logID'], $_SESSION['grplogs']) && !isset($_SESSION['updateflag']) || 
+        in_array($_GET['logID'], $_SESSION['grpnewlogs']) && isset($_SESSION['updateflag']) )
     {
         echo "Already added!";
+    }
+    elseif(!in_array($_GET['logID'], $_SESSION['grplogs']) && isset($_SESSION['updateflag']))
+    {
+        array_push($_SESSION['grpnewlogs'], $_GET['logID']);
+        echo "Added successfully!";
     }
     else
     {
@@ -58,9 +128,15 @@ function addlog2group()
 
 function addmodel2group()
 {
-    if(in_array($_GET['modelID'], $_SESSION['grpmodels']))
+    if(in_array($_GET['modelID'], $_SESSION['grpmodels']) && !isset($_SESSION['updateflag']) || 
+        in_array($_GET['modelID'], $_SESSION['grpnewmodels']) && isset($_SESSION['updateflag']))
     {
         echo "Already added!";
+    }
+    elseif(!in_array($_GET['modelID'], $_SESSION['grpmodels']) && isset($_SESSION['updateflag']))
+    {
+        array_push($_SESSION['grpnewmodels'], $_GET['modelID']);
+        echo "Added successfully!";
     }
     else
     {
@@ -121,8 +197,16 @@ function savegroup()
 {
     $conid = db_connect();
 
-    $models = $_SESSION['grpmodels'];
-    $logs = $_SESSION['grplogs'];
+    if(isset($_SESSION['updateflag']))
+    {
+        $models = $_SESSION['grpnewmodels'];
+        $logs = $_SESSION['grpnewlogs'];
+    }
+    else
+    {
+        $models = $_SESSION['grpmodels'];
+        $logs = $_SESSION['grplogs'];
+    }
     $groupid = $_SESSION['groupID'];
 
     $sqlmodels = "INSERT INTO ".TBL_PREFIX."modelgroups
@@ -169,10 +253,14 @@ function savegroup()
 
     $conid->close();
 
-    echo "Saved all entries!";
-
     unset($_SESSION['grpmodels']);
     unset($_SESSION['grplogs']);
+    if(isset($_SESSION['updateflag']))
+    {
+        unset($_SESSION['grpnewmodels']);
+        unset($_SESSION['grpnewlogs']);
+        unset($_SESSION['updateflag']);
+    }
     unset($_SESSION['groupID']);
     unset($_SESSION['groupName']);
 
@@ -185,14 +273,14 @@ function viewgroup($groupid)
 
     $groupvalues = array();
 
-    $sql = "SELECT groupID, groupName, timestamp, guid, creator, state
+    $sql = "SELECT groupID, groupName, timestamp, guid, creator, state, tags
             FROM ".TBL_PREFIX."groups
             WHERE groupID = '$groupid'";
 
     $res = $conid->prepare($sql);
     $res->execute();
     $res->store_result();
-    $res->bind_result($groupvalues['id'],$groupvalues['name'],$groupvalues['timestamp'],$groupvalues['guid'],$groupvalues['creator'],$groupvalues['state']);
+    $res->bind_result($groupvalues['id'],$groupvalues['name'],$groupvalues['timestamp'],$groupvalues['guid'],$groupvalues['creator'],$groupvalues['state'],$groupvalues['tags']);
     $res->fetch();
 
 
@@ -275,4 +363,97 @@ function deletefromgroup($type,$id)
     return ($res->affected_rows == 1) ? true : false;
 }
 
+function editgroup($id)
+{
+    $conid = db_connect();
+
+    $tags = cleantags($_POST['tags']);
+
+    $sql = "UPDATE ".TBL_PREFIX."groups
+            SET timestamp = '".$_POST['timestamp']."', tags = '$tags'
+            WHERE groupID = '$id'";
+
+    $res = $conid->prepare($sql);
+    $res->execute();
+    $res->store_result();
+
+    $conid->close();
+
+    return ($res->affected_rows == 1) ? true : false;
+}
+
+function createzip($id)
+{
+    $conid = db_connect();
+
+    $type = "";
+    $typeid = "";
+    $date = "";
+
+    $sqllogs = "SELECT logID,timestamp
+                FROM ".TBL_PREFIX."loggroups
+                WHERE groupID = $id";
+    
+    $sqlmodels = "SELECT modelID,timestamp
+                  FROM ".TBL_PREFIX."modelgroups
+                  WHERE groupID = $id";
+
+
+    $zip = array();
+    $tmp = array();
+
+    // read linked logs from group
+    if( $res = $conid->query($sqllogs) )
+    {
+        while( $row = $res->fetch_assoc() )
+        {
+            $val = $row['logID']."|".$row['timestamp']."|log";
+            array_push($tmp, $val); 
+        }
+    }
+    else
+    {
+        echo $conid-error;
+        $conid->close();
+    }
+
+    // read linked models from group
+    if( $res = $conid->query($sqlmodels) )
+    {
+        while( $row = $res->fetch_assoc() )
+        {
+            $val = $row['modelID']."|".$row['timestamp']."|model";
+            array_push($tmp, $val); 
+        }
+    }
+    else
+    {
+        echo $conid-error;
+        $conid->close();
+    }
+
+    // for each entry in tmp, explode 
+    foreach($tmp as $t)
+    {
+        $parts = explode("|",$t);
+        $typeid = $parts[0];
+        $date = $parts[1];
+        $type = $parts[2];
+        $sqlfiles = "SELECT DISTINCT(path)
+                     FROM ".TBL_PREFIX."files
+                     WHERE type = '$type' AND foreignID = '$typeid' AND timestamp <= '$date'
+                     ORDER BY timestamp
+                     DESC";
+        $res = $conid->query($sqlfiles);
+        while( $row = $res->fetch_assoc() )
+        {
+            // $path_filename = $row['path']."|".$row['fileName'];
+            array_push($zip, $row['path']);
+        }
+        $res->free();
+    }
+    return $zip;
+
+    $conid->close();
+}
 ?>

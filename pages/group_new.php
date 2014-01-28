@@ -10,6 +10,14 @@
         </div>
     </div>
 
+    <!-- Textarea -->
+    <div class="form-group">
+      <label class="control-label col-sm-3" for="groupTags">Tags</label>
+      <div class="col-sm-6">
+        <textarea id="groupTags" name="groupTags" class="form-control" rows="4" placeholder="Comma-separated list of tags"></textarea>
+      </div>
+    </div>
+
     <!-- timestamp -->
     <input type="hidden" name="timestamp" value="<?php echo date("YmdHis"); ?>">
 
@@ -19,6 +27,7 @@
             <button type="submit" id="submit_group" name="submit_group" value="Submit "class="btn btn-success">Create Group</button>
         </div>
     </div>
+
     </fieldset>
 </form>
 <?php endif; ?>

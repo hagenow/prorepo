@@ -91,7 +91,7 @@ function sendregmail($login,$uniqid,$email)
     $mailbody = str_replace( '###EMAIL###', $email, $mailbody );
     $mailbody = str_replace( '###URL###', $url, $mailbody );
 
-    sendmail($email,$login,$subject,$mailbody);
+    return sendmail($email,$login,$subject,$mailbody);
 }
 
 function sendmailpw($email,$login,$uniqid)

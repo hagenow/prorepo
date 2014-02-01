@@ -319,28 +319,29 @@ function registeruser()
 
     $sql = "INSERT INTO
                 ".TBL_PREFIX."users
-                (login, password, firstname, lastname, email, affiliation, registerdate,verifyid)
+                (login, password, firstname, lastname, email, affiliation, registerdate,verifyid, usergroup)
                 VALUES
                 ('".$conid->real_escape_string($login)."','".$conid->real_escape_string($password)."',
                     '".$conid->real_escape_string($firstname)."','".$conid->real_escape_string($lastname)."',
                     '".$conid->real_escape_string($email)."','".$conid->real_escape_string($affiliation)."',
-                    CURDATE(), '$uniqid')";
+                    CURDATE(), '$uniqid', '2')";
 
-    if(sendregmail($login,$uniqid,$email))
+    if($res = $conid->prepare($sql))
     {
-        if($res = $conid->prepare($sql))
+        $res->execute();
+        if($res->affected_rows == 1)
         {
-            $res->execute();
-            $res->store_result();
-            return ($res->affected_rows == 1) ? true : false;
+            $conid->close();
+            return sendregmail($login,$uniqid,$email);
         }
         else
         {
-            echo $conid->error;
+            return false; 
         }
     }
     else
     {
+        echo $conid->error; 
         return false;
     }
 

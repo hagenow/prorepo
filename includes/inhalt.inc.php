@@ -17,6 +17,7 @@ if(isset($_GET['show']))
         case "notloggedin": require 'pages/user_notloggedin.php'; break;
 
         case "admincontact": require 'pages/admin_contact.php'; break;
+        case "adminuser": require 'pages/admin_user.php'; break;
         case "contact": require 'pages/contact.php'; break;
         case "download": require 'pages/download.php'; break;
 

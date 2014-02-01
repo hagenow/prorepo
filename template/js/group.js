@@ -78,4 +78,17 @@ $(document).ready(function () {
     		}
     	);
     });
+
+    $("#switchgrpstate").click(function(){
+        var st = $( this ).val();
+    	$.get("includes/groupedit.inc.php",
+    		{
+    			state: st
+    		},
+    		function(data){
+    			$("#switchgrpstate").html(data);
+    		}
+    	);
+    });
+
 });

@@ -15,8 +15,8 @@ require_once 'functions.inc.php';
         <thead>
             <tr>
                 <th>Logname</th>
-                <th>Creation date</th>
-                <th>Creator</th>
+                <th class="text-center">Creation date</th>
+                <th class="text-center">Creator</th>
             </tr>
         </thead>
         <tbody>

@@ -1,3 +1,4 @@
+<?php require 'includes/authcheck.inc.php'; ?>
 <?php if(!isset($_POST['submit_cat']) || !$_POST['submit_cat']) : ?>
 <form class="form-horizontal" name="CreateCategory" id="CreateCategory" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>?show=catnew">
     <fieldset>

@@ -35,4 +35,7 @@ require_once 'functions/vldfunc.inc.php';
 
 /* Funktionen für das Zippen von Ordrnerstrukturen mit Pfaderhaltung*/
 require_once 'functions/zipfunc.inc.php';
+
+/* Funktionen für das Zippen von Ordrnerstrukturen mit Pfaderhaltung*/
+require_once 'functions/mailfunc.inc.php';
 ?>

@@ -1,5 +1,5 @@
 <?php
-echo "<pre>".print_r($_SESSION, true)."</pre>";
+require 'includes/authcheck.inc.php'; 
 ?>
 
 <?php if(!isset($_GET['action']) && !isset($_SESSION['groupID'])) : ?>
@@ -10,13 +10,14 @@ echo "<pre>".print_r($_SESSION, true)."</pre>";
     unset($_SESSION['grpmodels']);
     unset($_SESSION['grplogs']);
     unset($_SESSION['groupID']);
-    unset($_SESSION['grpnewmodels']);
-    unset($_SESSION['grpnewlogs']);
+    unset($_SESSION['grpoldmodels']);
+    unset($_SESSION['grpoldlogs']);
 ?>
 </div>
 <?php endif; ?>
 
 <?php if((!isset($_GET['action']) || !$_GET['action']) && isset($_SESSION['groupID'])) : ?>
+<?php echo "<pre>".print_r($_SESSION,TRUE)."</pre>"; ?>
 
     <h4>Temporary set of models and logs:</h4>
 
@@ -37,14 +38,14 @@ echo "<pre>".print_r($_SESSION, true)."</pre>";
             <?php 
                 if(isset($_SESSION['updateflag']))
                 {
-                    foreach($_SESSION['grpnewmodels'] as $key => $id)
+                    foreach($_SESSION['grpmodels'] as $key => $id)
                     {
                         getnamesfromgroup("model", $key, $id); 
                     }
                 }
                 else
                 {
-                    foreach($_SESSION['grpmodels'] as $key => $id)
+                    foreach($_SESSION['grpoldmodels'] as $key => $id)
                     {
                         getnamesfromgroup("model", $key, $id); 
                     }
@@ -71,14 +72,14 @@ echo "<pre>".print_r($_SESSION, true)."</pre>";
             <?php 
                 if(isset($_SESSION['updateflag']))
                 {
-                    foreach($_SESSION['grpnewlogs'] as $key => $id)
+                    foreach($_SESSION['grplogs'] as $key => $id)
                     {
                         getnamesfromgroup("log", $key, $id); 
                     }
                 }
                 else
                 {
-                    foreach($_SESSION['grplogs'] as $key => $id)
+                    foreach($_SESSION['grpoldlogs'] as $key => $id)
                     {
                         getnamesfromgroup("log", $key, $id); 
                     }
@@ -102,8 +103,8 @@ echo "<pre>".print_r($_SESSION, true)."</pre>";
     unset($_SESSION['grpmodels']);
     unset($_SESSION['grplogs']);
     unset($_SESSION['groupID']);
-    unset($_SESSION['grpnewmodels']);
-    unset($_SESSION['grpnewlogs']);
+    unset($_SESSION['grpoldmodels']);
+    unset($_SESSION['grpoldlogs']);
 ?>
 </div>
 <?php endif; ?>

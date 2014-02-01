@@ -21,6 +21,9 @@ define ('TMP', 'tmp/');
 /** own debug check */
 define ('DEBUG', TRUE);
 
+/** own debug check */
+define ('ADMINMAIL', 'hagenowh@informatik.uni-freiburg.de');
+
 /** define max. size of an uploaded file 
  * here 1024*100000 are 100 Megabytes. 
  * The value have to be in bytes */
@@ -57,8 +60,8 @@ define ('STRG_PATH', 'repository');
 
 /** PHP Settings */
 /** suppress errors with 0, else -1 will display all errors in the apache log 
-    * file*/
-error_reporting(-1);
+ * file*/
+ini_set('display_errors', 0);
 
 /** Timezone */
 date_default_timezone_set('Europe/Berlin');

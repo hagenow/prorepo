@@ -1,13 +1,5 @@
 <?php
-if(!isset($_SESSION)){
-        session_start();
-}
-// session_destroy();
-// 
-// $hostname = $_SERVER['HTTP_HOST'];
-// $path = dirname($_SERVER['PHP_SELF']);
-// 
-// header('Location: http://'.$hostname.($path == '/' ? '' : $path).'/');
+unset($_SESSION);
 
 ?>
 <div class="panel panel-danger">

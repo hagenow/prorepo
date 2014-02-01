@@ -1,0 +1,13 @@
+Hello Admin,
+
+the user ###LOGIN### (###EMAIL###) has placed a message (@ ###TIME###):
+
+------
+
+Subject:
+###SUBJECT###
+
+Message:
+###MSG###
+
+------

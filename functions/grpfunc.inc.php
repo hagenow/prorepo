@@ -51,16 +51,16 @@ function initgroup($id)
 {
     $models = array();
     $logs = array();
-
-    $_SESSION['grpmodels'] = $models;
-    $_SESSION['grplogs'] = $logs;
-    $_SESSION['groupID'] = $id;
-
     $models_edit = array();
     $logs_edit = array();
 
-    $_SESSION['grpnewmodels'] = $models_edit;
-    $_SESSION['grpnewlogs'] = $logs_edit;
+
+    $_SESSION['grpmodels'] = $models_edit;
+    $_SESSION['grplogs'] = $logs_edit;
+    $_SESSION['groupID'] = $id;
+
+    $_SESSION['grpoldmodels'] = $models;
+    $_SESSION['grpoldlogs'] = $logs;
 
     $_SESSION['updateflag'] = true;
 
@@ -80,7 +80,7 @@ function initgroup($id)
         while( $row = $res->fetch_assoc() )
         {
             $val = $row['logID'];
-            array_push($_SESSION['grplogs'], $val); 
+            array_push($_SESSION['grpoldlogs'], $val); 
         }
     }
     else
@@ -95,7 +95,7 @@ function initgroup($id)
         while( $row = $res->fetch_assoc() )
         {
             $val = $row['modelID'];
-            array_push($_SESSION['grpmodels'], $val); 
+            array_push($_SESSION['grpoldmodels'], $val); 
         }
     }
     else
@@ -110,13 +110,14 @@ function initgroup($id)
 function addlog2group()
 {
     if(in_array($_GET['logID'], $_SESSION['grplogs']) && !isset($_SESSION['updateflag']) || 
-        in_array($_GET['logID'], $_SESSION['grpnewlogs']) && isset($_SESSION['updateflag']) )
+        in_array($_GET['logID'], $_SESSION['grpoldlogs']) && isset($_SESSION['updateflag']) ||
+        in_array($_GET['logID'], $_SESSION['grplogs']) && isset($_SESSION['updateflag']) )
     {
         echo "Already added!";
     }
     elseif(!in_array($_GET['logID'], $_SESSION['grplogs']) && isset($_SESSION['updateflag']))
     {
-        array_push($_SESSION['grpnewlogs'], $_GET['logID']);
+        array_push($_SESSION['grplogs'], $_GET['logID']);
         echo "Added successfully!";
     }
     else
@@ -129,13 +130,14 @@ function addlog2group()
 function addmodel2group()
 {
     if(in_array($_GET['modelID'], $_SESSION['grpmodels']) && !isset($_SESSION['updateflag']) || 
-        in_array($_GET['modelID'], $_SESSION['grpnewmodels']) && isset($_SESSION['updateflag']))
+        in_array($_GET['modelID'], $_SESSION['grpmodels']) && isset($_SESSION['updateflag']) || 
+        in_array($_GET['modelID'], $_SESSION['grpoldmodels']) && isset($_SESSION['updateflag']))
     {
         echo "Already added!";
     }
     elseif(!in_array($_GET['modelID'], $_SESSION['grpmodels']) && isset($_SESSION['updateflag']))
     {
-        array_push($_SESSION['grpnewmodels'], $_GET['modelID']);
+        array_push($_SESSION['grpmodels'], $_GET['modelID']);
         echo "Added successfully!";
     }
     else
@@ -169,7 +171,6 @@ function getnamesfromgroup($type,$key,$typeid)
             }
 
             $html .= "<td class=\"text-center\"><a href=\"".$_SERVER['PHP_SELF']."?show=user&name=".$row['creator']."\">".$row['creator']."</td>";
-
             if($type == "model")
             {
                 $html .= "<td class=\"text-center\">";
@@ -197,16 +198,9 @@ function savegroup()
 {
     $conid = db_connect();
 
-    if(isset($_SESSION['updateflag']))
-    {
-        $models = $_SESSION['grpnewmodels'];
-        $logs = $_SESSION['grpnewlogs'];
-    }
-    else
-    {
-        $models = $_SESSION['grpmodels'];
-        $logs = $_SESSION['grplogs'];
-    }
+    $models = $_SESSION['grpmodels'];
+    $logs = $_SESSION['grplogs'];
+
     $groupid = $_SESSION['groupID'];
 
     $sqlmodels = "INSERT INTO ".TBL_PREFIX."modelgroups
@@ -257,8 +251,8 @@ function savegroup()
     unset($_SESSION['grplogs']);
     if(isset($_SESSION['updateflag']))
     {
-        unset($_SESSION['grpnewmodels']);
-        unset($_SESSION['grpnewlogs']);
+        unset($_SESSION['grpoldmodels']);
+        unset($_SESSION['grpoldlogs']);
         unset($_SESSION['updateflag']);
     }
     unset($_SESSION['groupID']);
@@ -293,7 +287,7 @@ function viewgroup($groupid)
     }
 }
 
-function linkedtypes($id,$type)
+function linkedtypes($id,$type,$creator)
 {
     $conid = db_connect();
 
@@ -315,9 +309,12 @@ function linkedtypes($id,$type)
                 $html .= "<td><a href=\"".$_SERVER['PHP_SELF']."?show=modview&modelID=".$values['id']."&timestamp=".date("YmdHis", strtotime($values['timestamp']))."\">".$values['name']."</a></td>";
                 $html .= "<td class=\"text-center\">".date("d.m.Y - H:i:s", strtotime($values['timestamp']))."</td>";
                 $html .= "<td class=\"text-center\">";
-                $html .= "<button type=\"submit\" class=\"btn btn-default btn-sm\" name=\"removegroupmodel\" value=\"".$values['id']."|".$id."\">";
-                $html .= "<span class=\"glyphicon glyphicon-minus\"></span> Remove from group</button>";
-                $html .= "</td>";
+                if(isset($_SESSION['angemeldet']) && isset($_SESSION['user']) && $_SESSION['user'] == $creator || isadmin())
+                {
+                    $html .= "<button type=\"submit\" class=\"btn btn-default btn-sm\" name=\"removegroupmodel\" value=\"".$values['id']."|".$id."\">";
+                    $html .= "<span class=\"glyphicon glyphicon-minus\"></span> Remove from group</button>";
+                }
+                    $html .= "</td>";
                 $html .= "</tr>";
 
                 echo $html;
@@ -332,8 +329,11 @@ function linkedtypes($id,$type)
                 $html .= "<td><a href=\"".$_SERVER['PHP_SELF']."?show=logview&logID=".$values['id']."&timestamp=".date("YmdHis", strtotime($values['timestamp']))."\">".$values['name']."</a></td>";
                 $html .= "<td class=\"text-center\">".date("d.m.Y - H:i:s", strtotime($values['timestamp']))."</td>";
                 $html .= "<td class=\"text-center\">";
-                $html .= "<button type=\"submit\" class=\"btn btn-default btn-sm\" name=\"removegrouplog\" value=\"".$values['id']."|".$id."\">";
-                $html .= "<span class=\"glyphicon glyphicon-minus\"></span> Remove from group</button>";
+                if(isset($_SESSION['angemeldet']) && isset($_SESSION['user']) && $_SESSION['user'] == $creator || isadmin())
+                {
+                    $html .= "<button type=\"submit\" class=\"btn btn-default btn-sm\" name=\"removegrouplog\" value=\"".$values['id']."|".$id."\">";
+                    $html .= "<span class=\"glyphicon glyphicon-minus\"></span> Remove from group</button>";
+                }
                 $html .= "</td>";
                 $html .= "</tr>";
 
@@ -456,4 +456,67 @@ function createzip($id)
 
     $conid->close();
 }
+
+function getgroupid($guid)
+{
+    $conid = db_connect();
+
+    $sql = "SELECT groupID
+            FROM ".TBL_PREFIX."groups
+            WHERE guid = '".$guid."'";
+
+    if($res = $conid->prepare($sql))
+    {
+        $res->execute();
+        $res->store_result();
+        $res->bind_result($groupID);
+        $res->fetch();
+
+        $conid->close();
+
+        return $groupID;
+    }
+    else
+    {
+        echo $conid->error;
+        $conid->close();
+    }
+}
+
+function switchgrpstate($st)
+{
+    $id = "";
+    $state = "";
+
+    $parts = explode("|",$st);
+    $id = $parts[0];
+    $state = $parts[1];
+
+    if($state == "0")
+        $statename = "<span class=\"label label-danger\">closed</span>";
+    if($state == "1")
+        $statename = "<span class=\"label label-success\">open</span>";
+
+    $conid = db_connect();
+
+    $sql = "UPDATE ".TBL_PREFIX."groups
+            SET state = '$state'
+            WHERE groupID = '$id'";
+
+    $res = $conid->query($sql);
+    if($res)
+    {
+        $conid->close();
+        echo "State: ".$statename;
+    }
+    else
+    {
+        echo $conid->error;
+        $conid->close();
+        echo "error!";
+    }
+
+}
+
+
 ?>

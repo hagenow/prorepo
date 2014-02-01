@@ -1,0 +1,10 @@
+Hello ###LOGIN###,
+
+you requested a new password.
+
+The password can be set with the following URL:
+
+###URL###
+
+Sincere regards,
+your ProRepo Team

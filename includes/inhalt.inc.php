@@ -5,14 +5,18 @@ if(isset($_GET['show']))
     {
         case "login": require 'pages/user_login.php'; break;
         case "usersettings": require 'pages/user_settings.php'; break;
+        case "usershow": require 'pages/user_show.php'; break;
+        case "userpwreset": require 'pages/user_pwreset.php'; break;
         case "updateuser": require 'pages/user_update.php'; break;
         case "register": require 'pages/user_register.php'; break;
+        case "verify": require 'pages/user_verify.php'; break;
         case "mymodels": require 'pages/user_models.php'; break;
         case "mylogs": require 'pages/user_logs.php'; break;
         case "mygroups": require 'pages/user_groups.php'; break;
         case "logout": require 'pages/user_logout.php'; break;
         case "notloggedin": require 'pages/user_notloggedin.php'; break;
 
+        case "admincontact": require 'pages/admin_contact.php'; break;
         case "contact": require 'pages/contact.php'; break;
         case "download": require 'pages/download.php'; break;
 
@@ -37,6 +41,7 @@ if(isset($_GET['show']))
         case "groupedit": require 'pages/group_edit.php'; break;
         case "groupview": require 'pages/group_view.php'; break;
         case "groupcurrent": require 'pages/group_current.php'; break;
+        case "group": require 'pages/group_redirect.php'; break;
 
         case "uc": require 'pages/under_construction.php'; break;
 
@@ -47,5 +52,4 @@ else
 {
     require 'pages/start.php';
 }
-
 ?>

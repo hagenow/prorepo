@@ -21,38 +21,6 @@ function checkuserlogin($user, $pass)
     }
 } 
 
-/** Ähnlich wie checkuserlogin mit dem Zusatz der Gruppenprüfung auf 
- * Mitgliedschaft in der admin-Gruppe
- * */
-function checkadminlogin($user, $pass)
-{
-    $conid = db_connect();
-
-    $user = $conid->real_escape_string($user);
-    $pass = $conid->real_escape_string($pass);
-
-    $usergroup = checkgroup($user,$conid);
-
-    if(checkuser($user,$conid))
-    {
-       if(checkadmin($usergroup,$conid))
-       {
-            $conid->close();
-           return checkpass($user,$pass,$conid);
-       }
-       else
-       {
-            $conid->close();
-           return false;
-       }
-    }
-    else
-    {
-        $conid->close();
-        return false;
-    }
-} 
-
 /** Prüft ob der Nutzer existiert
  * */
 function checkuser($user)
@@ -178,51 +146,48 @@ function checkgroup($user)
 {
     $conid = db_connect();
 
-    $sql = "SELECT
+    $sqlusergroupid = "SELECT
                 usergroup
              FROM
                 ".TBL_PREFIX."users
              WHERE
                 login = '".$user."'";
 
-    $res = $conid->prepare($sql);
+    $res = $conid->prepare($sqlusergroupid);
     $res->execute();
     $res->store_result();
-    $res->bind_result($usergroup);
-    
-    if($res->affected_rows == 1)
-    {
-        $res->fetch();
-        $conid->close();
-        return $usergroup;
-    }
-}
+    $res->bind_result($usergroupid);
+    $res->fetch();
 
-/** prüft die Gruppenzugehörigkeit für den Administrationslogin
- * */
-function checkadmin($usergroup)
-{
-    $conid = db_connect();
+    echo $usergroupid;
 
-    $sql = "SELECT
+    $sqlusergroup = "SELECT
                 groupname
              FROM
                 ".TBL_PREFIX."usergroups
              WHERE
-                usergroupID = '".$usergroup."'";
+                usergroupID = '".$usergroupid."'";
 
-    $res = $conid->prepare($sql);
-    $res->execute();
-    $res->store_result();
-    $res->bind_result($groupname);
+    $res2 = $conid->prepare($sqlusergroup);
+    $res2->execute();
+    $res2->store_result();
+    $res2->bind_result($usergroup);
+
+    echo $usergroup;
     
-    if($res->affected_rows == 1)
+    if($res2->affected_rows == 1)
     {
-        $res->fetch();
+        $res2->fetch();
         $conid->close();
-        $_SESSION['usergroup'] = $groupname;
-        return ($groupname == "admin") ? true : false;
+        $_SESSION['usergroup'] = $usergroup;
     }
+}
+
+/** is user an administrator
+ * */
+function isadmin()
+{
+    return ($_SESSION['usergroup'] == "admin") ? true : false;
 }
 
 /** lese die Anzahl der fehlerhaften Logins aus
@@ -256,7 +221,7 @@ function checkfailedlogins($user)
  * */
 function updatefailedlogins($user, $count)
 {
-    $conid = db_conect();
+    $conid = db_connect();
 
     $sql = "UPDATE
                 ".TBL_PREFIX."users
@@ -289,10 +254,11 @@ function blockuser($user)
              LIMIT
                  1";
 
-    $conid->close();
 
     $res = $conid->prepare($sql);
     $res->execute();
+    $conid->close();
+    return false;
 }
 
 /** updateuser($user, $conid)
@@ -333,15 +299,20 @@ function registeruser()
 {
     $conid = db_connect();
 
-    /** TODO more input cleaning */
-    $login = htmlspecialchars($_POST['login'], ENT_QUOTES, 'UTF-8');
-    $firstname = htmlspecialchars($_POST['firstname'], ENT_QUOTES, 'UTF-8');
-    $lastname = htmlspecialchars($_POST['lastname'], ENT_QUOTES, 'UTF-8');
-    $email = htmlspecialchars($_POST['email'], ENT_QUOTES, 'UTF-8');
-    $affiliation = htmlspecialchars($_POST['affiliation'], ENT_QUOTES, 'UTF-8');
+    $login = cleaninput($_POST['login']);
+    $firstname = cleaninput($_POST['firstname']);
+    $lastname = cleaninput($_POST['lastname']);
+    $affiliation = cleaninput($_POST['affiliation']);
 
-    /** TODO checkmail - mxrecord und aufbau 
-     * */
+    // create uniqid for mail-validation
+    $uniqid = uniqid('u',TRUE);
+
+    // Check mailaddress for correct structure
+    $email = checkmail( $_POST['email'] );
+
+    // MX-Check
+    if(!domain_exists($email))
+        return false;
 
     /** encrypt password */
     $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
@@ -353,14 +324,26 @@ function registeruser()
                 ('".$conid->real_escape_string($login)."','".$conid->real_escape_string($password)."',
                     '".$conid->real_escape_string($firstname)."','".$conid->real_escape_string($lastname)."',
                     '".$conid->real_escape_string($email)."','".$conid->real_escape_string($affiliation)."',
-                    CURDATE(), '".uniqid('',TRUE)."')";
+                    CURDATE(), '$uniqid')";
 
-    $res = $conid->prepare($sql);
-    $res->execute();
-    $res->store_result();
+    if(sendregmail($login,$uniqid,$email))
+    {
+        if($res = $conid->prepare($sql))
+        {
+            $res->execute();
+            $res->store_result();
+            return ($res->affected_rows == 1) ? true : false;
+        }
+        else
+        {
+            echo $conid->error;
+        }
+    }
+    else
+    {
+        return false;
+    }
 
-    /** TODO send mail after registration to verify emailaddress */
-    return ($res->affected_rows == 1) ? true : false;
 }
 
 /** update user details */
@@ -437,6 +420,35 @@ function getuserdata()
     
 }
 
+function showuserdata($name)
+{
+    $conid = db_connect();
+
+    $userdata = array();
+
+    $name = cleaninput($name);
+
+    $sql = "SELECT 
+                firstname, lastname, email, affiliation
+            FROM
+                ".TBL_PREFIX."users
+            WHERE
+                login = '".$_SESSION['user']."'";
+
+    $res = $conid->prepare($sql);
+    $res->execute();
+    $res->store_result();
+    $res->bind_result($userdata['firstname'],$userdata['lastname'],$userdata['email'],$userdata['affiliation']);
+    $res->fetch();
+
+    if($res->affected_rows == 1)
+    {
+        $res->fetch();
+        return $userdata;
+    }
+    
+}
+
 /** bereinige Nutzereingaben */
 function cleanlogininput()
 {
@@ -459,7 +471,7 @@ function cleanlogininput()
     $input['pass'] = trim( $input['pass'], " \n\r\0\x0B\t" );
 
     // In Kleinschrift umwandeln
-    $input['user'] = strtolower( $input['user'] );
+    // $input['user'] = strtolower( $input['user'] );
 
     // db-Verbindung schließen
     $conid->close();
@@ -545,5 +557,100 @@ function getuseruploads($type)
         }
     }
     $conid->close();
+}
+
+function verify($id)
+{
+    $conid = db_connect();
+
+    $sql = "UPDATE ".TBL_PREFIX."users
+            SET valid = '1'
+            WHERE verifyid = '$id'";
+
+    if($res = $conid->prepare($sql))
+    {
+        $res->execute();
+        $res->store_result();
+        $conid->close();
+        return true;
+    }
+    else
+    {
+        echo $conid->error."<br>";
+        $conid->close();
+        return false;
+    }
+}
+
+function resetpwfromid($id)
+{
+    $conid = db_connect();
+
+    $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+
+    $sql = "UPDATE ".TBL_PREFIX."users
+            SET password = '$password'
+            WHERE verifyid = '$id'";
+
+    if($res = $conid->prepare($sql))
+    {
+        $res->execute();
+        $res->store_result();
+        $conid->close();
+        return true;
+    }
+    else
+    {
+        echo $conid->error;
+        $conid->close();
+        return false;
+    }
+}
+
+function sendpwreq($login)
+{
+    $conid = db_connect();
+
+    $login = cleaninput($login);
+    
+    // create uniqid for password reset
+    $uniqid = uniqid('p',TRUE);
+
+    $sqlmail = "SELECT email
+            FROM ".TBL_PREFIX."users
+            WHERE login = '$login'";
+
+    $sqlverifyid = "UPDATE ".TBL_PREFIX."users
+                    SET verifyid = '$uniqid'
+                    WHERE login = '$login'";
+
+    if($res1 = $conid->prepare($sqlverifyid))
+    {
+        $res1->execute();
+        $res1->store_result();
+
+        if($res2 = $conid->prepare($sqlmail))
+        {
+            $res2->execute();
+            $res2->store_result();
+            $res2->bind_result($email);
+            $res2->fetch();
+            $conid->close();
+            // sendmail here
+            sendmailpw($email,$login,$uniqid);
+        }
+        else
+        {
+            echo $conid->error;
+            $conid->close();
+            return false;
+        }
+    }
+    else
+    {
+        echo $conid->error;
+        $conid->close();
+        return false;
+    }
 }
 ?>

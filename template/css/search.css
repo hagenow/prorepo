@@ -12,6 +12,7 @@ input#catsearch,input#modsearch,input#logsearch {
 	font-size: 20px;
 	line-height: 25px;
 	color: #ababab;
+    z-index:99;
 }
 input#catsearch:hover, input#catsearch:focus, input#modsearch:hover, input#modsearch:focus, input#logsearch:hover, input#logsearch:focus {
 	color: #3b3b3b;
@@ -37,6 +38,9 @@ ul#results-cat,ul#results-mod,ul#results-log {
 	-webkit-box-shadow: rgba(0, 0, 0, .15) 0 1px 3px;
 	-moz-box-shadow: rgba(0,0,0,.15) 0 1px 3px;
 	box-shadow: rgba(0, 0, 0, .15) 0 1px 3px;
+}
+.list-group-item{
+    z-index:99;
 }
 ul#results-cat li,ul#results-mod li,ul#results-log li {
 	/*padding: 8px;

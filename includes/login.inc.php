@@ -4,12 +4,13 @@ if(isset( $_POST['login'] ))
 {
     /** Eingabe bereinigen */
     $input = cleanlogininput();
-    $login = checkadminlogin( $input['user'], $input['pass']);
+    $login = checkuserlogin( $input['user'], $input['pass']);
     /** Prüfen ob die Anmeldung korrekt war */
     if(!checkblocked($input['user']))
     {
         if($login)
         {
+            checkgroup($input['user']);
             $update = updateuser($input['user']);
             if($update)
             {
@@ -18,17 +19,19 @@ if(isset( $_POST['login'] ))
             }
             else
             {
-                $error = 'Bei der Anmeldung ist ein Problem aufgetreten!';
+                $error = "There was an error while login, go back and try again!";
             }
         }
         else
         {
-            $error = 'Die Anmeldung war fehlerhaft!';
+            $error = "You entered wrong userdata, go back and try again!<br/>";
+            $error .= "If you want to reset your password, click <a href=\"".$_SERVER['PHP_SELF']."?show=userpwreset\"><strong>here</strong></a>";
         }
     }
     else
     {
-        $error = 'Ihr Konto ist deaktiviert! Bitte kontaktieren Sie den Sysadmin!';
+        $error = "Your account get blocked due to a amount of failed logins!<br/>";
+        $error .= "Click <a href=\"".$_SERVER['PHP_SELF']."?show=admincontact\"><strong>here</strong></a> to unblock your account.";
     }
 }
 
@@ -45,14 +48,12 @@ if(!isset($_SESSION['angemeldet']) || !$_SESSION['angemeldet'])
               <input type="password" placeholder="Password" class="form-control" name="pass" id="pass" required>
             </div>
             <button type="submit" class="btn btn-primary" id="login" name="login">Sign in</button>
-
         <!-- form in form - registration -->
-        <form class="navbar-form navbar-right" role="form">
+            <form class="navbar-form navbar-right" role="form">
                 <div class="form-group">
-                    <button type="submit" class="btn btn-success" data-toggle="modal" data-target="#register">Sign up</button>
+                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#register">Sign up</button>
                 </div>
-        </form>
-    
+            </form>
     </form>
 <?php } else {?>
 <ul class="nav navbar-nav navbar-right">

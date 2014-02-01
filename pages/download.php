@@ -12,6 +12,6 @@ if(isset($_GET['id']))
 }
 else
 {
-    echo "keine ID angegeben!";
+    echo "No ID given!";
 }
 ?>

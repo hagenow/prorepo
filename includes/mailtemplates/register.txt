@@ -1,0 +1,15 @@
+Hello ###LOGIN###,
+
+please confirm your given mailaddress ( ###EMAIL### ) by clicking on this link:
+
+###URL###
+
+You'll be redirected to a page that shows your registration state.
+
+After your confirmation, an admin will activate your account within the next 48
+hours!
+
+You'll get an activation mail.
+
+Sincere regards,
+your ProRepo Team

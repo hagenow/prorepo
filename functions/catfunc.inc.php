@@ -18,8 +18,8 @@ function getcategories()
             $html = "";
             $html .= "<tr>";
             $html .= "<td>".$row['catName']."</td>";
-            $html .= "<td><a href=\"".$_SERVER['PHP_SELF']."?show=modlist&catID=".$row['catID']."\">".$modelcnt." Models</a></td>";
-            $html .= "<td><a href=\"".$_SERVER['PHP_SELF']."?show=loglist&catID=".$row['catID']."\">".$logcnt." Logs</a></td>";
+            $html .= "<td class=\"text-center\"><a href=\"".$_SERVER['PHP_SELF']."?show=modlist&catID=".$row['catID']."\">".$modelcnt." Models</a></td>";
+            $html .= "<td class=\"text-center\"><a href=\"".$_SERVER['PHP_SELF']."?show=loglist&catID=".$row['catID']."\">".$logcnt." Logs</a></td>";
             $html .= "</tr>";
 
             echo $html;

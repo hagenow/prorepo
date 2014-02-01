@@ -20,19 +20,23 @@ else
 {
     $date = date("Y-m-d H:i:s");
 }
+
+
 ?>
 
 <div class="panel panel-success">
   <div class="panel-heading">
-    <?php if(isset($_SESSION['angemeldet']) || $_SESSION['angemeldet']) : ?>
+    <?php if(isset($_SESSION['angemeldet'])) : ?>
         <div class="btn-group pull-right">
+    <?php if(isset($_SESSION['angemeldet']) && isset($_SESSION['user']) && $_SESSION['user'] == $modvalues['creator'] || isadmin()) : ?>
         <button type="button" class="btn btn-default btn-sm" onclick="location.href='<?php echo $_SERVER['PHP_SELF']."?show=modupload&modelID=".$_GET['modelID']; ?>'">
            <span class="glyphicon glyphicon-circle-arrow-up"></span> Upload new files
         </button>
         <button type="button" class="btn btn-default btn-sm" onclick="location.href='<?php echo $_SERVER['PHP_SELF']."?show=modedit&modelID=".$_GET['modelID']; ?>'">
            <span class="glyphicon glyphicon-wrench"></span> Edit model
         </button>
-    <?php if(isset($_SESSION['groupID']) && isset($_SESSION['updateflag']) && in_array($_GET['modelID'], $_SESSION['grpmodels'])) : ?>
+    <?php endif; ?>
+    <?php if(isset($_SESSION['groupID']) && isset($_SESSION['updateflag']) && in_array($_GET['modelID'], $_SESSION['grpoldmodels'])) : ?>
         <button type="button" class="btn btn-default btn-sm" id="addmodel2group_donothing" value="<?php echo $_GET['modelID']."|".$date; ?>">
            <span class="glyphicon glyphicon-flash"></span> Already added, please remove first!
         </button>

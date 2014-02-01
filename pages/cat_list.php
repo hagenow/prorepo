@@ -7,7 +7,7 @@ require_once 'functions.inc.php';
 <div class="panel panel-default">
     <!-- Default panel contents -->
     <div class="panel-heading">
-      <?php if(isset($_SESSION['usergroup']) && $_SESSION['usergroup'] == "admin") :?>
+      <?php if(isadmin()) :?>
         <button type="button" class="btn btn-default btn-sm pull-right" onclick="location.href='<?php echo $_SERVER['PHP_SELF']."?show=catnew"; ?>'">New category</button> 
       <?php endif; ?>
         <h3 class="panel-title"><h3>Category list</h3></h3>
@@ -21,8 +21,8 @@ require_once 'functions.inc.php';
         <thead>
             <tr>
                 <th>Name of Category</th>
-                <th>Models</th>
-                <th>Logs</th>
+                <th class="text-center">Models</th>
+                <th class="text-center">Logs</th>
             </tr>
         </thead>
         <tbody>

@@ -14,17 +14,32 @@ else
 {
     $date = $_POST['timestamp'];
 }
+
+$state = $groupvalues['state'];
+$state = $state^1;
+
 ?>
 
-<div class="panel panel-success">
+<div class="panel panel-warning">
   <div class="panel-heading">
-    <?php if(isset($_SESSION['angemeldet']) || $_SESSION['angemeldet']) : ?>
+    <?php if(isset($_SESSION['angemeldet']) && isset($_SESSION['user']) && $_SESSION['user'] == $groupvalues['creator'] && $groupvalues['state'] == "1" || isadmin()) : ?>
+        <?php
+        ?>
         <div class="btn-group pull-right">
         <button type="button" class="btn btn-default btn-sm" onclick="location.href='<?php echo $_SERVER['PHP_SELF']."?show=groupedit&groupID=".$_GET['groupID']; ?>'">
            <span class="glyphicon glyphicon-wrench"></span> Edit group
         </button>
         <button type="button" class="btn btn-default btn-sm" onclick="location.href='<?php echo $_SERVER['PHP_SELF']."?show=groupcurrent&groupID=".$_GET['groupID']."&action=load"; ?>'">
            <span class="glyphicon glyphicon-plus"></span> Add new models or logs
+        </button>
+        <button type="button" class="btn btn-default btn-sm" id="switchgrpstate" value="<?php echo $groupvalues['id']."|".$state; ?>">
+           <span class="glyphicon glyphicon-off"></span> Switch state
+        </button>
+        </div>
+    <?php else : ?>
+        <div class="btn-group pull-right">
+        <button type="button" class="btn btn-default btn-sm" onclick="location.href='<?php echo $_SERVER['PHP_SELF']."?show=admincontact&groupID=".$_GET['groupID']; ?>'">
+           <span class="glyphicon glyphicon-wrench"></span> Closed group, contact the admin for re-opening!
         </button>
         </div>
     <?php endif; ?>
@@ -52,12 +67,12 @@ else
             </tr>
         </thead>
         <tbody>
-            <?php linkedtypes($_GET['groupID'],"model"); ?>
+            <?php linkedtypes($_GET['groupID'],"model",$groupvalues['creator']); ?>
         </tbody>
     </table>
 </div>
 
-<div class="panel panel-success">
+<div class="panel panel-info">
   <div class="panel-heading">
   <h3 class="panel-title">Linked Logs</h3>
   </div>
@@ -70,7 +85,7 @@ else
             </tr>
         </thead>
         <tbody>
-            <?php linkedtypes($_GET['groupID'],"log"); ?>
+            <?php linkedtypes($_GET['groupID'],"log",$groupvalues['creator']); ?>
         </tbody>
     </table>
 </div>

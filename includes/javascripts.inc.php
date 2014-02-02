@@ -12,3 +12,5 @@
     <script src="template/js/passcheck.js"></script>
     <!-- Group functions -->
     <script src="template/js/group.js"></script>
+    <!-- usermgmt functions -->
+    <script src="template/js/usermgmt.js"></script>

@@ -1,19 +1,19 @@
-<?php if(isset($_POST['unblock'])) : ?>
+<?php if(isset($_POST['approve'])) : ?>
 <?php
 echo "<pre>".print_r($_POST, TRUE)."</pre>";
-    unblockusers();
+    approveusers();
 ?>
 <?php endif; ?>
 
-<?php if(!isset($_POST['unblock'])) : ?>
+<?php if(!isset($_POST['approve'])) : ?>
 <div class="panel panel-default">
     <!-- Default panel contents -->
     <div class="panel-heading">
-        <h3 class="panel-title"><h3>Unblock users</h3></h3>
+        <h3 class="panel-title"><h3>Approve users</h3></h3>
     </div>
 
     <!-- List group -->
-    <form action="<?php echo $_SERVER['PHP_SELF']; ?>?show=adminuser&action=unblock" method="post" name="unblockusers" id="unblockusers">
+    <form action="<?php echo $_SERVER['PHP_SELF']; ?>?show=adminuser&action=approve" method="post" name="approveusers" id="approveusers">
     <table class="table table-striped">
         <thead>
             <tr>
@@ -25,7 +25,7 @@ echo "<pre>".print_r($_POST, TRUE)."</pre>";
             </tr>
         </thead>
         <tbody>
-            <?php getblockedusers(); ?>
+            <?php getunapprovedusers(); ?>
         </tbody>
     </table>
     </form>

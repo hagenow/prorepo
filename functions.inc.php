@@ -38,4 +38,7 @@ require_once 'functions/zipfunc.inc.php';
 
 /* Funktionen für das Zippen von Ordrnerstrukturen mit Pfaderhaltung*/
 require_once 'functions/mailfunc.inc.php';
+
+/* Funktionen für die Administration der User */
+require_once 'functions/adminfunc.inc.php';
 ?>

@@ -289,6 +289,7 @@ function updateuser($user)
         $_SESSION['angemeldet']   = true;
         $_SESSION['user'] = $user;
         $_SESSION['anmeldung']    = md5( $_SERVER['REQUEST_TIME'] );
+        $conid->close();
         return true;
     }
 
@@ -342,6 +343,7 @@ function registeruser()
     else
     {
         echo $conid->error; 
+        $conid->close();
         return false;
     }
 
@@ -352,15 +354,16 @@ function updateuserdata()
 {
     $conid = db_connect();
 
-    $firstname = htmlspecialchars($_POST['firstname'], ENT_QUOTES, 'UTF-8');
-    $lastname = htmlspecialchars($_POST['lastname'], ENT_QUOTES, 'UTF-8');
-    $email = htmlspecialchars($_POST['email'], ENT_QUOTES, 'UTF-8');
-    $affiliation = htmlspecialchars($_POST['affiliation'], ENT_QUOTES, 'UTF-8');
+    $firstname = cleaninput($_POST['firstname']);
+    $lastname = cleaninput($_POST['lastname']);
+    $email = cleaninput($_POST['email']);
+    $affiliation = cleaninput($_POST['affiliation']);
 
     /** encrypt password */
     if(isset($_POST['password'])&& (strlen($_POST['password']) >= 1 && $_POST['password'] !== ' ') )
     {
         $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+
         $sql_wpw = "UPDATE
                         ".TBL_PREFIX."users
                      SET
@@ -389,6 +392,7 @@ function updateuserdata()
 
     $res->execute();
     $res->store_result();
+    $conid->close();
 
     return ($res->affected_rows == 1) ? true : false;
 }

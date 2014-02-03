@@ -33,6 +33,7 @@ function viewusers()
 
             }
             echo $html;
+            $conid->close();
         }
         else
         {
@@ -42,6 +43,7 @@ function viewusers()
             $html .= "</tr>";
 
             echo $html;
+            $conid->close();
         }
     }
     else
@@ -138,7 +140,16 @@ function adm_deleteuser($id)
 
     $res = $conid->query($sql);
 
-    return ($conid->affected_rows == 1 ) ? true : false;
+    if ($conid->affected_rows == 1 )
+    {
+        $conid->close();
+        return true;
+    }
+    else
+    {
+        $conid->close();
+        return false;
+    }
 }
 
 
@@ -180,6 +191,7 @@ function getunapprovedusers()
             $html .= "</tr>";
 
             echo $html;
+            $conid->close();
         }
         else
         {
@@ -188,6 +200,7 @@ function getunapprovedusers()
             $html .= "</tr>";
 
             echo $html;
+            $conid->close();
         }
     }
     else
@@ -262,6 +275,7 @@ function getblockedusers()
             $html .= "</tr>";
 
             echo $html;
+            $conid->close();
         }
         else
         {
@@ -271,6 +285,7 @@ function getblockedusers()
             $html .= "</tr>";
 
             echo $html;
+            $conid->close();
         }
     }
     else

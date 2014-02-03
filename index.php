@@ -67,7 +67,7 @@ require_once 'functions.inc.php';
 </div>
 <div id="footer">
     <div class="container">
-            <?php require_once 'includes/footer.inc.php'; ?>
+            <?php require_once 'content/footer.inc.php'; ?>
     </div>
 </div>
 

@@ -1,6 +1,8 @@
 <?php require 'includes/authcheck.inc.php'; ?>
 
 <?php if((!isset($_POST['submit_group']) || !$_POST['submit_group']) && !isset($_SESSION['groupID']) ) : ?>
+    <!-- Form Name -->
+    <legend>New group</legend>
 <form class="form-horizontal" name="group" id="group" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>?show=groupnew">
     <fieldset>
     <div class="form-group">

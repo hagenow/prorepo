@@ -41,4 +41,7 @@ require_once 'functions/mailfunc.inc.php';
 
 /* Funktionen für die Administration der User */
 require_once 'functions/adminfunc.inc.php';
+
+/* Funktionen für die Suche */
+require_once 'functions/searchfunc.inc.php';
 ?>

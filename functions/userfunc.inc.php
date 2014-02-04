@@ -187,7 +187,8 @@ function checkgroup($user)
  * */
 function isadmin()
 {
-    return ($_SESSION['usergroup'] == "admin") ? true : false;
+    if(isset($_SESSION['usergroup']))
+        return ($_SESSION['usergroup'] == "admin") ? true : false;
 }
 
 /** lese die Anzahl der fehlerhaften Logins aus
@@ -438,7 +439,7 @@ function showuserdata($name)
             FROM
                 ".TBL_PREFIX."users
             WHERE
-                login = '".$_SESSION['user']."'";
+                login = '$name'";
 
     $res = $conid->prepare($sql);
     $res->execute();

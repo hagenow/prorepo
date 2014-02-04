@@ -37,17 +37,23 @@ $state = $state^1;
         </button>
         </div>
     <?php else : ?>
+      <?php if(isset($_SESSION['angemeldet'])) :?>
         <div class="btn-group pull-right">
         <button type="button" class="btn btn-default btn-sm" onclick="location.href='<?php echo $_SERVER['PHP_SELF']."?show=admincontact&groupID=".$_GET['groupID']; ?>'">
            <span class="glyphicon glyphicon-wrench"></span> Closed group, contact the admin for re-opening!
         </button>
         </div>
     <?php endif; ?>
+    <?php endif; ?>
   <h3 class="panel-title"><h3><?php echo $groupvalues['name']; ?></h3></div>
   <div class="panel-body">
     <h4>Tags:</h4>
     <blockquote>
     <p><?php  echo $groupvalues['tags']; ?></p>
+    </blockquote>
+    <h4>Short-URL:</h4>
+    <blockquote>
+    <p><a href="http://<?php echo $_SERVER['SERVER_NAME'].PATHINFO."g/".$groupvalues['guid']; ?>">http://<?php echo $_SERVER['SERVER_NAME'].PATHINFO."g/".$groupvalues['guid']; ?></a></p>
     </blockquote>
     <small>Added: <?php echo $groupvalues['timestamp']. " (".$groupvalues['creator'].")" ?></small>
   </div>

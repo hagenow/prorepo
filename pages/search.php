@@ -1,3 +1,4 @@
+<?php require 'includes/authcheck.inc.php'; ?>
 
 <form class="form-horizontal" name="modelupload" id="modelupload" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>?show=search">
   <fieldset>

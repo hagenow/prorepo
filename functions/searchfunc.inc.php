@@ -34,7 +34,7 @@ function searchmodel($keyword)
                 $html .= "<tr>";
                 $html .= "<td><a href=\"". $_SERVER['PHP_SELF']."?show=adminuser&action=view&userID=".$id."\">".$name."</a></td>";
                 $html .= "<td class=\"text-center\">".$timestamp."</td>";
-                $html .= "<td class=\"text-center\">".$creator."</td>";
+                $html .= "<td class=\"text-center\"><a href=\"".$_SERVER['PHP_SELF']."?show=usershow&name=".$row['creator']."\">".$row['creator']."</td>";
                 $html .= "</tr>";
 
             }
@@ -86,7 +86,7 @@ function searchlog($keyword)
                 $html .= "<tr>";
                 $html .= "<td><a href=\"". $_SERVER['PHP_SELF']."?show=adminuser&action=view&userID=".$id."\">".$name."</a></td>";
                 $html .= "<td class=\"text-center\">".$timestamp."</td>";
-                $html .= "<td class=\"text-center\">".$creator."</td>";
+                $html .= "<td class=\"text-center\"><a href=\"".$_SERVER['PHP_SELF']."?show=usershow&name=".$row['creator']."\">".$row['creator']."</td>";
                 $html .= "</tr>";
 
             }
@@ -142,7 +142,7 @@ function searchgroup($keyword)
                 $html .= "<td><a href=\"". $_SERVER['PHP_SELF']."?show=adminuser&action=view&userID=".$id."\">".$name."</a></td>";
                 $html .= "<td class=\"text-center\">".$timestamp."</td>";
                 $html .= "<td class=\"text-center\">".$tags."</td>";
-                $html .= "<td class=\"text-center\">".$creator."</td>";
+                $html .= "<td class=\"text-center\"><a href=\"".$_SERVER['PHP_SELF']."?show=usershow&name=".$row['creator']."\">".$row['creator']."</td>";
                 $html .= "</tr>";
 
             }

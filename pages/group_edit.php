@@ -29,7 +29,7 @@ if(!isset($_POST['submit_group']) || !$_POST['submit_group']) {
     <div class="form-group">
       <label class="control-label col-sm-3" for="tags">Tags</label>
       <div class="col-sm-6">                     
-      <textarea id="tags" name="tags" class="form-control" rows="4" placeholder="<?php echo $grpvalues['tags']?>" value="<?php echo $grpvalues['tags']?>"></textarea>
+      <textarea id="tags" name="tags" class="form-control" rows="4" value="<?php echo $grpvalues['tags']?>"></textarea>
       </div>
     </div>
 

@@ -83,4 +83,29 @@ function guid(){
     }
 }
 
+function mailtogfx($email)
+{
+    $size = 4;
+    $textwidth = imagefontwidth($size) * strlen($email);
+    $textheight  = imagefontheight($size);
+     
+    // header('Content-Disposition: Attachment;filename=mail.png'); 
+    header("Cache-Control: no-store, no-cache, must-revalidate");  
+    header("Cache-Control: post-check=0, pre-check=0", false);  
+    //header('Content-type: image/png');
+    $pic = imagecreatetruecolor ($textwidth , $textheight);
+     
+    $bg_col  = imagecolorallocate ($pic, 222, 222, 222);
+    imagefill($pic, 0, 0, $bg_col);
+    imagecolortransparent($pic,$bg_col);
+     
+    $text_col        = imagecolorallocate ($pic, 0, 0, 0);
+    imagestring ($pic, $size, 0, 0, $email, $text_col);
+    ob_start();
+    imagepng ($pic);
+    $output = ob_get_contents();
+    ob_end_clean();
+
+    echo '<img src="data:image/png;base64,'.base64_encode($output).'" />';
+}
 ?>

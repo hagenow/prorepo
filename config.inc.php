@@ -18,6 +18,9 @@ define ('TBL_PREFIX', 'repo_');
 /** tmp folder */
 define ('TMP', 'tmp/');
 
+/** path ( folder ) */
+define ('PATHINFO', '/prorepo/');
+
 /** own debug check */
 define ('DEBUG', TRUE);
 

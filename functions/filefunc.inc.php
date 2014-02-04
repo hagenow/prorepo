@@ -421,7 +421,7 @@ function viewfiles($type,$typeid,$ext,$date)
             }
             $html .= "<td class=\"text-center\">".round(($row['size'] / 1024), 2)." KB</td>";
             $html .= "<td class=\"text-center\">".$date."</td>";
-            $html .= "<td class=\"text-center\"><a href=\"#\">".$row['uploader']."</a></td>";
+            $html .= "<td class=\"text-center\"><a href=\"".$_SERVER['PHP_SELF']."?show=usershow&name=".$row['uploader']."\">".$row['uploader']."</td>";
             $html .= "</tr>";
 
             echo $html;

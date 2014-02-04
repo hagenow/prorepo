@@ -30,7 +30,9 @@
     <?php endif; ?>
               </ul>
             </li>
+    <?php if(isset($_SESSION['angemeldet']) && $_SESSION['angemeldet']) : ?>
             <li><a href="<?php echo $_SERVER['PHP_SELF']; ?>?show=search">Search</a></li>
+    <?php endif; ?>
             <li><a href="<?php echo $_SERVER['PHP_SELF']; ?>?show=contact">Contact</a></li>
         <?php if(isadmin()) : ?>
             <li class="dropdown">

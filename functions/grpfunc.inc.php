@@ -471,7 +471,6 @@ function getgroupid($guid)
         $res->store_result();
         $res->bind_result($groupID);
         $res->fetch();
-
         $conid->close();
 
         return $groupID;

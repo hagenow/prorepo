@@ -141,6 +141,7 @@ function uploadfiles_new()
                     else
                     {
                         echo $conid->error;
+                        $conid->close();
                     }
 
                     $target = $filepath.$filename.".".$ext;
@@ -154,6 +155,7 @@ function uploadfiles_new()
     	    }
     	}
     }
+    $conid->close();
 }
 
 /* nearly complex like uploadfiles_new .
@@ -305,6 +307,7 @@ function uploadfiles_existing()
     	    }
     	}
     }
+    $conid->close();
 }
 
 function updatetypepath($type,$id,$typepath)
@@ -429,4 +432,5 @@ function viewfiles($type,$typeid,$ext,$date)
     }
     $conid->close();
 }
+
 ?>

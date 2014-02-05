@@ -103,6 +103,7 @@ function mailtogfx($email)
     imagestring ($pic, $size, 0, 0, $email, $text_col);
     ob_start();
     imagepng ($pic);
+    imagedestroy($pic);
     $output = ob_get_contents();
     ob_end_clean();
 

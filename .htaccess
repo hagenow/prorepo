@@ -3,13 +3,18 @@ php_value session.use_only_cookies 1
 php_value session.use_trans_sid 0
 php_value session.cookie_httponly 1
 
+ErrorDocument 404 http://dev.blackforestmedia.de/prorepo/index.php?show=404 
+
 <IfModule mod_rewrite.c>
-        RewriteEngine On
-        RewriteBase /
-        # Directs all EE web requests through the site index file
-        RewriteCond %{REQUEST_FILENAME} !-f
-        RewriteCond %{REQUEST_FILENAME} !-d
-        # Accept only this the URL which conforms to the regex
-        RewriteRule ^g/([0-9A-Z]{8}-[0-9A-Z]{4}-[0-9A-Z]{4}-[0-9A-Z]{4}-[0-9A-Z]{12})$ /prorepo/index.php?show=group&guid=$1 [NC,L]
-</IfModule>
+    RewriteEngine On
+    RewriteBase /
+    # Directs all EE web requests through the site index file
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    # Accept only this the URL which conforms to the regex
+    RewriteRule ^g/([0-9A-Z]{8}-[0-9A-Z]{4}-[0-9A-Z]{4}-[0-9A-Z]{4}-[0-9A-Z]{12})$ /prorepo/index.php?show=group&guid=$1 [NC,L]
+
+    RewriteCond %{REQUEST_URI} ^/404/$
+    RewriteRule ^(.*)$ /index.php?show=404.php [L]
+ </IfModule>
 

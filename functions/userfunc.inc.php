@@ -557,6 +557,12 @@ function getuseruploads($type)
                 }
             }
             $html .= "<td class=\"text-center\">".$date."</td>";
+            if($type == "model")
+                $html .= "<td class=\"text-center\"><span class=\"glyphicon glyphicon-remove\"></span></td>";
+            if($type == "log")
+                $html .= "<td class=\"text-center\"><span class=\"glyphicon glyphicon-remove\"></span></td>";
+            if($type == "group")
+                $html .= "<td class=\"text-center\"><span class=\"glyphicon glyphicon-remove\"></span></td>";
             $html .= "</tr>";
 
             echo $html;

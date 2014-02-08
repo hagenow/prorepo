@@ -22,9 +22,9 @@ function createmodel()
 
     $sql = "INSERT INTO
                 ".TBL_PREFIX."models
-                (modelName, timestamp, lastupdate, comment, catID, creator)
+                (modelName, timestamp, lastupdate, comment, catID, creator, deletable)
                 VALUES
-                ('$modelName','$timestamp','$timestamp','$comment','$catid','$creator')";
+                ('$modelName','$timestamp','$timestamp','$comment','$catid','$creator', '1')";
 
     if($res = $conid->prepare($sql)){
         $res->execute();
@@ -73,14 +73,14 @@ function viewmodel($modelid)
 
     $modvalues = array();
 
-    $sql = "SELECT modelID, modelName, timestamp, lastupdate, comment, catID, path, creator
+    $sql = "SELECT modelID, modelName, timestamp, lastupdate, comment, catID, path, deletable, creator
             FROM ".TBL_PREFIX."models
             WHERE modelID = '$modelid'";
 
     $res = $conid->prepare($sql);
     $res->execute();
     $res->store_result();
-    $res->bind_result($modvalues['id'],$modvalues['name'],$modvalues['timestamp'],$modvalues['lastupdate'],$modvalues['comment'],$modvalues['catID'],$modvalues['path'],$modvalues['creator']);
+    $res->bind_result($modvalues['id'],$modvalues['name'],$modvalues['timestamp'],$modvalues['lastupdate'],$modvalues['comment'],$modvalues['catID'],$modvalues['path'],$modvalues['deletable'],$modvalues['creator']);
     $res->fetch();
 
 
@@ -175,4 +175,10 @@ function getmodname($modid)
     $conid->close();
 }
 
+function removemodel($modid)
+{
+    $conid = db_connect();
+
+    
+}
 ?>

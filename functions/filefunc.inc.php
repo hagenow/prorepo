@@ -129,9 +129,9 @@ function uploadfiles_new()
                     /** create entry in the files table */
                     $sql = "INSERT INTO
                                         ".TBL_PREFIX."files
-                                        (fileName, path, type, foreignID, ext, fileType, uploader, timestamp, uniqid, size, valid)
+                                        (fileName, path, type, foreignID, ext, fileType, uploader, timestamp, uniqid, size, valid, deletable)
                                    VALUES
-                                        ('$filename_w_ext','$filepath','$type','$id','$ext','$fileType','$creator','$timestamp','$uniqid','$size','$valid')"; 
+                                        ('$filename_w_ext','$filepath','$type','$id','$ext','$fileType','$creator','$timestamp','$uniqid','$size','$valid','1')"; 
 
                     if($res = $conid->prepare($sql)){
                         $res->execute();
@@ -283,9 +283,9 @@ function uploadfiles_existing()
                     /** create entry in the files table */
                     $sql = "INSERT INTO
                                         ".TBL_PREFIX."files
-                                        (fileName, path, type, foreignID, ext, fileType, uploader, timestamp, uniqid, size, valid)
+                                        (fileName, path, type, foreignID, ext, fileType, uploader, timestamp, uniqid, size, valid, deletable)
                                    VALUES
-                                        ('$filename_w_ext','$filepath','$type','$id','$ext','$fileType','$creator','$timestamp','$uniqid','$size','$valid')"; 
+                                        ('$filename_w_ext','$filepath','$type','$id','$ext','$fileType','$creator','$timestamp','$uniqid','$size','$valid','1')"; 
 
                     if($res = $conid->prepare($sql)){
                         $res->execute();
@@ -346,10 +346,6 @@ function updatetypepath($type,$id,$typepath)
         return false;
     }
 }
-
-/* nearly complex as the function above, but it updates an existing model or log 
- * with new files
- * */
 
 
 /* get versions of a model or log */

@@ -1,7 +1,7 @@
 <?php if(isset($_SESSION['user'])) : ?>
 <ul class="nav nav-pills nav-stacked">
     <?php if(isset($_SESSION['groupID'])) : ?>
-        <li class="active"><a href="<?php echo $_SERVER['PHP_SELF']; ?>?show=groupcurrent">Current group</a></li>
+        <li class="active"><a href="<?php echo $_SERVER['PHP_SELF']; ?>?show=groupcurrent">Group <? echo $_SESSION['groupName']; ?></a></li>
         <hr>
     <?php endif; ?>
   <li><a href="<?php echo $_SERVER['PHP_SELF']; ?>?show=mymodels">My models</a></li>

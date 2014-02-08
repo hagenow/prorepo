@@ -9,6 +9,7 @@
                 <th>Groupname</th>
                 <th class="text-center">Status</th>
                 <th class="text-center">Creation date</th>
+                <th class="text-center">Delete</th>
             </tr>
         </thead>
         <tbody>

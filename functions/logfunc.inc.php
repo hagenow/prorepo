@@ -25,9 +25,9 @@ function createlog()
 
     $sql = "INSERT INTO
                 ".TBL_PREFIX."logs
-                (logName, timestamp, lastupdate, comment, catID, modelID, creator)
+                (logName, timestamp, lastupdate, comment, catID, modelID, creator, deletable)
                 VALUES
-                ('$logName','$timestamp','$timestamp','$comment','$catid', '$modelID','$creator')";
+                ('$logName','$timestamp','$timestamp','$comment','$catid', '$modelID','$creator', '1')";
 
     if($res = $conid->prepare($sql)){
         $res->execute();
@@ -74,14 +74,14 @@ function viewlog($logid)
 
     $logvalues = array();
 
-    $sql = "SELECT logID, logName, timestamp, lastupdate, comment, catID, modelID, path, creator
+    $sql = "SELECT logID, logName, timestamp, lastupdate, comment, catID, modelID, path, deletable, creator
             FROM ".TBL_PREFIX."logs
             WHERE logID = '$logid'";
 
     $res = $conid->prepare($sql);
     $res->execute();
     $res->store_result();
-    $res->bind_result($logvalues['id'],$logvalues['name'],$logvalues['timestamp'],$logvalues['lastupdate'],$logvalues['comment'],$logvalues['catID'],$logvalues['modelID'],$logvalues['path'],$logvalues['creator']);
+    $res->bind_result($logvalues['id'],$logvalues['name'],$logvalues['timestamp'],$logvalues['lastupdate'],$logvalues['comment'],$logvalues['catID'],$logvalues['modelID'],$logvalues['path'],$logvalues['deletable'],$logvalues['creator']);
     $res->fetch();
 
 

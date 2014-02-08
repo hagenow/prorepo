@@ -207,31 +207,71 @@ function savegroup()
                     (groupID, modelID, timestamp)
                   VALUES
                     ('$groupid', ?, ?)";
+    
+    // update files which type is model, that they can't be deleted furthermore!
+    $sqlmodfiles = "UPDATE ".TBL_PREFIX."files
+                    SET deletable = 0
+                    WHERE type = 'model' AND foreignID = ? AND timestamp <= ?";
+
+
+    // update model entry, that it can't be deleted furthermore!
+    $sqlmodentry = "UPDATE ".TBL_PREFIX."models
+                    SET deletable = 0
+                    WHERE modelID = ?";
+
 
     // execute for all modelids in array
     if($res = $conid->prepare($sqlmodels))
     {
+        $res2 = $conid->prepare($sqlmodfiles);
+        $res3 = $conid->prepare($sqlmodentry);
+
         $res->bind_param('is',$modelid,$modeltimestamp);
+        $res2->bind_param('is',$modelid,$modeltimestamp);
+        $res3->bind_param('i',$modelid);
 
         foreach($models as $entry)
         {
             $parts = explode("|",$entry);
             $modelid = $parts[0];
+            $modelid2 = $parts[0];
+            $modelid3 = $parts[0];
             $modeltimestamp = $parts[1];
+            $modeltimestamp2 = $parts[1];
             $res->execute();
+            $res2->execute();
+            $res3->execute();
         }
     }
     else
         echo $conid->error;
+
+
 
     $sqllogs = "INSERT INTO ".TBL_PREFIX."loggroups
                     (groupID, logID, timestamp)
                   VALUES
                     ('$groupid', ?, ?)";
 
+    // update files which type is log, that they can't be deleted furthermore!
+    $sqllogfiles = "UPDATE ".TBL_PREFIX."files
+                    SET deletable = 0
+                    WHERE type = 'log' AND foreignID = ? AND timestamp <= ?";
+
+
+    // update log entry, that it can't be deleted furthermore!
+    $sqllogentry = "UPDATE ".TBL_PREFIX."logs
+                    SET deletable = 0
+                    WHERE logID = ?";
+
+    $res2 = $conid->prepare($sqllogfiles);
+    $res3 = $conid->prepare($sqllogentry);
+
     if($res = $conid->prepare($sqllogs))
     {
         $res->bind_param('is',$logid, $logtimestamp);
+        $res2->bind_param('is',$logid,$logtimestamp);
+        $res3->bind_param('i',$logid);
 
         // execute for all logids in array
         foreach($logs as $entry)
@@ -240,6 +280,8 @@ function savegroup()
             $logid = $parts[0];
             $logtimestamp = $parts[1];
             $res->execute();
+            $res2->execute();
+            $res3->execute();
         }
     }
     else

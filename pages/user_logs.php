@@ -8,6 +8,7 @@
             <tr>
                 <th>Modelname</th>
                 <th class="text-center">Creation date</th>
+                <th class="text-center">Delete</th>
             </tr>
         </thead>
         <tbody>

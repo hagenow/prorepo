@@ -524,6 +524,7 @@ function getgroupid($guid)
     }
 }
 
+// open or close a group
 function switchgrpstate($st)
 {
     $id = "";
@@ -559,5 +560,25 @@ function switchgrpstate($st)
 
 }
 
+// delete group
+function removegroup($grpid)
+{
+    $conid = db_connect();
 
+    $grpid = cleaninput($grpid);
+
+    $sql = "DELETE FROM ".TBL_PREFIX."groups
+            WHERE groupID = '$grpid'";
+
+    if($res = $conid->prepare($sql))
+    {
+        $res->execute();
+        return true;
+    }
+    else
+    {
+        echo $conid->error;
+    }
+    $conid->close();
+}
 ?>

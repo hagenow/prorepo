@@ -180,4 +180,26 @@ function connectedlogs($modelID)
     }
     $conid->close();
 }
+
+// delete log
+function removelog($logid)
+{
+    $conid = db_connect();
+
+    $logid = cleaninput($logid);
+
+    $sql = "DELETE FROM ".TBL_PREFIX."logs
+            WHERE logID = '$logid'";
+
+    if($res = $conid->prepare($sql))
+    {
+        $res->execute();
+        return true;
+    }
+    else
+    {
+        echo $conid->error;
+    }
+    $conid->close();
+}
 ?>

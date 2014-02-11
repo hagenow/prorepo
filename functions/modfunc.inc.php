@@ -175,10 +175,25 @@ function getmodname($modid)
     $conid->close();
 }
 
+// delete model
 function removemodel($modid)
 {
     $conid = db_connect();
 
-    
+    $modid = cleaninput($modid);
+
+    $sql = "DELETE FROM ".TBL_PREFIX."models
+            WHERE modelID = '$modid'";
+
+    if($res = $conid->prepare($sql))
+    {
+        $res->execute();
+        return true;
+    }
+    else
+    {
+        echo $conid->error;
+    }
+    $conid->close();
 }
 ?>

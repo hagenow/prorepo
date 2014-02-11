@@ -558,11 +558,11 @@ function getuseruploads($type)
             }
             $html .= "<td class=\"text-center\">".$date."</td>";
             if($type == "model")
-                $html .= "<td class=\"text-center\"><span class=\"glyphicon glyphicon-remove\"></span></td>";
+                $html .= "<td class=\"text-center\"><a href=\"".$_SERVER['PHP_SELF']."?show=moddelete&modelID=".$row['modelID']."\"><span class=\"glyphicon glyphicon-remove\"></span></a>/td>";
             if($type == "log")
-                $html .= "<td class=\"text-center\"><span class=\"glyphicon glyphicon-remove\"></span></td>";
+                $html .= "<td class=\"text-center\"><a href=\"".$_SERVER['PHP_SELF']."?show=logdelete&logID=".$row['logID']."\"><span class=\"glyphicon glyphicon-remove\"></span></a></td>";
             if($type == "group")
-                $html .= "<td class=\"text-center\"><span class=\"glyphicon glyphicon-remove\"></span></td>";
+                $html .= "<td class=\"text-center\"><a href=\"".$_SERVER['PHP_SELF']."?show=groupdelete&groupID=".$row['groupID']."\"><span class=\"glyphicon glyphicon-remove\"></span></a></td>";
             $html .= "</tr>";
 
             echo $html;

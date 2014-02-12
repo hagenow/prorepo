@@ -28,10 +28,19 @@ if(isset($_SESSION['mod_semaphore'])) {
         unset($_SESSION['mod_semaphore']);
 }
 /** Wurde das Formular abgeschickt? */ 
-if(!isset($_POST['submit_batch']) || !$_POST['submit_batch'] || isset($_POST['submit_batch2']))
+if(!isset($_POST['submit_batch']) || !$_POST['submit_batch'] || !isset($_POST['submit_batch2']) || !$_POST['submit_batch2'])
 {
-    if(!isset($_POST['cname']) || !$_POST['cname']) { 
+        if(isset($_SESSION['files']) && isset($_SESSION['logs']) && isset($_SESSION['models']))
+        {
+            batchimport_step2();
 
+            unset($_SESSION['files']);
+            unset($_SESSION['models']);
+            unset($_SESSION['logs']);
+            
+            // delete files after processing
+            rrmdir($targetdir);
+        }
 ?>
     
     <form class="form-horizontal" name="batchupload2" id="batchupload2" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>?show=batch2" enctype="multipart/form-data">
@@ -60,37 +69,38 @@ if(!isset($_POST['submit_batch']) || !$_POST['submit_batch'] || isset($_POST['su
     
     </fieldset>
     </form> 
-<?php  
-        if (isset( $_POST['submit_batch2'] ))
+<?php  }
+else
+{
+    if (isset( $_POST['submit_batch2'] ))
+    {
+        unset($_SESSION['cid']);
+        unset($_SESSION['cname']);
+        unset($_SESSION['batch_semaphore']);
+        
+        
+
+        if(isset($_SESSION['files']) && isset($_SESSION['logs']) && isset($_SESSION['models']))
         {
-            unset($_SESSION['cid']);
-            unset($_SESSION['cname']);
-            unset($_SESSION['batch_semaphore']);
+            batchimport_step2();
+
+            unset($_SESSION['files']);
+            unset($_SESSION['models']);
+            unset($_SESSION['logs']);
             
-            
-
-            if(isset($_SESSION['files']) && isset($_SESSION['logs']) && isset($_SESSION['models']))
-            {
-                batchimport_step2();
-
-                unset($_SESSION['files']);
-                unset($_SESSION['models']);
-                unset($_SESSION['logs']);
-                
-                // delete files after processing
-                rrmdir($targetdir);
-            }
-
-            echo "---";
-
-            if(DEBUG)
-            {
-                echo "<pre>" .print_r( $_SESSION, true ). "</pre>";
-                echo "<pre>" .print_r( $_POST, true ). "</pre>";
-                echo "<pre>" .print_r( $_FILES, true ). "</pre>";
-            }
-            
+            // delete files after processing
+            rrmdir($targetdir);
         }
+
+        echo "---";
+
+        if(DEBUG)
+        {
+            echo "<pre>" .print_r( $_SESSION, true ). "</pre>";
+            echo "<pre>" .print_r( $_POST, true ). "</pre>";
+            echo "<pre>" .print_r( $_FILES, true ). "</pre>";
+        }
+        
     }
 }
 ?>

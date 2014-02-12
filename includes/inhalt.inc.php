@@ -23,6 +23,8 @@ if(isset($_GET['show']))
         case "editcontent": require 'pages/editcontent.php'; break;
 
         case "search": require 'pages/search.php'; break;
+        case "batch1": require 'pages/batch_new1.php'; break;
+        case "batch2": require 'pages/batch_new2.php'; break;
 
         case "cat": require 'pages/cat_list.php'; break;
         case "catnew": require 'pages/cat_new.php'; break;

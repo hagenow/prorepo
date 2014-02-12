@@ -19,4 +19,19 @@ function folderToZip($folder,&$zipFile)
         }
     }
 }
+// extract given zip file to given target directory
+function extractZip($zipfile,$targetdir)
+{
+    $zip = new ZipArchive;
+    if ($zip->open($zipfile) === TRUE) 
+    {
+        $zip->extractTo($targetdir);
+        $zip->close();
+        return true;
+    } 
+    else 
+    {
+        return false;
+    }
+}
 ?>

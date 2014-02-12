@@ -202,4 +202,34 @@ function removelog($logid)
     }
     $conid->close();
 }
+
+/** Batchimporting logs */
+function batchimport_log($name, $timestamp, $catid, $modelid)
+{
+    $conid = db_connect();
+
+    $timestamp = $_POST['timestamp'];
+
+    $catid = $_POST['catid'];
+    $creator = $_SESSION['user'];
+
+    $sql = "INSERT INTO
+                ".TBL_PREFIX."logs
+                (logName, timestamp, lastupdate, catID, creator, deletable, modelID)
+                VALUES
+                ('$name','$timestamp','$timestamp','$catid','$creator', '1', $modelid)";
+
+    if($res = $conid->prepare($sql)){
+        $res->execute();
+        $res->store_result();
+        $id = $conid->insert_id;
+    }
+    else
+    {
+        echo $conid->error;
+    }
+
+    $conid->close();
+    return $id;
+}
 ?>

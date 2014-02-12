@@ -196,4 +196,34 @@ function removemodel($modid)
     }
     $conid->close();
 }
+
+/** Batchimporting models */
+function batchimport_model($name, $timestamp, $catid)
+{
+    $conid = db_connect();
+
+    $timestamp = $_POST['timestamp'];
+
+    $catid = $_POST['catid'];
+    $creator = $_SESSION['user'];
+
+    $sql = "INSERT INTO
+                ".TBL_PREFIX."models
+                (modelName, timestamp, lastupdate, catID, creator, deletable)
+                VALUES
+                ('$name','$timestamp','$timestamp','$catid','$creator', '1')";
+
+    if($res = $conid->prepare($sql)){
+        $res->execute();
+        $res->store_result();
+        $id = $conid->insert_id;
+    }
+    else
+    {
+        echo $conid->error;
+    }
+
+    $conid->close();
+    return $id;
+}
 ?>

@@ -452,7 +452,7 @@ function find_all_files($dir)
     return $result;
 } 
 
-function batchimport_step1($zip)
+function batchimport_step1($result,$targetdir)
 {
     // define arrays for storaging the values
     $models = array();
@@ -462,11 +462,107 @@ function batchimport_step1($zip)
     //define arrays for temporary storaging of the values
     $filenames = array();
     $filetypes = array();
+    $typenames = array();
     $mimetypes = array();
     $extensions = array();
     $sizes = array();
     $tmp_paths = array();
 
+    // file extensions
+    $log_extensions = array("xes", "mxml", "csv", "txt");
+    $model_extensions = array("pdf", "png", "pnml", "xml", "svg", "eps");
+    $check_extensions = array_merge($log_extensions, $model_extensions);
+
+    $finfo = finfo_open(FILEINFO_MIME_TYPE); // return mime type ala mimetype extension
+
+    foreach($result as $res)
+    {
+        $path_parts = pathinfo($res);
+
+        if(in_array($path_parts['extension'], $check_extensions))
+        {
+            if(in_array($path_parts['extension'], $model_extensions))
+            {
+                $filetype = "model";
+
+                // extract modelname
+                $tmp = strstr(str_replace($targetdir.'/', '', $res), '/', 1);
+                if(!in_array($tmp, $models) && !empty($tmp))
+                {
+                    $typename = $tmp;
+                    array_push($models, $tmp);
+                }
+                elseif(!in_array($tmp, $models) &&  !in_array($path_parts['filename'], $models) && empty($tmp))
+                {
+                    $typename = $path_parts['filename'];
+                    array_push($models, $typename);
+                }
+            }
+            elseif(in_array($path_parts['extension'], $log_extensions))
+            {
+                $filetype = "log";
+
+                // extract logname
+                $tmp = strstr(str_replace($targetdir.'/', '', $res), '/', 1);
+                if(!in_array($tmp, $logs) && !empty($tmp))
+                {
+                    $typename = $tmp;
+                    array_push($logs, $tmp);
+                }
+                elseif(!in_array($tmp, $logs) && !in_array($path_parts['filename'], $logs) && empty($tmp))
+                {
+                    $typename = $path_parts['filename'];
+                    array_push($logs, $typename);
+                }
+            }
+
+            $filename = $path_parts['basename'];
+            $extension = $path_parts['extension'];
+            $size = filesize($res);
+            $mimetype = finfo_file($finfo, $res);
+
+            array_push($filenames, $filename);
+            array_push($filetypes, $filetype);
+            array_push($typenames, $typename);
+            array_push($mimetypes, $mimetype);
+            array_push($extensions, $extension);
+            array_push($sizes, $size);
+            array_push($tmp_paths, $res);
+        }
+        else
+        {
+            continue;
+        }
+        
+    }
+    $files['filename'] = $filenames;
+    $files['filetype'] = $filetypes;
+    $files['mimetype'] = $mimetypes;
+    $files['tmp_path'] = $tmp_paths;
+    $files['typename'] = $typenames;
+    $files['extension'] = $extensions;
+    $files['size'] = $sizes;
+
+    array_multisort($files['filetype'], SORT_DESC, SORT_STRING, $files['filename'],$files['typename'],$files['mimetype'],$files['tmp_path'],$files['typename'],$files['extension'],$files['size']);
+
+    finfo_close($finfo);
+
+    $_SESSION['files'] = $files;
+    $_SESSION['models'] = $models;
+    $_SESSION['logs'] = $logs;
+
 }
 
+function batchimport_step2($files,$models,$logs)
+{
+    $files = $_SESSION['files'];
+    $models = $_SESSION['models'];
+    $logs = $_SESSION['logs'];
+
+    echo "<pre>";
+    print_r($files);
+    print_r($models);
+    print_r($logs);
+    echo "</pre>";
+}
 ?>

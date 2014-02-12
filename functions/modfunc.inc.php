@@ -226,4 +226,29 @@ function batchimport_model($name, $timestamp, $catid)
     $conid->close();
     return $id;
 }
+// check if model exists, if yes, return id if no, return 0
+function checkmodelexist($name)
+{
+    $conid = db_connect();
+
+    $sql = "SELECT modelID
+            FROM ".TBL_PREFIX."models
+            WHERE modelName = '$name'";
+
+    if($res = $conid->prepare($sql)){
+        $res->execute();
+        $res->store_result();
+        $res->bind_result($id);
+        $res->fetch();
+        return $id
+    }
+    else
+    {
+        echo $conid->error;
+    }
+
+    $conid->close();
+    return 0;
+}
+}
 ?>

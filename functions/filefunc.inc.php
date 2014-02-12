@@ -563,21 +563,45 @@ function batchimport_step2()
     unset($_SESSION['models']);
     unset($_SESSION['logs']);
 
+    $timestamp = $_POST['timestamp'];
+    $catid = $_POST['catid'];
+
+    // iterate over existing models, check whether it exists, else create a new 
+    // one and save the id in an associative array
     foreach($models as $name)
     {
-        $model_assoc[$name] = batchimport_model($name, $timestamp, $catid);
+        $tmp_id = checkmodelexist($name);
+
+        if($tmp_id != 0)
+            $model_assoc[$name] = $tmp_id;
+        else
+            $model_assoc[$name] = batchimport_createmodel($name, $timestamp, $catid);
     }
-    $log_assoc[$name] = batchimport_log($name, $timestamp, $catid, $modelid);
+
+    // iterate over existing logs, check whether it exists, else create a new 
+    // one and save the id in an associative array
+    foreach($logs as $name)
+    {
+        $tmp_id = checklogexist($name);
+        if($tmp_id != 0)
+        {
+            $log_assoc[$name] = $tmp_id;
+        }
+        else
+        {
+            if(array_key_exists($name, $model_assoc))
+            {
+                $log_assoc[$name] = batchimport_createlog($name, $timestamp, $catid, $model_assoc[$name]);
+            }
+        }
+    }
 
 
     echo "<pre>";
-    print_r($files);
+    print_r($model_assoc);
     echo "</pre>";
     echo "<pre>";
-    print_r($models);
-    echo "</pre>";
-    echo "<pre>";
-    print_r($logs);
+    print_r($log_assoc);
     echo "</pre>";
 }
 function batchimport_step3()

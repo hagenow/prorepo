@@ -42,6 +42,7 @@ if(!isset($_POST['submit_batch2']) || !$_POST['submit_batch2'])
             $result = find_all_files($targetdir);
             
             batchimport_step1($result,$targetdir);
+            batchimport_step2();
         }
     }
 ?>

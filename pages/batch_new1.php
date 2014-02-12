@@ -103,10 +103,12 @@ $_SESSION['cname']; ?>" class="form-control search-query" disabled>
             $result = find_all_files($targetdir);
             
             echo "<pre>" .print_r( $result, true ). "</pre>";
-            // batchimport_step1($result,$targetdir);
+            batchimport_step1($result,$targetdir);
             
-            // rrmdir($targetdir);
+            rrmdir($targetdir);
         }
+
+        echo "---":
 
         if(DEBUG)
         {
@@ -115,7 +117,6 @@ $_SESSION['cname']; ?>" class="form-control search-query" disabled>
             echo "<pre>" .print_r( $_FILES, true ). "</pre>";
         }
         
-        // uploadfiles_new();
     }
 } 
 ?>

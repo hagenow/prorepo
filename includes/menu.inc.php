@@ -25,8 +25,7 @@
                 <li><a href="<?php echo $_SERVER['PHP_SELF']; ?>?show=lognew">New log</a></li>
                 <li class="divider"></li>
                 <li class="dropdown-header">Batch upload</li>
-                <li><a href="<?php echo $_SERVER['PHP_SELF']; ?>?show=modbatch">New models</a></li>
-                <li><a href="<?php echo $_SERVER['PHP_SELF']; ?>?show=logbatch">New logs</a></li>
+                <li><a href="<?php echo $_SERVER['PHP_SELF']; ?>?show=batch1">Import models & logs</a></li>
     <?php endif; ?>
               </ul>
             </li>

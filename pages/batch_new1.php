@@ -94,6 +94,20 @@ $_SESSION['cname']; ?>" class="form-control search-query" disabled>
         unset($_SESSION['cid']);
         unset($_SESSION['cname']);
         unset($_SESSION['batch_semaphore']);
+        
+        $targetdir = TMP.uniqid();
+
+        if(extractZip($_FILES['files']['tmp_name'][0],$targetdir))
+        {
+            $result = array();
+            $result = find_all_files($targetdir);
+            
+            echo "<pre>" .print_r( $result, true ). "</pre>";
+            // batchimport_step1($result,$targetdir);
+            
+            // rrmdir($targetdir);
+        }
+
         if(DEBUG)
         {
             echo "<pre>" .print_r( $_SESSION, true ). "</pre>";

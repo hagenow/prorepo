@@ -551,12 +551,6 @@ function batchimport_step1($result,$targetdir)
     $_SESSION['models'] = $models;
     $_SESSION['logs'] = $logs;
 
-    echo "<pre>";
-    print_r($_SESSION['files']);
-    print_r($_SESSION['models']);
-    print_r($_SESSION['logs']);
-    echo "</pre>";
-
 }
 
 function batchimport_step2()
@@ -566,7 +560,11 @@ function batchimport_step2()
     $logs = $_SESSION['logs'];
     echo "<pre>";
     print_r($files);
+    echo "</pre>";
+    echo "<pre>";
     print_r($models);
+    echo "</pre>";
+    echo "<pre>";
     print_r($logs);
     echo "</pre>";
 }

@@ -40,6 +40,8 @@ if(!isset($_POST['submit_batch']) || !$_POST['submit_batch'] || !isset($_POST['s
     {
         $targetdir = TMP.uniqid();
 
+        $_SESSION['targetdir'] = $targetdir;
+
         if(extractZip($_FILES['files']['tmp_name'][0],$targetdir))
         {
             $result = array();
@@ -81,16 +83,20 @@ else
 {
     if (isset( $_POST['submit_batch2']) && !empty($_POST['submit_batch2']))
     {
-            batchimport_step2();
+        batchimport_step2();
 
-            unset($_SESSION['files']);
-            unset($_SESSION['models']);
-            unset($_SESSION['logs']);
+        $targetdir = $_SESSION['targetdir'];
 
-            echo "bla";
-        
-            // delete files after processing
-            rrmdir($targetdir);
+        echo "bla";
+    
+        // delete files after processing
+        rrmdir($targetdir);
+
+        unset($_SESSION['files']);
+        unset($_SESSION['models']);
+        unset($_SESSION['logs']);
+        unset($_SESSION['targetdir']);
+
     }
     unset($_SESSION['cid']);
     unset($_SESSION['cname']);

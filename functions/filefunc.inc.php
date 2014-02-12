@@ -564,7 +564,10 @@ function batchimport_step2()
     unset($_SESSION['logs']);
 
     $timestamp = $_POST['timestamp'];
-    $catid = $_POST['catid'];
+    $_SESSION['timestamp'] = $timestamp;
+    $catid = $_SESSION['cid'];
+    unset($_SESSION['cid']);
+    unset($_SESSION['cname']);
 
     // iterate over existing models, check whether it exists, else create a new 
     // one and save the id in an associative array
@@ -573,9 +576,26 @@ function batchimport_step2()
         $tmp_id = checkmodelexist($name);
 
         if($tmp_id != 0)
+        {
             $models_assoc[$name] = $tmp_id;
+        }
         else
+        {
             $models_assoc[$name] = batchimport_createmodel($name, $timestamp, $catid);
+
+            /** create the pathname for the file*/ 
+            $filepath = STRG_PATH."/model/".$models_assoc[$name]."_".$name."/".$timestamp."/";
+
+            /** create the pathname for the type*/ 
+            $typepath = STRG_PATH."/model/".$models_assoc[$name]."_".$name."/";
+
+            updatetypepath('model',$models_assoc[$name],$typepath);
+
+            if(!file_exists($filepath) && !is_dir($filepath))
+            {
+                mkdir($filepath, 0755, true);
+            }
+        }
     }
 
     // iterate over existing logs, check whether it exists, else create a new 
@@ -586,9 +606,6 @@ function batchimport_step2()
         if($tmp_id != 0)
         {
             $logs_assoc[$name] = $tmp_id;
-
-            /** create the pathname for the type*/ 
-            $typepath = STRG_PATH."/log/".$tmp_id."_".$name."/";
         }
         else
         {
@@ -596,13 +613,35 @@ function batchimport_step2()
             {
                 $logs_assoc[$name] = batchimport_createlog($name, $timestamp, $catid, $models_assoc[$name]);
 
+                /** create the pathname for the file*/ 
+                $filepath = STRG_PATH."/log/".$logs_assoc[$name]."_".$name."/".$timestamp."/";
+
                 /** create the pathname for the type*/ 
                 $typepath = STRG_PATH."/log/".$logs_assoc[$name]."_".$name."/";
+
                 updatetypepath('log',$logs_assoc[$name],$typepath);
+
+                if(!file_exists($filepath) && !is_dir($filepath))
+                {
+                    mkdir($filepath, 0755, true);
+                }
             }
             else
             {
                 $logs_assoc[$name] = batchimport_createlog($name, $timestamp, $catid, '0');
+
+                /** create the pathname for the file*/ 
+                $filepath = STRG_PATH."/log/".$logs_assoc[$name]."_".$name."/".$timestamp."/";
+
+                /** create the pathname for the type*/ 
+                $typepath = STRG_PATH."/log/".$logs_assoc[$name]."_".$name."/";
+
+                updatetypepath('log',$logs_assoc[$name],$typepath);
+
+                if(!file_exists($filepath) && !is_dir($filepath))
+                {
+                    mkdir($filepath, 0755, true);
+                }
             }
         }
     }
@@ -623,8 +662,10 @@ function batchimport_step3()
     $models = $_SESSION['models_assoc'];
     $logs = $_SESSION['logs_assoc'];
 
-    unset( $_SESSION['models_assoc']);
-    unset( $_SESSION['logs_assoc']);
+    $timestamp = $_SESSION['timestamp'];
+    unset($_SESSION['timestamp']);
+    unset($_SESSION['models_assoc']);
+    unset($_SESSION['logs_assoc']);
 
     echo "<pre>";
     print_r($files);

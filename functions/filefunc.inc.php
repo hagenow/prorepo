@@ -555,13 +555,48 @@ function batchimport_step1($result,$targetdir)
 
 function batchimport_step2()
 {
+    $models = $_SESSION['models'];
+    $logs = $_SESSION['logs'];
+    $models_assoc = array();
+    $logs_assoc = array();
+
+    unset($_SESSION['models']);
+    unset($_SESSION['logs']);
+
+    foreach($models as $name)
+    {
+        $model_assoc[$name] = batchimport_model($name, $timestamp, $catid);
+    }
+    $log_assoc[$name] = batchimport_log($name, $timestamp, $catid, $modelid);
+
+
+    echo "<pre>";
+    print_r($files);
+    echo "</pre>";
+    echo "<pre>";
+    print_r($models);
+    echo "</pre>";
+    echo "<pre>";
+    print_r($logs);
+    echo "</pre>";
+}
+function batchimport_step3()
+{
     $files = $_SESSION['files'];
     $models = $_SESSION['models'];
     $logs = $_SESSION['logs'];
+    $models_assoc = array();
+    $logs_assoc = array();
 
     unset($_SESSION['files']);
     unset($_SESSION['models']);
     unset($_SESSION['logs']);
+
+    foreach($models as $name)
+    {
+        $model_assoc[$name] = batchimport_model($name, $timestamp, $catid);
+    }
+    $log_assoc[$name] = batchimport_log($name, $timestamp, $catid, $modelid);
 
 
     echo "<pre>";

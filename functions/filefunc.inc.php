@@ -573,9 +573,9 @@ function batchimport_step2()
         $tmp_id = checkmodelexist($name);
 
         if($tmp_id != 0)
-            $model_assoc[$name] = $tmp_id;
+            $models_assoc[$name] = $tmp_id;
         else
-            $model_assoc[$name] = batchimport_createmodel($name, $timestamp, $catid);
+            $models_assoc[$name] = batchimport_createmodel($name, $timestamp, $catid);
     }
 
     // iterate over existing logs, check whether it exists, else create a new 
@@ -585,46 +585,43 @@ function batchimport_step2()
         $tmp_id = checklogexist($name);
         if($tmp_id != 0)
         {
-            $log_assoc[$name] = $tmp_id;
+            $logs_assoc[$name] = $tmp_id;
         }
         else
         {
             if(array_key_exists($name, $model_assoc))
             {
-                $log_assoc[$name] = batchimport_createlog($name, $timestamp, $catid, $model_assoc[$name]);
+                $logs_assoc[$name] = batchimport_createlog($name, $timestamp, $catid, $model_assoc[$name]);
+            }
+            else
+            {
+                $logs_assoc[$name] = batchimport_createlog($name, $timestamp, $catid, '0');
             }
         }
     }
 
 
     echo "<pre>";
-    print_r($model_assoc);
+    print_r($models_assoc);
     echo "</pre>";
     echo "<pre>";
-    print_r($log_assoc);
+    print_r($logs_assoc);
     echo "</pre>";
 }
 function batchimport_step3()
 {
     $files = $_SESSION['files'];
-    $models = $_SESSION['models'];
-    $logs = $_SESSION['logs'];
-    $models_assoc = array();
-    $logs_assoc = array();
-
     unset($_SESSION['files']);
-    unset($_SESSION['models']);
-    unset($_SESSION['logs']);
 
+    $models = $_SESSION['models_assoc'];
+    $logs = $_SESSION['logs_assoc'];
+
+    unset( $_SESSION['models_assoc']);
+    unset( $_SESSION['logs_assoc']);
 
     echo "<pre>";
     print_r($files);
     echo "</pre>";
-    echo "<pre>";
-    print_r($models);
-    echo "</pre>";
-    echo "<pre>";
-    print_r($logs);
-    echo "</pre>";
+
 }
 ?>

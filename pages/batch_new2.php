@@ -43,6 +43,10 @@ if(!isset($_POST['submit_batch2']) || !$_POST['submit_batch2'])
             
             batchimport_step1($result,$targetdir);
             batchimport_step2();
+
+            echo "<pre>";
+            print_r($_SESSION);
+            echo "</pre>";
         }
     }
 ?>
@@ -79,7 +83,7 @@ else
 {
     if (isset( $_POST['submit_batch2']) && !empty($_POST['submit_batch2']))
     {
-        batchimport_step2();
+        batchimport_step3();
 
         $targetdir = $_SESSION['targetdir'];
 
@@ -89,8 +93,6 @@ else
         rrmdir($targetdir);
 
         unset($_SESSION['files']);
-        unset($_SESSION['models']);
-        unset($_SESSION['logs']);
         unset($_SESSION['targetdir']);
 
     }

@@ -30,17 +30,36 @@ if(isset($_SESSION['mod_semaphore'])) {
 /** Wurde das Formular abgeschickt? */ 
 if(!isset($_POST['submit_batch']) || !$_POST['submit_batch'] || !isset($_POST['submit_batch2']) || !$_POST['submit_batch2'])
 {
-        if(isset($_SESSION['files']) && isset($_SESSION['logs']) && isset($_SESSION['models']))
-        {
-            batchimport_step2();
+    if (isset( $_POST['submit_batch'] ))
+    {
+        unset($_SESSION['cid']);
+        unset($_SESSION['cname']);
+        unset($_SESSION['batch_semaphore']);
+        
+        $targetdir = TMP.uniqid();
 
-            unset($_SESSION['files']);
-            unset($_SESSION['models']);
-            unset($_SESSION['logs']);
+        if(extractZip($_FILES['files']['tmp_name'][0],$targetdir))
+        {
+            $result = array();
+            $result = find_all_files($targetdir);
             
-            // delete files after processing
-            rrmdir($targetdir);
+            batchimport_step1($result,$targetdir);
+            
+            if(isset($_SESSION['files']) && isset($_SESSION['logs']) && isset($_SESSION['models']))
+            {
+                batchimport_step2();
+
+                unset($_SESSION['files']);
+                unset($_SESSION['models']);
+                unset($_SESSION['logs']);
+                
+                // delete files after processing
+                rrmdir($targetdir);
+            }
         }
+
+        echo "---";
+    }
 ?>
     
     <form class="form-horizontal" name="batchupload2" id="batchupload2" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>?show=batch2" enctype="multipart/form-data">

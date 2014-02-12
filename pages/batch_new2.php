@@ -28,14 +28,8 @@ if(isset($_SESSION['mod_semaphore'])) {
         unset($_SESSION['mod_semaphore']);
 }
 /** Wurde das Formular abgeschickt? */ 
-if(!isset($_POST['submit_batch']) || !$_POST['submit_batch'] || !isset($_POST['submit_batch2']) || !$_POST['submit_batch2'])
+if(!isset($_POST['submit_batch2']) || !$_POST['submit_batch2'])
 {
-    if(DEBUG)
-    {
-        echo "<pre>" .print_r( $_SESSION, true ). "</pre>";
-        echo "<pre>" .print_r( $_POST, true ). "</pre>";
-        echo "<pre>" .print_r( $_FILES, true ). "</pre>";
-    }
     if (isset( $_POST['submit_batch'] ))
     {
         $targetdir = TMP.uniqid();
@@ -78,7 +72,8 @@ if(!isset($_POST['submit_batch']) || !$_POST['submit_batch'] || !isset($_POST['s
     
     </fieldset>
     </form> 
-<?php  }
+<?php  
+}
 else
 {
     if (isset( $_POST['submit_batch2']) && !empty($_POST['submit_batch2']))

@@ -79,7 +79,7 @@ if(!isset($_POST['submit_batch']) || !$_POST['submit_batch'] || !isset($_POST['s
 <?php  }
 else
 {
-    if (isset( $_POST['submit_batch2'] && !empty($_POST['submit_batch2'])))
+    if (isset( $_POST['submit_batch2']) && !empty($_POST['submit_batch2']))
     {
             batchimport_step2();
 

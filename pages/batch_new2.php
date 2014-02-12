@@ -72,24 +72,33 @@ if(!isset($_POST['submit_batch']) || !$_POST['submit_batch'] || !isset($_POST['s
 <?php  }
 else
 {
-    if (isset( $_POST['submit_batch2'] ))
+    if (isset( $_POST['submit_batch'] ))
     {
         unset($_SESSION['cid']);
         unset($_SESSION['cname']);
         unset($_SESSION['batch_semaphore']);
         
-        
+        $targetdir = TMP.uniqid();
 
-        if(isset($_SESSION['files']) && isset($_SESSION['logs']) && isset($_SESSION['models']))
+        if(extractZip($_FILES['files']['tmp_name'][0],$targetdir))
         {
-            batchimport_step2();
-
-            unset($_SESSION['files']);
-            unset($_SESSION['models']);
-            unset($_SESSION['logs']);
+            $result = array();
+            $result = find_all_files($targetdir);
             
-            // delete files after processing
-            rrmdir($targetdir);
+            echo "<pre>" .print_r( $result, true ). "</pre>";
+            batchimport_step1($result,$targetdir);
+            
+            if(isset($_SESSION['files']) && isset($_SESSION['logs']) && isset($_SESSION['models']))
+            {
+                batchimport_step2();
+
+                unset($_SESSION['files']);
+                unset($_SESSION['models']);
+                unset($_SESSION['logs']);
+                
+                // delete files after processing
+                rrmdir($targetdir);
+            }
         }
 
         echo "---";
@@ -100,7 +109,6 @@ else
             echo "<pre>" .print_r( $_POST, true ). "</pre>";
             echo "<pre>" .print_r( $_FILES, true ). "</pre>";
         }
-        
     }
 }
 ?>

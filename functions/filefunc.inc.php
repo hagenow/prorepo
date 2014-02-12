@@ -586,12 +586,19 @@ function batchimport_step2()
         if($tmp_id != 0)
         {
             $logs_assoc[$name] = $tmp_id;
+
+            /** create the pathname for the type*/ 
+            $typepath = STRG_PATH."/log/".$tmp_id."_".$name."/";
         }
         else
         {
-            if(array_key_exists($name, $model_assoc))
+            if(array_key_exists($name, $models_assoc))
             {
-                $logs_assoc[$name] = batchimport_createlog($name, $timestamp, $catid, $model_assoc[$name]);
+                $logs_assoc[$name] = batchimport_createlog($name, $timestamp, $catid, $models_assoc[$name]);
+
+                /** create the pathname for the type*/ 
+                $typepath = STRG_PATH."/log/".$logs_assoc[$name]."_".$name."/";
+                updatetypepath('log',$logs_assoc[$name],$typepath);
             }
             else
             {

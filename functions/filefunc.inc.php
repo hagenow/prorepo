@@ -558,6 +558,12 @@ function batchimport_step2()
     $files = $_SESSION['files'];
     $models = $_SESSION['models'];
     $logs = $_SESSION['logs'];
+
+    unset($_SESSION['files']);
+    unset($_SESSION['models']);
+    unset($_SESSION['logs']);
+
+
     echo "<pre>";
     print_r($files);
     echo "</pre>";

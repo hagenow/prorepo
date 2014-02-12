@@ -46,7 +46,7 @@ if(!isset($_POST['submit_batch']) || !$_POST['submit_batch']) { ?>
         </form>
     <?php } ?>
     
-    <form class="form-horizontal" name="batchupload" id="batchupload" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>?show=batch1" enctype="multipart/form-data">
+    <form class="form-horizontal" name="batchupload" id="batchupload" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>?show=batch2" enctype="multipart/form-data">
     <fieldset>
     
     <!-- Form Name -->

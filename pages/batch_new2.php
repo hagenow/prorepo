@@ -72,6 +72,10 @@ if(!isset($_POST['submit_batch']) || !$_POST['submit_batch'] || isset($_POST['su
             if(isset($_SESSION['files']) && isset($_SESSION['logs']) && isset($_SESSION['models']))
             {
                 batchimport_step2();
+
+                unset($_SESSION['files']);
+                unset($_SESSION['models']);
+                unset($_SESSION['logs']);
                 
                 // delete files after processing
                 rrmdir($targetdir);

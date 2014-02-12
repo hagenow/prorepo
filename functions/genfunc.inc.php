@@ -109,4 +109,31 @@ function mailtogfx($email)
 
     echo '<img src="data:image/png;base64,'.base64_encode($output).'" />';
 }
+
+// extract given zip file to given target directory
+function extractZip($zipfile,$targetdir)
+{
+    $zip = new ZipArchive;
+    if ($zip->open($zipfile) === TRUE) 
+    {
+        $zip->extractTo($targetdir);
+        $zip->close();
+        return true;
+    } 
+    else 
+    {
+        return false;
+    }
+}
+// recursively remove a directory
+function rrmdir($dir) {
+    foreach(glob($dir . '/*') as $file) 
+    {
+        if(is_dir($file))
+            rrmdir($file);
+        else
+            unlink($file);
+    }
+    rmdir($dir);
+}
 ?>

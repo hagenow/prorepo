@@ -429,4 +429,44 @@ function viewfiles($type,$typeid,$ext,$date)
     $conid->close();
 }
 
+// recursively read directory structure and return an array 
+function find_all_files($dir)
+{
+    $root = scandir($dir);
+    foreach($root as $value)
+    {
+        if($value === '.' || $value === '..') 
+        {
+            continue;
+        }
+        if(is_file("$dir/$value")) 
+        {
+            $result[]="$dir/$value";
+            continue;
+        }
+        foreach(find_all_files("$dir/$value") as $value)
+        {
+            $result[]=$value;
+        }
+    }
+    return $result;
+} 
+
+function batchimport_step1($zip)
+{
+    // define arrays for storaging the values
+    $models = array();
+    $logs = array();
+    $files = array();
+
+    //define arrays for temporary storaging of the values
+    $filenames = array();
+    $filetypes = array();
+    $mimetypes = array();
+    $extensions = array();
+    $sizes = array();
+    $tmp_paths = array();
+
+}
+
 ?>

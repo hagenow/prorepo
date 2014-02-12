@@ -198,7 +198,7 @@ function removemodel($modid)
 }
 
 /** Batchimporting models */
-function batchimport_model($name, $timestamp, $catid)
+function batchimport_createmodel($name, $timestamp, $catid)
 {
     $conid = db_connect();
 
@@ -235,12 +235,13 @@ function checkmodelexist($name)
             FROM ".TBL_PREFIX."models
             WHERE modelName = '$name'";
 
-    if($res = $conid->prepare($sql)){
+    if($res = $conid->prepare($sql))
+    {
         $res->execute();
         $res->store_result();
         $res->bind_result($id);
         $res->fetch();
-        return $id
+        return $id;
     }
     else
     {
@@ -249,6 +250,5 @@ function checkmodelexist($name)
 
     $conid->close();
     return 0;
-}
 }
 ?>

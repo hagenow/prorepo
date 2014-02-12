@@ -616,12 +616,6 @@ function batchimport_step3()
     unset($_SESSION['models']);
     unset($_SESSION['logs']);
 
-    foreach($models as $name)
-    {
-        $model_assoc[$name] = batchimport_model($name, $timestamp, $catid);
-    }
-    $log_assoc[$name] = batchimport_log($name, $timestamp, $catid, $modelid);
-
 
     echo "<pre>";
     print_r($files);

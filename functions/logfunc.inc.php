@@ -204,7 +204,7 @@ function removelog($logid)
 }
 
 /** Batchimporting logs */
-function batchimport_log($name, $timestamp, $catid, $modelid)
+function batchimport_createlog($name, $timestamp, $catid, $modelid)
 {
     $conid = db_connect();
 
@@ -231,5 +231,30 @@ function batchimport_log($name, $timestamp, $catid, $modelid)
 
     $conid->close();
     return $id;
+}
+
+function checklogexist($name)
+{
+    $conid = db_connect();
+
+    $sql = "SELECT logID
+            FROM ".TBL_PREFIX."logs
+            WHERE logName = '$name'";
+
+    if($res = $conid->prepare($sql))
+    {
+        $res->execute();
+        $res->store_result();
+        $res->bind_result($id);
+        $res->fetch();
+        return $id;
+    }
+    else
+    {
+        echo $conid->error;
+    }
+
+    $conid->close();
+    return 0;
 }
 ?>

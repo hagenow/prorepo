@@ -105,10 +105,9 @@ $_SESSION['cname']; ?>" class="form-control search-query" disabled>
             echo "<pre>" .print_r( $result, true ). "</pre>";
             batchimport_step1($result,$targetdir);
             
-            rrmdir($targetdir);
         }
 
-        echo "---":
+        echo "---";
 
         if(DEBUG)
         {

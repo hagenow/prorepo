@@ -559,11 +559,11 @@ function batchimport_step1($result,$targetdir)
 
 }
 
-function batchimport_step2($files,$models,$logs)
-{
-    $files = $_SESSION['files'];
-    $models = $_SESSION['models'];
-    $logs = $_SESSION['logs'];
+function batchimport_step2()
+
+    unset($_SESSION['files']);
+    unset($_SESSION['models']);
+    unset($_SESSION['logs']);
 
     echo "<pre>";
     print_r($files);

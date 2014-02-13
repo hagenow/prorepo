@@ -574,23 +574,27 @@ function batchimport_step2()
     // one and save the id in an associative array
     foreach($models as $name)
     {
-        $tmp_id = checkmodelexist($name);
+        $modval = checkmodelexist($name);
 
-        if($tmp_id != 0)
+        if($modval['id'] != 0)
         {
-            $models_assoc[$name] = $tmp_id;
+            $models_assoc[$name] = $modval;
         }
         else
         {
-            $models_assoc[$name] = batchimport_createmodel($name, $timestamp, $catid);
+            $modval = array();
+            $modval['id'] = batchimport_createmodel($name, $timestamp, $catid);
 
             /** create the pathname for the file*/ 
-            $filepath = STRG_PATH."/model/".$models_assoc[$name]."_".$name."/".$timestamp."/";
+            $filepath = STRG_PATH."/model/".$modval['id']."_".$name."/".$timestamp."/";
+            $modval['path'] = $filepath;
 
             /** create the pathname for the type*/ 
-            $typepath = STRG_PATH."/model/".$models_assoc[$name]."_".$name."/";
+            $typepath = STRG_PATH."/model/".$modval['id']."_".$name."/";
 
-            updatetypepath('model',$models_assoc[$name],$typepath);
+            $models_assoc[$name] = $modval;
+
+            updatetypepath('model',$modval['id'],$typepath);
 
             if(!file_exists($filepath) && !is_dir($filepath))
             {
@@ -606,21 +610,25 @@ function batchimport_step2()
         $logval = checklogexist($name);
         if($logval['id'] != 0)
         {
-            $logs_assoc[$name] = $logval['id'];
+            $logs_assoc[$name] = $logval;
         }
         else
         {
+            $logval = array();
             if(array_key_exists($name, $models_assoc))
             {
-                $logs_assoc[$name] = batchimport_createlog($name, $timestamp, $catid, $models_assoc[$name]);
+                $logval['id']= batchimport_createlog($name, $timestamp, $catid, $models_assoc[$name]['id']);
 
                 /** create the pathname for the file*/ 
-                $filepath = STRG_PATH."/log/".$logs_assoc[$name]."_".$name."/".$timestamp."/";
+                $filepath = STRG_PATH."/log/".$logval['id']."_".$name."/".$timestamp."/";
+                $logval['path'] = $filepath;
 
                 /** create the pathname for the type*/ 
-                $typepath = STRG_PATH."/log/".$logs_assoc[$name]."_".$name."/";
+                $typepath = STRG_PATH."/log/".$logval['id']."_".$name."/";
 
-                updatetypepath('log',$logs_assoc[$name],$typepath);
+                $logs_assoc[$name] = $logval; 
+
+                updatetypepath('log',$logval['id'],$typepath);
 
                 if(!file_exists($filepath) && !is_dir($filepath))
                 {
@@ -629,15 +637,18 @@ function batchimport_step2()
             }
             else
             {
-                $logs_assoc[$name] = batchimport_createlog($name, $timestamp, $catid, '0');
+                $logval['id']= batchimport_createlog($name, $timestamp, $catid, '0');
 
                 /** create the pathname for the file*/ 
-                $filepath = STRG_PATH."/log/".$logs_assoc[$name]."_".$name."/".$timestamp."/";
+                $filepath = STRG_PATH."/log/".$logval['id']."_".$name."/".$timestamp."/";
+                $logval['path'] = $filepath;
 
                 /** create the pathname for the type*/ 
-                $typepath = STRG_PATH."/log/".$logs_assoc[$name]."_".$name."/";
+                $typepath = STRG_PATH."/log/".$logval['id']."_".$name."/";
 
-                updatetypepath('log',$logs_assoc[$name],$typepath);
+                $logs_assoc[$name] = $logval; 
+
+                updatetypepath('log',$logval['id'],$typepath);
 
                 if(!file_exists($filepath) && !is_dir($filepath))
                 {
@@ -691,61 +702,60 @@ function batchimport_step3()
     // Loop $files to execute all files
     foreach ($files['filename'] as $f => $filename) 
     {     
-            /** if the file is to large, then go to the next file */
-            if ($files['size'][$f] > $max_file_size) 
-            {
-                $message[] = "$filename is too large!.";
-                continue; // Skip large files
+        /** if the file is to large, then go to the next file */
+        if ($files['size'][$f] > $max_file_size) 
+        {
+            $message[] = "$filename is too large!.";
+            continue; // Skip large files
+        }
+        elseif( ! in_array(pathinfo($filename, PATHINFO_EXTENSION), $valid_formats) )
+        {
+            $message[] = "$filename is not a valid format";
+            continue; // Skip invalid file formats
+        }
+        else // No error found! Move uploaded files 
+        {
+            // extract extension
+            $ext = pathinfo($filename, PATHINFO_EXTENSION);
+
+            /** clean up the filename */
+            $filename = pathinfo($filename, PATHINFO_FILENAME);
+            $filename = strtr( $filename , $replacements );
+            $filename = preg_replace('/[^-a-zA-Z_]/', '',$filename);
+            $name = preg_replace('/[^-a-zA-Z_]/', '',$name);
+            
+            $size = $files['size'][$f];
+
+            // set filetype for download
+            $fileType = $files['mimetype'][$f];
+
+            /** filepath from given parameters */ 
+            
+            $filepath = $typeinfo['path']."/".$timestamp."/";
+
+            $filename_w_ext = $filename.".".$ext;
+            $uniqid =  uniqid('f', TRUE);
+            /** create entry in the files table */
+            $sql = "INSERT INTO
+                                ".TBL_PREFIX."files
+                                (fileName, path, type, foreignID, ext, fileType, uploader, timestamp, uniqid, size, valid, deletable)
+                           VALUES
+                                ('$filename_w_ext','$filepath','$type','$id','$ext','$fileType','$creator','$timestamp','$uniqid','$size','$valid','1')"; 
+
+            if($res = $conid->prepare($sql)){
+                $res->execute();
+                $res->store_result();
             }
-            elseif( ! in_array(pathinfo($filename, PATHINFO_EXTENSION), $valid_formats) )
+            else
             {
-                $message[] = "$filename is not a valid format";
-                continue; // Skip invalid file formats
+                echo $conid->error;
             }
-            else // No error found! Move uploaded files 
+
+            $target = $filepath.$filename.".".$ext;
+
+            if(move_uploaded_file($files["files"]["tmp_name"][$f], $target))
             {
-                // extract extension
-                $ext = pathinfo($filename, PATHINFO_EXTENSION);
-
-                /** clean up the filename */
-                $filename = pathinfo($filename, PATHINFO_FILENAME);
-                $filename = strtr( $filename , $replacements );
-                $filename = preg_replace('/[^-a-zA-Z_]/', '',$filename);
-                $name = preg_replace('/[^-a-zA-Z_]/', '',$name);
-                
-                $size = $files['size'][$f];
-
-                // set filetype for download
-                $fileType = $files['mimetype'][$f];
-
-                /** filepath from given parameters */ 
-                
-                $filepath = $typeinfo['path']."/".$timestamp."/";
-
-                $filename_w_ext = $filename.".".$ext;
-                $uniqid =  uniqid('f', TRUE);
-                /** create entry in the files table */
-                $sql = "INSERT INTO
-                                    ".TBL_PREFIX."files
-                                    (fileName, path, type, foreignID, ext, fileType, uploader, timestamp, uniqid, size, valid, deletable)
-                               VALUES
-                                    ('$filename_w_ext','$filepath','$type','$id','$ext','$fileType','$creator','$timestamp','$uniqid','$size','$valid','1')"; 
-
-                if($res = $conid->prepare($sql)){
-                    $res->execute();
-                    $res->store_result();
-                }
-                else
-                {
-                    echo $conid->error;
-                }
-
-                $target = $filepath.$filename.".".$ext;
-
-                if(move_uploaded_file($files["files"]["tmp_name"][$f], $target))
-                {
-                    $count++; // Number of successfully uploaded file
-                }
+                $count++; // Number of successfully uploaded file
             }
         }
     }

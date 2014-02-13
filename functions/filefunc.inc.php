@@ -693,9 +693,6 @@ function batchimport_step3()
     /** init submitted file-conuter to zero */
     $count = 0;
 
-    /** get category ID */
-    $catid = $_POST['catid'];
-
     /** set creator to current logged in user */
     $creator = $_SESSION['user'];
 
@@ -708,39 +705,47 @@ function batchimport_step3()
             $message[] = "$filename is too large!.";
             continue; // Skip large files
         }
-        elseif( ! in_array(pathinfo($filename, PATHINFO_EXTENSION), $valid_formats) )
-        {
-            $message[] = "$filename is not a valid format";
-            continue; // Skip invalid file formats
-        }
         else // No error found! Move uploaded files 
         {
             // extract extension
-            $ext = pathinfo($filename, PATHINFO_EXTENSION);
+            $ext = $files['extension'][$f];
 
             /** clean up the filename */
-            $filename = pathinfo($filename, PATHINFO_FILENAME);
             $filename = strtr( $filename , $replacements );
             $filename = preg_replace('/[^-a-zA-Z_]/', '',$filename);
-            $name = preg_replace('/[^-a-zA-Z_]/', '',$name);
             
+            // get filesize
             $size = $files['size'][$f];
 
             // set filetype for download
-            $fileType = $files['mimetype'][$f];
+            $mimetype = $files['mimetype'][$f];
 
             /** filepath from given parameters */ 
+            if($files['filetype'] == 'log')
+            {
+                $id = $logs_assoc[$files['typename'][$f]]['id'];
+                $filepath = $logs_assoc[$files['typename'][$f]]['path'];
+                $type = 'log';
+            }
+            elseif($files['filetype'] == 'model')
+            {
+                $id = $models_assoc[$files['typename'][$f]]['id'];
+                $filepath = $models_assoc[$files['typename'][$f]]['path'];
+                $type = 'model';
+            }
             
-            $filepath = $typeinfo['path']."/".$timestamp."/";
-
             $filename_w_ext = $filename.".".$ext;
             $uniqid =  uniqid('f', TRUE);
+
+            // batchimporting files aren't checked for validation
+            $valid = '2';
+
             /** create entry in the files table */
             $sql = "INSERT INTO
                                 ".TBL_PREFIX."files
                                 (fileName, path, type, foreignID, ext, fileType, uploader, timestamp, uniqid, size, valid, deletable)
                            VALUES
-                                ('$filename_w_ext','$filepath','$type','$id','$ext','$fileType','$creator','$timestamp','$uniqid','$size','$valid','1')"; 
+                                ('$filename_w_ext','$filepath','$type','$id','$ext','$mimetype','$creator','$timestamp','$uniqid','$size','$valid','1')"; 
 
             if($res = $conid->prepare($sql)){
                 $res->execute();
@@ -751,17 +756,14 @@ function batchimport_step3()
                 echo $conid->error;
             }
 
-            $target = $filepath.$filename.".".$ext;
+            $target = $filepath.$filename_w_ext;
 
-            if(move_uploaded_file($files["files"]["tmp_name"][$f], $target))
+            if(move_uploaded_file($files["files"]["tmp_path"][$f], $target))
             {
                 $count++; // Number of successfully uploaded file
             }
         }
     }
-    echo "<pre>";
-    print_r($files);
-    echo "</pre>";
 
 }
 ?>

@@ -231,17 +231,21 @@ function checkmodelexist($name)
 {
     $conid = db_connect();
 
-    $sql = "SELECT modelID
+    $sql = "SELECT modelID,path
             FROM ".TBL_PREFIX."models
             WHERE modelName = '$name'";
+
+    $values = array();
 
     if($res = $conid->prepare($sql))
     {
         $res->execute();
         $res->store_result();
-        $res->bind_result($id);
+        $res->bind_result($id,$path);
         $res->fetch();
-        return $id;
+        $values['id'] = $id;
+        $values['path'] = $path;
+        return $values; 
     }
     else
     {

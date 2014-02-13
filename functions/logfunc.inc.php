@@ -237,17 +237,21 @@ function checklogexist($name)
 {
     $conid = db_connect();
 
-    $sql = "SELECT logID
+    $sql = "SELECT logID,path
             FROM ".TBL_PREFIX."logs
             WHERE logName = '$name'";
+
+    $values = array();
 
     if($res = $conid->prepare($sql))
     {
         $res->execute();
         $res->store_result();
-        $res->bind_result($id);
+        $res->bind_result($id,$path);
         $res->fetch();
-        return $id;
+        $values['id'] = $id;
+        $values['path'] = $path;
+        return $values; 
     }
     else
     {
@@ -255,6 +259,5 @@ function checklogexist($name)
     }
 
     $conid->close();
-    return 0;
 }
 ?>

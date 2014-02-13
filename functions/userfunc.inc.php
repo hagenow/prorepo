@@ -529,7 +529,7 @@ function getuseruploads($type)
     $sql = "SELECT *
             FROM ".TBL_PREFIX.$type."s
             WHERE creator ='".$_SESSION['user']."'
-            GROUP BY timestamp
+            ORDER BY timestamp
             DESC";
 
     if( $res = $conid->query($sql) )

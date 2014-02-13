@@ -543,7 +543,8 @@ function batchimport_step1($result,$targetdir)
     $files['extension'] = $extensions;
     $files['size'] = $sizes;
 
-    array_multisort($files['filetype'], SORT_DESC, SORT_STRING, $files['filename'],$files['typename'],$files['mimetype'],$files['tmp_path'],$files['typename'],$files['extension'],$files['size']);
+    array_multisort($files['filetype'], SORT_DESC, SORT_STRING, $files['filename'],$files['typename'],
+                    $files['mimetype'],$files['tmp_path'],$files['typename'],$files['extension'],$files['size']);
 
     finfo_close($finfo);
 
@@ -559,12 +560,12 @@ function batchimport_step2()
     $logs = $_SESSION['logs'];
     $models_assoc = array();
     $logs_assoc = array();
-
     unset($_SESSION['models']);
     unset($_SESSION['logs']);
 
     $timestamp = $_POST['timestamp'];
     $_SESSION['timestamp'] = $timestamp;
+
     $catid = $_SESSION['cid'];
     unset($_SESSION['cid']);
     unset($_SESSION['cname']);
@@ -602,10 +603,10 @@ function batchimport_step2()
     // one and save the id in an associative array
     foreach($logs as $name)
     {
-        $tmp_id = checklogexist($name);
-        if($tmp_id != 0)
+        $logval = checklogexist($name);
+        if($logval['id'] != 0)
         {
-            $logs_assoc[$name] = $tmp_id;
+            $logs_assoc[$name] = $logval['id'];
         }
         else
         {
@@ -646,13 +647,18 @@ function batchimport_step2()
         }
     }
 
+    $_SESSION['models_assoc'] = $models_assoc;
+    $_SESSION['logs_assoc'] = $logs_assoc;
 
-    echo "<pre>";
-    print_r($models_assoc);
-    echo "</pre>";
-    echo "<pre>";
-    print_r($logs_assoc);
-    echo "</pre>";
+    if(DEBUG)
+    {
+        echo "<pre>";
+        print_r($models_assoc);
+        echo "</pre>";
+        echo "<pre>";
+        print_r($logs_assoc);
+        echo "</pre>";
+    }
 }
 function batchimport_step3()
 {
@@ -667,6 +673,82 @@ function batchimport_step3()
     unset($_SESSION['models_assoc']);
     unset($_SESSION['logs_assoc']);
 
+    /** replace the given chars with their equivalents */
+    $replacements = array( 'ä' => 'ae', 'ö' => 'oe', 'ü' => 'ue', 'ß' => 'ss', ' ' => '_' );
+
+    /** use the FILESIZE from config.inc.php */
+    $max_file_size = FILESIZE;
+
+    /** init submitted file-conuter to zero */
+    $count = 0;
+
+    /** get category ID */
+    $catid = $_POST['catid'];
+
+    /** set creator to current logged in user */
+    $creator = $_SESSION['user'];
+
+    // Loop $files to execute all files
+    foreach ($files['filename'] as $f => $filename) 
+    {     
+            /** if the file is to large, then go to the next file */
+            if ($files['size'][$f] > $max_file_size) 
+            {
+                $message[] = "$filename is too large!.";
+                continue; // Skip large files
+            }
+            elseif( ! in_array(pathinfo($filename, PATHINFO_EXTENSION), $valid_formats) )
+            {
+                $message[] = "$filename is not a valid format";
+                continue; // Skip invalid file formats
+            }
+            else // No error found! Move uploaded files 
+            {
+                // extract extension
+                $ext = pathinfo($filename, PATHINFO_EXTENSION);
+
+                /** clean up the filename */
+                $filename = pathinfo($filename, PATHINFO_FILENAME);
+                $filename = strtr( $filename , $replacements );
+                $filename = preg_replace('/[^-a-zA-Z_]/', '',$filename);
+                $name = preg_replace('/[^-a-zA-Z_]/', '',$name);
+                
+                $size = $files['size'][$f];
+
+                // set filetype for download
+                $fileType = $files['mimetype'][$f];
+
+                /** filepath from given parameters */ 
+                
+                $filepath = $typeinfo['path']."/".$timestamp."/";
+
+                $filename_w_ext = $filename.".".$ext;
+                $uniqid =  uniqid('f', TRUE);
+                /** create entry in the files table */
+                $sql = "INSERT INTO
+                                    ".TBL_PREFIX."files
+                                    (fileName, path, type, foreignID, ext, fileType, uploader, timestamp, uniqid, size, valid, deletable)
+                               VALUES
+                                    ('$filename_w_ext','$filepath','$type','$id','$ext','$fileType','$creator','$timestamp','$uniqid','$size','$valid','1')"; 
+
+                if($res = $conid->prepare($sql)){
+                    $res->execute();
+                    $res->store_result();
+                }
+                else
+                {
+                    echo $conid->error;
+                }
+
+                $target = $filepath.$filename.".".$ext;
+
+                if(move_uploaded_file($files["files"]["tmp_name"][$f], $target))
+                {
+                    $count++; // Number of successfully uploaded file
+                }
+            }
+        }
+    }
     echo "<pre>";
     print_r($files);
     echo "</pre>";

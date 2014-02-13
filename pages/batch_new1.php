@@ -88,7 +88,8 @@ $_SESSION['cname']; ?>" class="form-control search-query" disabled>
     </div>
     
     </fieldset>
-    </form> <?php } else {
+    </form> 
+<?php } else {
     if (isset( $_POST['submit_batch'] ))
     {
         unset($_SESSION['cid']);

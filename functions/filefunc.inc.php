@@ -759,13 +759,13 @@ function batchimport_step3()
 
             $target = $filepath.$filename;
 
-            if(move_uploaded_file($files['tmp_path'][$f], $target))
+            if(rename($files['tmp_path'][$f], $target))
             {
                 $count++; // Number of successfully uploaded file
             }
         }
     }
-
+    echo "uploaded ".$count." files!";
 }
 
 ?>

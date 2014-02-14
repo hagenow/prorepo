@@ -3,7 +3,7 @@ function getfile($uniqid)
 {
     $conid = db_connect();
 
-    $sql = "SELECT fileName, path, fileType
+    $sql = "SELECT fileName, path, fileType,size
             FROM ".TBL_PREFIX."files
             WHERE `uniqid` = '$uniqid'";
 
@@ -14,10 +14,11 @@ function getfile($uniqid)
             $file = $row['fileName'];
             $type = $row['fileType'];
             $path = $row['path'];
+            $size = $row['size'];
             
             header("Content-Type: $type");
             header("Content-Disposition: attachment; filename=\"$file\"");
-            header("Content-length: " . filesize($file)); 
+            header("Content-length: " .$size); 
 
             readfile($path.$file);
         }

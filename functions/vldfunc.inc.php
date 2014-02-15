@@ -62,6 +62,7 @@ function validatePNML($file)
     // otherwise run shellscript and returns true, if validates can be found in 
     // a line - otherwise return false!
     $result_shell = shell_exec(PNMLSchema." ".$file." 2>&1");
+    // $result_shell = shell_exec(PNMLSchema." ".$file);
 
     // load result from HTML file under PNMLReport (look at config.inc.php)
     $html = file_get_contents(PNMLReport);

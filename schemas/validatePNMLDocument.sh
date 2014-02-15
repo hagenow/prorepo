@@ -12,7 +12,7 @@
 # The validation results are output in $HOME/pnmlValidation/pnmlValidationReport.html
 #------------------------------------------------------------------------------------
 
-REPORTFILE=./pnmlValidationReport.html
+REPORTFILE=schemas/pnmlValidationReport.html
 TITLE="PNML Document(s) validation report"
 
 [ $# -eq 0 ] && echo "Usage: $0 pnmlFile1 [pnmlFile2 pnmlFile3 ...]" && exit 1

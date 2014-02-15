@@ -12,14 +12,10 @@
 # The validation results are output in $HOME/pnmlValidation/pnmlValidationReport.html
 #------------------------------------------------------------------------------------
 
-RESULTDIR=./schemas
-REPORTFILE=$RESULTDIR/pnmlValidationReport.html
+REPORTFILE=./pnmlValidationReport.html
 TITLE="PNML Document(s) validation report"
 
 [ $# -eq 0 ] && echo "Usage: $0 pnmlFile1 [pnmlFile2 pnmlFile3 ...]" && exit 1
-
-# Create folder in user $HOME to contain report file
-mkdir -p $RESULTDIR
 
 # Prepare report file
 echo "<?xml version=\"1.0\" encoding=\"utf-8\"?>" > $REPORTFILE

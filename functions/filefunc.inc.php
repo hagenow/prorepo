@@ -25,7 +25,7 @@ function uploadfiles_new()
     {
         $type = "log";
         $typeinfo = createlog();
-        $valid_formats = array("xes", "mxml", "csv");
+        $valid_formats = array("xes", "mxml", "csv", "txt");
     }
     else
     {
@@ -88,8 +88,8 @@ function uploadfiles_new()
                     /** clean up the filename */
                     $filename = pathinfo($filename, PATHINFO_FILENAME);
                     $filename = strtr( $filename , $replacements );
-                    $filename = preg_replace('/[^-a-zA-Z_]/', '',$filename);
-                    $name = preg_replace('/[^-a-zA-Z_]/', '',$name);
+                    $filename = preg_replace('/[^-0-9a-zA-Z_]/', '',$filename);
+                    $name = preg_replace('/[^-0-9a-zA-Z_]/', '',$name);
                     
                     $size = $_FILES['files']['size'][$f];
 

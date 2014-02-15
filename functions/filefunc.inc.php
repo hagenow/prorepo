@@ -19,7 +19,7 @@ function uploadfiles_new()
     {
         $type = "model";
         $typeinfo = createmodel();
-        $valid_formats = array("pdf", "png", "pnml", "xml", "svg", "eps");
+        $valid_formats = array("pdf", "png", "pnml", "xml", "svg", "eps", "tpn");
     }
     elseif($_POST['type'] == "log")
     {
@@ -176,7 +176,7 @@ function uploadfiles_existing()
         $type = "model";
         editmodel($_GET['modelID']);
         $typeinfo = viewmodel($_GET['modelID']);
-        $valid_formats = array("pdf", "png", "pnml", "xml", "svg", "eps");
+        $valid_formats = array("pdf", "png", "pnml", "xml", "svg", "eps", "tpn");
     }
     elseif($_POST['type'] == "log")
     {
@@ -470,7 +470,7 @@ function batchimport_step1($result,$targetdir)
 
     // file extensions
     $log_extensions = array("xes", "mxml", "csv", "txt");
-    $model_extensions = array("pdf", "png", "pnml", "xml", "svg", "eps");
+    $model_extensions = array("pdf", "png", "pnml", "xml", "svg", "eps", "tpn");
     $check_extensions = array_merge($log_extensions, $model_extensions);
 
     $finfo = finfo_open(FILEINFO_MIME_TYPE); // return mime type ala mimetype extension

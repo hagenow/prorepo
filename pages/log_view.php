@@ -115,21 +115,41 @@ else
 </div>
 
 <div class="panel panel-info">
-  <div class="panel-heading">
-  <h3 class="panel-title">CSV</h3>
-  </div>
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Filename</th>
-                <th></th>
-                <th class="text-center">Size</th>
-                <th class="text-center">Upload date</th>
-                <th class="text-center">Uploader</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php viewfiles("log", $_GET['logID'], "csv", $date); ?>
-        </tbody>
-    </table>
+<div class="panel-heading">
+<h3 class="panel-title">CSV</h3>
+</div>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Filename</th>
+            <th></th>
+            <th class="text-center">Size</th>
+            <th class="text-center">Upload date</th>
+            <th class="text-center">Uploader</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php viewfiles("log", $_GET['logID'], "csv", $date); ?>
+    </tbody>
+</table>
+</div>
+
+<div class="panel panel-info">
+<div class="panel-heading">
+<h3 class="panel-title">TPN</h3>
+</div>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Filename</th>
+            <th></th>
+            <th class="text-center">Size</th>
+            <th class="text-center">Upload date</th>
+            <th class="text-center">Uploader</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php viewfiles("log", $_GET['logID'], "tpn", $date); ?>
+    </tbody>
+</table>
 </div>

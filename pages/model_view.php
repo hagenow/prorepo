@@ -78,7 +78,7 @@ else
 
 <div class="panel panel-success">
   <div class="panel-heading">
-  <h3 class="panel-title">PNML & XML files</h3>
+  <h3 class="panel-title">PNML</h3>
   </div>
     <!-- List group -->
     <table class="table table-striped">
@@ -93,6 +93,46 @@ else
         </thead>
         <tbody>
             <?php viewfiles("model", $_GET['modelID'], "pnml", $date); ?>
+        </tbody>
+    </table>
+</div>
+
+<div class="panel panel-success">
+  <div class="panel-heading">
+  <h3 class="panel-title">TPN</h3>
+  </div>
+    <!-- List group -->
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Filename</th>
+                <th class="text-center">Size</th>
+                <th class="text-center">Upload date</th>
+                <th class="text-center">Uploader</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php viewfiles("model", $_GET['modelID'], "tpn", $date); ?>
+        </tbody>
+    </table>
+</div>
+
+<div class="panel panel-success">
+  <div class="panel-heading">
+  <h3 class="panel-title">XML</h3>
+  </div>
+    <!-- List group -->
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Filename</th>
+                <th class="text-center">Validation</th>
+                <th class="text-center">Size</th>
+                <th class="text-center">Upload date</th>
+                <th class="text-center">Uploader</th>
+            </tr>
+        </thead>
+        <tbody>
             <?php viewfiles("model", $_GET['modelID'], "xml", $date); ?>
         </tbody>
     </table>

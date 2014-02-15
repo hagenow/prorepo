@@ -36,7 +36,7 @@ else
            <span class="glyphicon glyphicon-wrench"></span> Edit model
         </button>
     <?php endif; ?>
-    <?php if(isset($_SESSION['groupID']) && isset($_SESSION['updateflag']) && in_array($_GET['modelID'], $_SESSION['grpoldmodels'])) : ?>
+    <?php if(isset($_SESSION['groupID']) && isset($_SESSION['updateflag']) && isset($_SESSION['grpoldmodels']) && in_array($_GET['modelID'], $_SESSION['grpoldmodels'])) : ?>
         <button type="button" class="btn btn-default btn-sm" id="addmodel2group_donothing" value="<?php echo $_GET['modelID']."|".$date; ?>">
            <span class="glyphicon glyphicon-flash"></span> Already added, please remove first!
         </button>

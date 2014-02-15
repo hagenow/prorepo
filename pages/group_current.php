@@ -36,7 +36,7 @@ require 'includes/authcheck.inc.php';
         </thead>
         <tbody>
             <?php 
-                if(isset($_SESSION['updateflag']))
+                if(!isset($_SESSION['updateflag']))
                 {
                     foreach($_SESSION['grpmodels'] as $key => $id)
                     {
@@ -70,7 +70,7 @@ require 'includes/authcheck.inc.php';
         </thead>
         <tbody>
             <?php 
-                if(isset($_SESSION['updateflag']))
+                if(!isset($_SESSION['updateflag']))
                 {
                     foreach($_SESSION['grplogs'] as $key => $id)
                     {

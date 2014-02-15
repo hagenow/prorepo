@@ -398,7 +398,7 @@ function viewfiles($type,$typeid,$ext,$date)
             $date = date("d.m.Y - H:i:s", strtotime($row['timestamp']));
             $html = "";
             $html .= "<tr>";
-            $html .= "<td><a href=\"".$_SERVER['PHP_SELF']."?show=download&id=".$row['uniqid']."\">".$row['fileName']."</a></td>";
+            $html .= "<td><a href=\"http://" . $_SERVER['HTTP_HOST'].PATHINFO."d/".$row['uniqid']."\">".$row['fileName']."</a></td>";
             if(in_array($ext, $validation_type))
             {
                 if($row['valid'] == 0)

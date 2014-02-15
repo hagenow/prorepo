@@ -255,7 +255,7 @@ function uploadfiles_existing()
 
                     /** filepath from given parameters */ 
                     
-                    $filepath = $typeinfo['path']."/".$timestamp."/";
+                    $filepath = $typeinfo['path'].$timestamp."/";
 
                     if(!file_exists($filepath) && !is_dir($filepath))
                     {

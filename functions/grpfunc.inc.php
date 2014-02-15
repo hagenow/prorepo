@@ -333,7 +333,7 @@ function linkedtypes($id,$type,$creator)
 {
     $conid = db_connect();
 
-    $sql = "SELECT ".$type."ID
+    $sql = "SELECT ".$type."ID,timestamp
             FROM ".TBL_PREFIX.$type."groups
             WHERE groupID = $id";
 
@@ -348,8 +348,8 @@ function linkedtypes($id,$type,$creator)
 
                 $html = "";
                 $html .= "<tr>";
-                $html .= "<td><a href=\"".$_SERVER['PHP_SELF']."?show=modview&modelID=".$values['id']."&timestamp=".date("YmdHis", strtotime($values['timestamp']))."\">".$values['name']."</a></td>";
-                $html .= "<td class=\"text-center\">".date("d.m.Y - H:i:s", strtotime($values['timestamp']))."</td>";
+                $html .= "<td><a href=\"".$_SERVER['PHP_SELF']."?show=modview&modelID=".$values['id']."&timestamp=".date("YmdHis", strtotime($row['timestamp']))."\">".$values['name']."</a></td>";
+                $html .= "<td class=\"text-center\">".date("d.m.Y - H:i:s", strtotime($row['timestamp']))."</td>";
                 $html .= "<td class=\"text-center\">";
                 if(isset($_SESSION['angemeldet']) && isset($_SESSION['user']) && $_SESSION['user'] == $creator || isadmin())
                 {
@@ -368,8 +368,8 @@ function linkedtypes($id,$type,$creator)
 
                 $html = "";
                 $html .= "<tr>";
-                $html .= "<td><a href=\"".$_SERVER['PHP_SELF']."?show=logview&logID=".$values['id']."&timestamp=".date("YmdHis", strtotime($values['timestamp']))."\">".$values['name']."</a></td>";
-                $html .= "<td class=\"text-center\">".date("d.m.Y - H:i:s", strtotime($values['timestamp']))."</td>";
+                $html .= "<td><a href=\"".$_SERVER['PHP_SELF']."?show=logview&logID=".$values['id']."&timestamp=".date("YmdHis", strtotime($row['timestamp']))."\">".$values['name']."</a></td>";
+                $html .= "<td class=\"text-center\">".date("d.m.Y - H:i:s", strtotime($row['timestamp']))."</td>";
                 $html .= "<td class=\"text-center\">";
                 if(isset($_SESSION['angemeldet']) && isset($_SESSION['user']) && $_SESSION['user'] == $creator || isadmin())
                 {
@@ -574,6 +574,32 @@ function removegroup($grpid)
     {
         $res->execute();
         return true;
+    }
+    else
+    {
+        echo $conid->error;
+    }
+    $conid->close();
+}
+
+// get group name
+function getgroupname($grpid)
+{
+    $conid = db_connect();
+
+    $grpid = cleaninput($grpid);
+
+    $sql = "SELECT groupName 
+            FROM ".TBL_PREFIX."groups
+            WHERE groupID = '$grpid'";
+
+    if($res = $conid->prepare($sql))
+    {
+        $res->execute();
+        $res->store_result();
+        $res->bind_result($name);
+        $res->fetch();
+        return $name;
     }
     else
     {

@@ -36,19 +36,9 @@ require 'includes/authcheck.inc.php';
         </thead>
         <tbody>
             <?php 
-                if(!isset($_SESSION['updateflag']))
+                foreach($_SESSION['grpmodels'] as $key => $id)
                 {
-                    foreach($_SESSION['grpmodels'] as $key => $id)
-                    {
-                        getnamesfromgroup("model", $key, $id); 
-                    }
-                }
-                else
-                {
-                    foreach($_SESSION['grpoldmodels'] as $key => $id)
-                    {
-                        getnamesfromgroup("model", $key, $id); 
-                    }
+                    getnamesfromgroup("model", $key, $id); 
                 }
             ?>
         </tbody>
@@ -70,19 +60,9 @@ require 'includes/authcheck.inc.php';
         </thead>
         <tbody>
             <?php 
-                if(!isset($_SESSION['updateflag']))
+                foreach($_SESSION['grplogs'] as $key => $id)
                 {
-                    foreach($_SESSION['grplogs'] as $key => $id)
-                    {
-                        getnamesfromgroup("log", $key, $id); 
-                    }
-                }
-                else
-                {
-                    foreach($_SESSION['grpoldlogs'] as $key => $id)
-                    {
-                        getnamesfromgroup("log", $key, $id); 
-                    }
+                    getnamesfromgroup("log", $key, $id); 
                 }
             ?>
         </tbody>
@@ -114,7 +94,9 @@ require 'includes/authcheck.inc.php';
 <?php endif; ?>
 
 <?php if(isset($_GET['action']) && $_GET['action'] == "load" && !isset($_SESSION['groupID']) && isset($_SESSION['angemeldet'])) : ?>
-    <?php initgroup($_GET['groupID']); ?>
+    <?php initgroup($_GET['groupID']); 
+          $_SESSION['groupName'] = getgroupname($_GET['groupID']);
+    ?>
     <?php header("Location: ".$_SERVER['PHP_SELF']."?show=groupcurrent"); ?>
 <?php endif; ?>
 

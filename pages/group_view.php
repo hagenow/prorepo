@@ -112,7 +112,7 @@ Creating ZIP-file and serve download... <br/>
 <?php 
     $zip = array();
     $zip = createzip($_GET['groupID']); 
-    
+
     $z = new ZipArchive();
     $z->open("".TMP."/group_".$_GET['groupID'].".zip", ZIPARCHIVE::CREATE);
     foreach($zip as $folder)

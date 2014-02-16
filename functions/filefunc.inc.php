@@ -440,7 +440,7 @@ function viewfile($uniqid)
 
     $sql = "SELECT *
             FROM ".TBL_PREFIX."files
-            WHERE uniqid '$uniqid'";
+            WHERE uniqid = '$uniqid'";
 
     if( $res = $conid->query($sql) ){
 
@@ -457,7 +457,7 @@ function viewfile($uniqid)
 }
 
 // get values of one specific file
-function deletefile($uniqid)
+function deletefile($uniqid, $fullpath)
 {
     $conid = db_connect();
 
@@ -469,6 +469,7 @@ function deletefile($uniqid)
     if ($conid->affected_rows == 1 )
     {
         $conid->close();
+        unlink($fullpath);
         return true;
     }
     else

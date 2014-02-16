@@ -109,40 +109,40 @@ function initgroup($id)
 
 function addlog2group()
 {
-    if(in_array($_GET['logID'], $_SESSION['grplogs']) && !isset($_SESSION['updateflag']) || 
-        in_array($_GET['logID'], $_SESSION['grpoldlogs']) && isset($_SESSION['updateflag']) ||
-        in_array($_GET['logID'], $_SESSION['grplogs']) && isset($_SESSION['updateflag']) )
+    if(in_array($_POST['logID'], $_SESSION['grplogs']) && !isset($_SESSION['updateflag']) || 
+        in_array($_POST['logID'], $_SESSION['grpoldlogs']) && isset($_SESSION['updateflag']) ||
+        in_array($_POST['logID'], $_SESSION['grplogs']) && isset($_SESSION['updateflag']) )
     {
         echo "Already added!";
     }
-    elseif(!in_array($_GET['logID'], $_SESSION['grplogs']) && isset($_SESSION['updateflag']))
+    elseif(!in_array($_POST['logID'], $_SESSION['grplogs']) && isset($_SESSION['updateflag']))
     {
-        array_push($_SESSION['grplogs'], $_GET['logID']);
+        array_push($_SESSION['grplogs'], $_POST['logID']);
         echo "Added successfully!";
     }
     else
     {
-        array_push($_SESSION['grplogs'], $_GET['logID']);
+        array_push($_SESSION['grplogs'], $_POST['logID']);
         echo "Added successfully!";
     }
 }
 
 function addmodel2group()
 {
-    if(in_array($_GET['modelID'], $_SESSION['grpmodels']) && !isset($_SESSION['updateflag']) || 
-        in_array($_GET['modelID'], $_SESSION['grpmodels']) && isset($_SESSION['updateflag']) || 
-        in_array($_GET['modelID'], $_SESSION['grpoldmodels']) && isset($_SESSION['updateflag']))
+    if(in_array($_POST['modelID'], $_SESSION['grpmodels']) && !isset($_SESSION['updateflag']) || 
+        in_array($_POST['modelID'], $_SESSION['grpmodels']) && isset($_SESSION['updateflag']) || 
+        in_array($_POST['modelID'], $_SESSION['grpoldmodels']) && isset($_SESSION['updateflag']))
     {
         echo "Already added!";
     }
-    elseif(!in_array($_GET['modelID'], $_SESSION['grpmodels']) && isset($_SESSION['updateflag']))
+    elseif(!in_array($_POST['modelID'], $_SESSION['grpmodels']) && isset($_SESSION['updateflag']))
     {
-        array_push($_SESSION['grpmodels'], $_GET['modelID']);
+        array_push($_SESSION['grpmodels'], $_POST['modelID']);
         echo "Added successfully!";
     }
     else
     {
-        array_push($_SESSION['grpmodels'], $_GET['modelID']);
+        array_push($_SESSION['grpmodels'], $_POST['modelID']);
         echo "Added successfully!";
     }
 }
@@ -174,14 +174,14 @@ function getnamesfromgroup($type,$key,$typeid)
             if($type == "model")
             {
                 $html .= "<td class=\"text-center\">";
-                $html .= "<button type=\"submit\" class=\"btn btn-default btn-sm\" name=\"removemodel\" value=\"".$key."\">";
+                $html .= "<button type=\"submit\" class=\"btn btn-default btn-xs\" name=\"removemodel\" value=\"".$key."\">";
                 $html .= "<span class=\"glyphicon glyphicon-minus\"></span> Remove from group</button>";
                 $html .= "</td>";
             }
             if($type == "log")
             {
                 $html .= "<td class=\"text-center\">";
-                $html .= "<button type=\"submit\" class=\"btn btn-default btn-sm\" name=\"removelog\" value=\"".$key."\">";
+                $html .= "<button type=\"submit\" class=\"btn btn-default btn-xs\" name=\"removelog\" value=\"".$key."\">";
                 $html .= "<span class=\"glyphicon glyphicon-minus\"></span> Remove from group</button>";
                 $html .= "</td>";
             }
@@ -353,7 +353,7 @@ function linkedtypes($id,$type,$creator)
                 $html .= "<td class=\"text-center\">";
                 if(isset($_SESSION['angemeldet']) && isset($_SESSION['user']) && $_SESSION['user'] == $creator || isadmin())
                 {
-                    $html .= "<button type=\"submit\" class=\"btn btn-default btn-sm\" name=\"removegroupmodel\" value=\"".$values['id']."|".$id."\">";
+                    $html .= "<button type=\"submit\" class=\"btn btn-default btn-xs\" name=\"removegroupmodel\" value=\"".$values['id']."|".$id."\">";
                     $html .= "<span class=\"glyphicon glyphicon-minus\"></span> Remove from group</button>";
                 }
                     $html .= "</td>";
@@ -373,7 +373,7 @@ function linkedtypes($id,$type,$creator)
                 $html .= "<td class=\"text-center\">";
                 if(isset($_SESSION['angemeldet']) && isset($_SESSION['user']) && $_SESSION['user'] == $creator || isadmin())
                 {
-                    $html .= "<button type=\"submit\" class=\"btn btn-default btn-sm\" name=\"removegrouplog\" value=\"".$values['id']."|".$id."\">";
+                    $html .= "<button type=\"submit\" class=\"btn btn-default btn-xs\" name=\"removegrouplog\" value=\"".$values['id']."|".$id."\">";
                     $html .= "<span class=\"glyphicon glyphicon-minus\"></span> Remove from group</button>";
                 }
                 $html .= "</td>";

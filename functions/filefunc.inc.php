@@ -421,6 +421,10 @@ function viewfiles($type,$typeid,$ext,$date)
             $html .= "<td class=\"text-center\">".round(($row['size'] / 1024), 2)." KB</td>";
             $html .= "<td class=\"text-center\">".$date."</td>";
             $html .= "<td class=\"text-center\"><a href=\"".$_SERVER['PHP_SELF']."?show=usershow&name=".$row['uploader']."\">".$row['uploader']."</td>";
+            if($row['deletable'] == "1")
+                $html .= "<td class=\"text-center\"><a href=\"".$_SERVER['PHP_SELF']."?show=filedelete&id=".$row['uniqid']."\"><span class=\"glyphicon glyphicon-remove\"></span></td>";
+            else
+                $html .= "<td class=\"text-center\"></td>";
             $html .= "</tr>";
 
             echo $html;

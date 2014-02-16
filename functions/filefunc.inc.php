@@ -433,6 +433,51 @@ function viewfiles($type,$typeid,$ext,$date)
     $conid->close();
 }
 
+// get values of one specific file
+function viewfile($uniqid)
+{
+    $conid = db_connect();
+
+    $sql = "SELECT *
+            FROM ".TBL_PREFIX."files
+            WHERE uniqid '$uniqid'";
+
+    if( $res = $conid->query($sql) ){
+
+        while( $row = $res->fetch_assoc() )
+        {
+            $conid->close();
+            return $row;
+        }
+    }
+    else
+        echo $conid->error;
+
+    $conid->close();
+}
+
+// get values of one specific file
+function deletefile($uniqid)
+{
+    $conid = db_connect();
+
+    $sql = "DELETE FROM ".TBL_PREFIX."files
+            WHERE uniqid '$uniqid'";
+
+    $res = $conid->query($sql);
+
+    if ($conid->affected_rows == 1 )
+    {
+        $conid->close();
+        return true;
+    }
+    else
+    {
+        $conid->close();
+        return false;
+    }
+}
+
 // recursively read directory structure and return an array 
 function find_all_files($dir)
 {

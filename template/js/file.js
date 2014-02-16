@@ -1,7 +1,7 @@
 $(document).ready(function () {
     $("button[name^=removefile]").click(function(){
         var id = $( this ).val();
-    	$.get("includes/filedel.inc.php",
+    	$.post("includes/filedel.inc.php",
     		{
     			uniqid: id
     		},

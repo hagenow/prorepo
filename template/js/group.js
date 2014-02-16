@@ -1,7 +1,7 @@
 $(document).ready(function () {
     $("#addmodel2group").click(function(){
         var id = $( this ).val();
-    	$.get("includes/groupadd.inc.php",
+    	$.post("includes/groupadd.inc.php",
     		{
     			modelID: id
     		},
@@ -13,7 +13,7 @@ $(document).ready(function () {
     
     $("#addlog2group").click(function(){
         var id = $( this ).val();
-    	$.get("includes/groupadd.inc.php",
+    	$.post("includes/groupadd.inc.php",
     		{
     			logID: id
     		},
@@ -25,12 +25,11 @@ $(document).ready(function () {
 
     $("button[name^=removemodel]").click(function(){
         var id = $( this ).val();
-    	$.get("includes/groupdel.inc.php",
+    	$.post("includes/groupdel.inc.php",
     		{
     			modelID: id
     		},
     		function(data){
-    			$("#removemodelfromgroup").html(data);
     			window.location.reload(true);
     		}
     	);
@@ -38,7 +37,7 @@ $(document).ready(function () {
     
     $("button[name^=removelog]").click(function(){
         var id = $( this ).val();
-    	$.get("includes/groupdel.inc.php",
+    	$.post("includes/groupdel.inc.php",
     		{
     			logID: id,
                 ref: document.referrer
@@ -53,13 +52,12 @@ $(document).ready(function () {
     $("button[name^=removegroupmodel]").click(function(){
         var id = $( this ).val();
         var ref = document.referrer ;
-    	$.get("includes/groupdel.inc.php",
+    	$.post("includes/groupdel.inc.php",
     		{
     			modelID: id,
                 referrer: ref 
     		},
     		function(data){
-    			$("#removemodelfromgroup").html(data);
     			window.location.reload(true);
     		}
     	);
@@ -68,7 +66,7 @@ $(document).ready(function () {
     $("button[name^=removegrouplog]").click(function(){
         var id = $( this ).val();
         var ref = document.referrer ;
-    	$.get("includes/groupdel.inc.php",
+    	$.post("includes/groupdel.inc.php",
     		{
     			logID: id,
                 referrer: ref 
@@ -81,7 +79,7 @@ $(document).ready(function () {
 
     $("#switchgrpstate").click(function(){
         var st = $( this ).val();
-    	$.get("includes/groupedit.inc.php",
+    	$.post("includes/groupedit.inc.php",
     		{
     			state: st
     		},

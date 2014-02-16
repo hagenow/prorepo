@@ -12,5 +12,7 @@
     <script src="template/js/passcheck.js"></script>
     <!-- Group functions -->
     <script src="template/js/group.js"></script>
+    <!-- Filedelete functions -->
+    <script src="template/js/file.js"></script>
     <!-- usermgmt functions -->
     <script src="template/js/usermgmt.js"></script>

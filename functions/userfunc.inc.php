@@ -557,12 +557,16 @@ function getuseruploads($type)
                 }
             }
             $html .= "<td class=\"text-center\">".$date."</td>";
-            if($type == "model")
-                $html .= "<td class=\"text-center\"><a href=\"".$_SERVER['PHP_SELF']."?show=moddelete&modelID=".$row['modelID']."\"><span class=\"glyphicon glyphicon-remove\"></span></a></td>";
-            if($type == "log")
-                $html .= "<td class=\"text-center\"><a href=\"".$_SERVER['PHP_SELF']."?show=logdelete&logID=".$row['logID']."\"><span class=\"glyphicon glyphicon-remove\"></span></a></td>";
+            if($row['deletable'] == "1" && $type == "model")
+                $html .= "<td class=\"text-center\"><button type=\"submit\" class=\"btn btn-link\" name=\"deletemodel\" value=\"".$row['modelID']."\"><span class=\"glyphicon glyphicon-remove\"></span></button></td>";
+            elseif($row['deletable'] == "0" && $type == "model")
+                $html .= "<td class=\"text-center\"></td>";
+            if($row['deletable'] == "1" && $type == "log")
+                $html .= "<td class=\"text-center\"><button type=\"submit\" class=\"btn btn-link\" name=\"deletelog\" value=\"".$row['logID']."\"><span class=\"glyphicon glyphicon-remove\"></span></button></td>";
+            elseif($row['deletable'] == "0" && $type == "log")
+                $html .= "<td class=\"text-center\"></td>";
             if($type == "group")
-                $html .= "<td class=\"text-center\"><a href=\"".$_SERVER['PHP_SELF']."?show=groupdelete&groupID=".$row['groupID']."\"><span class=\"glyphicon glyphicon-remove\"></span></a></td>";
+                $html .= "<td class=\"text-center\"><button type=\"submit\" class=\"btn btn-link\" name=\"deletegroup\" value=\"".$row['groupID']."\"><span class=\"glyphicon glyphicon-remove\"></span></button></td>";
             $html .= "</tr>";
 
             echo $html;

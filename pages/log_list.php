@@ -1,6 +1,7 @@
 <?php
 require_once 'config.inc.php';
 require_once 'functions.inc.php';
+$catid = cleaninput($_GET['catID']);
 ?>
 
 <div class="panel panel-info">
@@ -17,10 +18,13 @@ require_once 'functions.inc.php';
                 <th>Logname</th>
                 <th class="text-center">Creation date</th>
                 <th class="text-center">Creator</th>
+<?php if(isadmin()) : ?>
+                <th class="text-center">Delete</th>
+<?php endif; ?>
             </tr>
         </thead>
         <tbody>
-            <?php getlogs($_GET['catID']); ?>
+            <?php getlogs($catid); ?>
         </tbody>
     </table>
 </div>

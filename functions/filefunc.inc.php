@@ -422,7 +422,7 @@ function viewfiles($type,$typeid,$ext,$date)
             $html .= "<td class=\"text-center\">".$date."</td>";
             $html .= "<td class=\"text-center\"><a href=\"".$_SERVER['PHP_SELF']."?show=usershow&name=".$row['uploader']."\">".$row['uploader']."</td>";
             if($row['deletable'] == "1" && ($row['uploader'] == $_SESSION['user'] || isadmin()))
-                $html .= "<td class=\"text-center\"><button type=\"submit\" class=\"btn btn-link\" name=\"removefile\" value=\"".$row['uniqid']."\"><span class=\"glyphicon glyphicon-remove\"></span></button></td>";
+                $html .= "<td class=\"text-center\"><button type=\"submit\" class=\"btn btn-link\" name=\"deletefile\" value=\"".$row['uniqid']."\"><span class=\"glyphicon glyphicon-remove\"></span></button></td>";
             else
                 $html .= "<td class=\"text-center\"></td>";
             $html .= "</tr>";
@@ -477,6 +477,49 @@ function deletefile($uniqid, $fullpath)
         $conid->close();
         return false;
     }
+}
+
+// get all files according to a specific type (model or log), find them in the 
+// the files-table and delete all entries and unlinks all files in repository
+function deletefiles($type, $typeid)
+{
+    $conid = db_connect();
+
+    $sql = "SELECT * 
+            FROM ".TBL_PREFIX."files
+            WHERE type = '$type' AND 
+            foreignID  = '$typeid'";
+
+    $sqldel = "DELETE FROM ".TBL_PREFIX."files
+               WHERE uniqid = ?";
+
+    $res2 = $conid->prepare($sqldel);
+    $res2->bind_param('s',$uniqid);
+
+    if( $res = $conid->query($sql) ){
+
+        while( $row = $res->fetch_assoc() )
+        {
+            $uniqid = $row['uniqid'];
+            $res2->execute();
+            // add here ../, because this function is called from a script 
+            // inside ./includes/ !
+            $fullpath = "../".$row['path'].$row['fileName'];
+            unlink($fullpath);
+        }
+        $fold_arr = explode("/", $row['path'], -1);
+        $folder = "../".$fold_arr[0]."/".$fold_arr[1]."/".$fold_arr[2];
+        unlink($folder);
+        $conid->close();
+        return true;
+    }
+    else
+    {
+        $conid->close();
+        echo $conid->error;
+        return false;
+    }
+
 }
 
 // recursively read directory structure and return an array 

@@ -1,6 +1,8 @@
 <?php
 require_once 'config.inc.php';
 require_once 'functions.inc.php';
+
+$catid = cleaninput($_GET['catID']);
 ?>
 
 <div class="panel panel-success">
@@ -17,10 +19,13 @@ require_once 'functions.inc.php';
                 <th>Modelname</th>
                 <th class="text-center">Creation date</th>
                 <th class="text-center">Creator</th>
+<?php if(isadmin()) : ?>
+                <th class="text-center">Delete</th>
+<?php endif; ?>
             </tr>
         </thead>
         <tbody>
-            <?php getmodels($_GET['catID']); ?>
+            <?php getmodels($catid); ?>
         </tbody>
     </table>
 </div>

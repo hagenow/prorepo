@@ -60,6 +60,10 @@ function getlogs($catid)
             $html .= "<td><a href=\"".$_SERVER['PHP_SELF']."?show=logview&logID=".$row['logID']."\">".$row['logName']."</a></td>";
             $html .= "<td class=\"text-center\">".date("d.m.Y - H:i:s", strtotime($row['timestamp']))."</td>";
             $html .= "<td class=\"text-center\"><a href=\"".$_SERVER['PHP_SELF']."?show=usershow&name=".$row['creator']."\">".$row['creator']."</td>";
+            if($row['deletable'] == "1" && isadmin())
+                $html .= "<td class=\"text-center\"><button type=\"submit\" class=\"btn btn-link\" name=\"deletelog\" value=\"".$row['logID']."\"><span class=\"glyphicon glyphicon-remove\"></span></button></td>";
+            elseif($row['deletable'] == "0" && isadmin())
+                $html .= "<td class=\"text-center\"></td>";
             $html .= "</tr>";
 
             echo $html;
@@ -181,7 +185,7 @@ function connectedlogs($modelID)
     $conid->close();
 }
 
-// delete log
+// delete log if it's marked as deletable
 function removelog($logid)
 {
     $conid = db_connect();
@@ -194,6 +198,8 @@ function removelog($logid)
     if($res = $conid->prepare($sql))
     {
         $res->execute();
+        $conid->close();
+        deletefiles('log',$modid);
         return true;
     }
     else

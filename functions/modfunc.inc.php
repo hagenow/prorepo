@@ -59,6 +59,10 @@ function getmodels($catid)
             $html .= "<td><a href=\"".$_SERVER['PHP_SELF']."?show=modview&modelID=".$row['modelID']."\">".$row['modelName']."</a></td>";
             $html .= "<td class=\"text-center\">".date("d.m.Y - H:i:s", strtotime($row['timestamp']))."</td>";
             $html .= "<td class=\"text-center\"><a href=\"".$_SERVER['PHP_SELF']."?show=usershow&name=".$row['creator']."\">".$row['creator']."</td>";
+            if($row['deletable'] == "1" && isadmin())
+                $html .= "<td class=\"text-center\"><button type=\"submit\" class=\"btn btn-link\" name=\"deletemodel\" value=\"".$row['modelID']."\"><span class=\"glyphicon glyphicon-remove\"></span></button></td>";
+            elseif($row['deletable'] == "0" && isadmin())
+                $html .= "<td class=\"text-center\"></td>";
             $html .= "</tr>";
 
             echo $html;
@@ -128,7 +132,6 @@ function editmodel($modelid)
     if($res = $conid->prepare($sql))
     {
         $res->execute();
-
         $conid->close();
         return ($res->affected_rows==1) ? true : false;
     }
@@ -165,7 +168,7 @@ function getmodname($modid)
         $res->store_result();
         $res->bind_result($id);
         $res->fetch();
-
+        $conid->close();
         return $id;
     }
     else
@@ -175,7 +178,7 @@ function getmodname($modid)
     $conid->close();
 }
 
-// delete model
+// delete model, if the model is marked as deletable
 function removemodel($modid)
 {
     $conid = db_connect();
@@ -188,6 +191,8 @@ function removemodel($modid)
     if($res = $conid->prepare($sql))
     {
         $res->execute();
+        $conid->close();
+        deletefiles('model',$modid);
         return true;
     }
     else

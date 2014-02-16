@@ -422,7 +422,7 @@ function viewfiles($type,$typeid,$ext,$date)
             $html .= "<td class=\"text-center\">".$date."</td>";
             $html .= "<td class=\"text-center\"><a href=\"".$_SERVER['PHP_SELF']."?show=usershow&name=".$row['uploader']."\">".$row['uploader']."</td>";
             if($row['deletable'] == "1" && ($row['uploader'] == $_SESSION['user'] || isadmin()))
-                $html .= "<td class=\"text-center\"><button type=\"button\" class=\"btn btn-link\" name=\"removefile\" value=\"".$row['uniqid']."\"><span class=\"glyphicon glyphicon-remove\"></span></button></td>";
+                $html .= "<td class=\"text-center\"><button type=\"submit\" class=\"btn btn-link\" name=\"removefile\" value=\"".$row['uniqid']."\"><span class=\"glyphicon glyphicon-remove\"></span></button></td>";
             else
                 $html .= "<td class=\"text-center\"></td>";
             $html .= "</tr>";
@@ -462,7 +462,7 @@ function deletefile($uniqid, $fullpath)
     $conid = db_connect();
 
     $sql = "DELETE FROM ".TBL_PREFIX."files
-            WHERE uniqid '$uniqid'";
+            WHERE uniqid = '$uniqid'";
 
     $res = $conid->query($sql);
 

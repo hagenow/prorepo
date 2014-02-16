@@ -6,6 +6,7 @@ $(document).ready(function () {
     			uniqid: id
     		},
     		function(data){
+    			$("#removefile").html(data);
     			window.location.reload(true);
     		}
     	);

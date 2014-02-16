@@ -136,7 +136,7 @@ else
 
 <div class="panel panel-info">
 <div class="panel-heading">
-<h3 class="panel-title">TPN</h3>
+<h3 class="panel-title">TXT</h3>
 </div>
 <table class="table table-striped">
     <thead>
@@ -149,7 +149,7 @@ else
         </tr>
     </thead>
     <tbody>
-        <?php viewfiles("log", $_GET['logID'], "tpn", $date); ?>
+        <?php viewfiles("log", $_GET['logID'], "txt", $date); ?>
     </tbody>
 </table>
 </div>

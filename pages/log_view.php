@@ -85,6 +85,7 @@ else
                 <th class="text-center">Size</th>
                 <th class="text-center">Upload date</th>
                 <th class="text-center">Uploader</th>
+                <th class="text-center">Delete</th>
             </tr>
         </thead>
         <tbody>
@@ -106,6 +107,7 @@ else
                 <th class="text-center">Size</th>
                 <th class="text-center">Upload date</th>
                 <th class="text-center">Uploader</th>
+                <th class="text-center">Delete</th>
             </tr>
         </thead>
         <tbody>
@@ -126,6 +128,7 @@ else
             <th class="text-center">Size</th>
             <th class="text-center">Upload date</th>
             <th class="text-center">Uploader</th>
+            <th class="text-center">Delete</th>
         </tr>
     </thead>
     <tbody>
@@ -146,6 +149,7 @@ else
             <th class="text-center">Size</th>
             <th class="text-center">Upload date</th>
             <th class="text-center">Uploader</th>
+            <th class="text-center">Delete</th>
         </tr>
     </thead>
     <tbody>

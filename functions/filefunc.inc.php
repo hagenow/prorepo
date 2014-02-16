@@ -389,7 +389,7 @@ function viewfiles($type,$typeid,$ext,$date)
             DESC";
 
     $validation_type = array("pnml","mxml","xes");
-    $other_type = array("xml","png","jpg","pdf","eps","svg","csv");
+    $other_type = array("xml","png","jpg","pdf","eps","svg","csv", "txt");
 
     if( $res = $conid->query($sql) ){
 
@@ -421,8 +421,8 @@ function viewfiles($type,$typeid,$ext,$date)
             $html .= "<td class=\"text-center\">".round(($row['size'] / 1024), 2)." KB</td>";
             $html .= "<td class=\"text-center\">".$date."</td>";
             $html .= "<td class=\"text-center\"><a href=\"".$_SERVER['PHP_SELF']."?show=usershow&name=".$row['uploader']."\">".$row['uploader']."</td>";
-            if($row['deletable'] == "1")
-                $html .= "<td class=\"text-center\"><a href=\"".$_SERVER['PHP_SELF']."?show=filedelete&id=".$row['uniqid']."\"><span class=\"glyphicon glyphicon-remove\"></span></td>";
+            if($row['deletable'] == "1" && ($row['uploader'] == $_SESSION['user'] || isadmin()))
+                $html .= "<td class=\"text-center\"><button type=\"button\" class=\"btn btn-link\" name=\"removefile\" value=\"".$row['uniqid']."\"><span class=\"glyphicon glyphicon-remove\"></span></button></td>";
             else
                 $html .= "<td class=\"text-center\"></td>";
             $html .= "</tr>";

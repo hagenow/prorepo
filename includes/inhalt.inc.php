@@ -22,8 +22,6 @@ if(isset($_GET['show']))
         case "download": require 'pages/download.php'; break;
         case "editcontent": require 'pages/editcontent.php'; break;
 
-        case "filedelete": require 'pages/file_delete.php'; break;
-
         case "search": require 'pages/search.php'; break;
         case "batch1": require 'pages/batch_new1.php'; break;
         case "batch2": require 'pages/batch_new2.php'; break;

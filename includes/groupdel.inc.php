@@ -4,25 +4,25 @@ require 'authcheck.inc.php';
 require_once '../config.inc.php';
 require_once '../functions.inc.php';
 
-if(isset($_GET['referrer']))
+if(isset($_POST['referrer']))
 {
-    if(isset($_GET['modelID']))
-        deletefromgroup("model",$_GET['modelID']);
-    if(isset($_GET['logID']))
-        deletefromgroup("log",$_GET['logID']);
+    if(isset($_POST['modelID']))
+        deletefromgroup("model",$_POST['modelID']);
+    if(isset($_POST['logID']))
+        deletefromgroup("log",$_POST['logID']);
 }
-if(isset($_GET['modelID']))
+if(isset($_POST['modelID']))
 {
     $arr = $_SESSION['grpmodels'];
-    $key = $_GET['modelID'];
+    $key = $_POST['modelID'];
     unset($arr[$key]);
     $_SESSION['grpmodels'] = $arr;
     echo "removed!";
 }
-if(isset($_GET['logID']))
+if(isset($_POST['logID']))
 {
     $arr = $_SESSION['grplogs'];
-    $key = $_GET['logID'];
+    $key = $_POST['logID'];
     unset($arr[$key]);
     $_SESSION['grplogs'] = $arr;
     echo "removed!";

@@ -508,8 +508,8 @@ function deletefiles($type, $typeid)
             unlink($fullpath);
         }
         $fold_arr = explode("/", $fullpath, -1);
-        $folder = "../".$fold_arr[0]."/".$fold_arr[1]."/".$fold_arr[2];
-        unlink($folder);
+        $folder = $fold_arr[0]."/".$fold_arr[1]."/".$fold_arr[2];
+        rrmdir($folder);
         $conid->close();
         return true;
     }

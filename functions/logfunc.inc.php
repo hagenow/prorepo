@@ -199,7 +199,7 @@ function removelog($logid)
     {
         $res->execute();
         $conid->close();
-        deletefiles('log',$modid);
+        deletefiles('log',$logid);
         return true;
     }
     else

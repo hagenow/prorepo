@@ -507,7 +507,7 @@ function deletefiles($type, $typeid)
             $fullpath = "../".$row['path'].$row['fileName'];
             unlink($fullpath);
         }
-        $fold_arr = explode("/", $row['path'], -1);
+        $fold_arr = explode("/", $fullpath, -1);
         $folder = "../".$fold_arr[0]."/".$fold_arr[1]."/".$fold_arr[2];
         unlink($folder);
         $conid->close();

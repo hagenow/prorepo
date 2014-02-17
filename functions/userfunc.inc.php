@@ -557,16 +557,18 @@ function getuseruploads($type)
                 }
             }
             $html .= "<td class=\"text-center\">".$date."</td>";
-            if($row['deletable'] == "1" && $type == "model")
+            if(isset($row['deletable']) && $row['deletable'] == "1" && $type == "model")
                 $html .= "<td class=\"text-center\"><button type=\"submit\" class=\"btn btn-link btn-xs\" name=\"deletemodel\" value=\"".$row['modelID']."\"><span class=\"glyphicon glyphicon-remove\"></span></button></td>";
-            elseif($row['deletable'] == "0" && $type == "model")
+            elseif(isset($row['deletable']) && $row['deletable'] == "0" && $type == "model")
                 $html .= "<td class=\"text-center\"></td>";
-            if($row['deletable'] == "1" && $type == "log")
+            if(isset($row['deletable']) && $row['deletable'] == "1" && $type == "log")
                 $html .= "<td class=\"text-center\"><button type=\"submit\" class=\"btn btn-link btn-xs\" name=\"deletelog\" value=\"".$row['logID']."\"><span class=\"glyphicon glyphicon-remove\"></span></button></td>";
-            elseif($row['deletable'] == "0" && $type == "log")
+            elseif(isset($row['deletable']) && $row['deletable'] == "0" && $type == "log")
                 $html .= "<td class=\"text-center\"></td>";
-            if($type == "group")
+            if(isset($row['state']) && $row['state'] == "1" && $type == "group")
                 $html .= "<td class=\"text-center\"><button type=\"submit\" class=\"btn btn-link btn-xs\" name=\"deletegroup\" value=\"".$row['groupID']."\"><span class=\"glyphicon glyphicon-remove\"></span></button></td>";
+            if(isset($row['state']) && $row['state'] == "0" && $type == "group")
+                $html .= "<td class=\"text-center\"></td>";
             $html .= "</tr>";
 
             echo $html;

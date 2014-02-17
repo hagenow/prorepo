@@ -583,6 +583,7 @@ function removegroup($grpid)
         if($res3 = $conid->prepare($sqllog))
             $res3->execute();
         $res->execute();
+        $conid->close();
         return true;
     }
     else

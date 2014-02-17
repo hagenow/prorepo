@@ -89,4 +89,16 @@ $(document).ready(function () {
     	);
     });
 
+    $("button[name^=deletegroup]").click(function(){
+        var id = $( this ).val();
+    	$.post("includes/groupdel.inc.php",
+    		{
+    			groupID: id
+    		},
+    		function(data){
+    			window.location.reload(true);
+    		}
+    	);
+    });
+
 });

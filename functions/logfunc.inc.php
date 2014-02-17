@@ -205,6 +205,7 @@ function removelog($logid)
     else
     {
         echo $conid->error;
+        return false;
     }
     $conid->close();
 }

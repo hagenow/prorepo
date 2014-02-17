@@ -198,6 +198,7 @@ function removemodel($modid,$basepath)
     else
     {
         echo $conid->error;
+        return false;
     }
     $conid->close();
 }

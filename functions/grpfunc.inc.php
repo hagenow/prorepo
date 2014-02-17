@@ -565,8 +565,6 @@ function removegroup($grpid)
 {
     $conid = db_connect();
 
-    $grpid = cleaninput($grpid);
-
     $sqlgrp = "DELETE FROM ".TBL_PREFIX."groups
             WHERE groupID = '$grpid'";
 
@@ -589,6 +587,7 @@ function removegroup($grpid)
     else
     {
         echo $conid->error;
+        return false;
     }
     $conid->close();
 }

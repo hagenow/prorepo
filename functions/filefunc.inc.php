@@ -507,7 +507,7 @@ function deletefiles($type, $typeid, $basepath)
             $fullpath = "../".$row['path'].$row['fileName'];
             unlink($fullpath);
         }
-        rrmdir($basepath);
+        rrmdir("../".$basepath);
         $conid->close();
         return true;
     }

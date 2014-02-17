@@ -208,7 +208,7 @@ function savegroup()
                   VALUES
                     ('$groupid', ?, ?)";
     
-    // update files which type is model, that they can't be deleted furthermore!
+    // update files which type is log, that they can't be deleted furthermore!
     $sqlmodfiles = "UPDATE ".TBL_PREFIX."files
                     SET deletable = 0
                     WHERE type = 'model' AND foreignID = ? AND timestamp <= ?";
@@ -567,11 +567,21 @@ function removegroup($grpid)
 
     $grpid = cleaninput($grpid);
 
-    $sql = "DELETE FROM ".TBL_PREFIX."groups
+    $sqlgrp = "DELETE FROM ".TBL_PREFIX."groups
             WHERE groupID = '$grpid'";
 
-    if($res = $conid->prepare($sql))
+    $sqlmod = "DELETE FROM ".TBL_PREFIX."modelgroups
+            WHERE groupID = '$grpid'";
+
+    $sqllog = "DELETE FROM ".TBL_PREFIX."loggroups
+            WHERE groupID = '$grpid'";
+
+    if($res = $conid->prepare($sqlgrp))
     {
+        if($res2 = $conid->prepare($sqlmod))
+            $res2->execute();
+        if($res3 = $conid->prepare($sqllog))
+            $res3->execute();
         $res->execute();
         return true;
     }

@@ -179,7 +179,7 @@ function getmodname($modid)
 }
 
 // delete model, if the model is marked as deletable
-function removemodel($modid)
+function removemodel($modid,$basepath)
 {
     $conid = db_connect();
 
@@ -192,7 +192,7 @@ function removemodel($modid)
     {
         $res->execute();
         $conid->close();
-        deletefiles('model',$modid);
+        deletefiles('model',$modid,$basepath);
         return true;
     }
     else

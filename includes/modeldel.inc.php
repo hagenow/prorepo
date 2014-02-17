@@ -9,5 +9,5 @@ $modelid = cleaninput($_POST['modelID']);
 $values = viewmodel($modelid);
 
 if(isset($_POST['modelID']) && ($values['creator'] == $_SESSION['user'] || isadmin()) && $values['deletable'] == "1")
-   removemodel($modelid);
+   removemodel($modelid,$values['path']);
 ?>

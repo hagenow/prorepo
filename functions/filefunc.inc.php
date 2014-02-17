@@ -481,7 +481,7 @@ function deletefile($uniqid, $fullpath)
 
 // get all files according to a specific type (model or log), find them in the 
 // the files-table and delete all entries and unlinks all files in repository
-function deletefiles($type, $typeid)
+function deletefiles($type, $typeid, $basepath)
 {
     $conid = db_connect();
 
@@ -507,9 +507,7 @@ function deletefiles($type, $typeid)
             $fullpath = "../".$row['path'].$row['fileName'];
             unlink($fullpath);
         }
-        $fold_arr = explode("/", $fullpath);
-        $folder = $fold_arr[0]."/".$fold_arr[1]."/".$fold_arr[2]."/";
-        rrmdir($folder);
+        rrmdir($basepath);
         $conid->close();
         return true;
     }

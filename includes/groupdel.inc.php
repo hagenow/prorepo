@@ -8,7 +8,7 @@ if(isset($_POST['groupID']))
 {
     $groupid = cleaninput($_POST['groupID']);
 
-    $values = viewmodel($groupid);
+    $values = viewgroup($groupid);
 
     if(isset($_POST['groupID']) && ($values['creator'] == $_SESSION['user'] || isadmin()) && $values['state'] == "1")
        removegroup($groupid);

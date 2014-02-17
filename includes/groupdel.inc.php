@@ -4,6 +4,16 @@ require 'authcheck.inc.php';
 require_once '../config.inc.php';
 require_once '../functions.inc.php';
 
+if(isset($_POST['groupID'))
+{
+    $groupid = cleaninput($_POST['groupID']);
+
+    $values = viewmodel($groupid);
+
+    if(isset($_POST['groupID']) && ($values['creator'] == $_SESSION['user'] || isadmin()) && $values['state'] == "1")
+       removegroup($groupid);
+}
+
 if(isset($_POST['referrer']))
 {
     if(isset($_POST['modelID']))

@@ -186,7 +186,7 @@ function connectedlogs($modelID)
 }
 
 // delete log if it's marked as deletable
-function removelog($logid)
+function removelog($logid,$basepath)
 {
     $conid = db_connect();
 
@@ -199,7 +199,7 @@ function removelog($logid)
     {
         $res->execute();
         $conid->close();
-        deletefiles('log',$logid);
+        deletefiles('log',$logid,$basepath);
         return true;
     }
     else

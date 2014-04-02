@@ -564,8 +564,6 @@ function batchimport_step1($result,$targetdir)
     $model_extensions = array("pdf", "png", "pnml", "xml", "svg", "eps", "tpn");
     $check_extensions = array_merge($log_extensions, $model_extensions);
 
-    $finfo = finfo_open(FILEINFO_MIME_TYPE); // return mime type ala mimetype extension
-
     foreach($result as $res)
     {
         $path_parts = pathinfo($res);
@@ -610,7 +608,8 @@ function batchimport_step1($result,$targetdir)
             $filename = $path_parts['basename'];
             $extension = $path_parts['extension'];
             $size = filesize($res);
-            $mimetype = finfo_file($finfo, $res);
+            $mimetype = shell_exec("file -b --mime-type $res");
+
 
             array_push($filenames, $filename);
             array_push($filetypes, $filetype);
@@ -636,8 +635,6 @@ function batchimport_step1($result,$targetdir)
 
     array_multisort($files['filetype'], SORT_DESC, SORT_STRING, $files['filename'],$files['typename'],
                     $files['mimetype'],$files['tmp_path'],$files['typename'],$files['extension'],$files['size']);
-
-    finfo_close($finfo);
 
     $_SESSION['files'] = $files;
     $_SESSION['models'] = $models;

@@ -108,8 +108,6 @@ $_SESSION['cname']; ?>" class="form-control search-query" disabled>
             
         }
 
-        echo "---";
-
         if(DEBUG)
         {
             echo "<pre>" .print_r( $_SESSION, true ). "</pre>";

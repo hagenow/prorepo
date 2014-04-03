@@ -919,7 +919,7 @@ function batchimport_step3()
             }
         }
     }
-    echo "uploaded ".$count." files!";
+    echo "Uploaded ".$count." files!";
 }
 
 ?>

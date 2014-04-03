@@ -44,9 +44,12 @@ if(!isset($_POST['submit_batch2']) || !$_POST['submit_batch2'])
             batchimport_step1($result,$targetdir);
             batchimport_step2();
 
-            echo "<pre>";
-            print_r($_SESSION);
-            echo "</pre>";
+            if(DEBUG)
+            {
+                echo "<pre>";
+                print_r($_SESSION);
+                echo "</pre>";
+            }
         }
     }
 ?>
@@ -87,8 +90,6 @@ else
 
         $targetdir = $_SESSION['targetdir'];
 
-        echo "bla";
-    
         // delete files after processing
         rrmdir($targetdir);
 
@@ -96,11 +97,21 @@ else
         unset($_SESSION['targetdir']);
 
     }
+    elseif(isset( $_POST['reset_batch2']) && !empty($_POST['reset_batch2']))
+    {
+        $targetdir = $_SESSION['targetdir'];
+
+        // delete files after processing
+        rrmdir($targetdir);
+
+        unset($_SESSION['files']);
+        unset($_SESSION['targetdir']);
+
+        header('Location: http://'.$_SERVER['PHP_SELF'].'?show=batch1');
+    }
     unset($_SESSION['cid']);
     unset($_SESSION['cname']);
     unset($_SESSION['batch_semaphore']);
-
-    echo "---";
 
     if(DEBUG)
     {
@@ -108,5 +119,6 @@ else
         echo "<pre>" .print_r( $_POST, true ). "</pre>";
         echo "<pre>" .print_r( $_FILES, true ). "</pre>";
     }
+
 }
 ?>

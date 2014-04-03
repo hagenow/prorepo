@@ -314,7 +314,8 @@ function updateuser($user)
     {
         $_SESSION['angemeldet']   = true;
         $_SESSION['user'] = $user;
-        $_SESSION['anmeldung']    = md5( $_SERVER['REQUEST_TIME'] );
+        $_SESSION['oldtoken']    = md5( $_SERVER['REQUEST_TIME'] );
+        $_SESSION['newtoken']    = md5( $_SERVER['REQUEST_TIME'] );
         $conid->close();
         return true;
     }

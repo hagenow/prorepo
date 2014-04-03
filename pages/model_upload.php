@@ -64,7 +64,7 @@ if(!isset($_POST['submit_model']) || !$_POST['submit_model']) {
       <label class="control-label col-sm-3" for="checkboxes">Validate PNML file</label>
       <div class="col-sm-6">
         <label class="checkbox-inline" for="checkboxes-0">
-          <input type="checkbox" name="checkboxes" id="checkboxes-0" value="validatepnml">
+          <input type="checkbox" name="validate-pnml" id="checkboxes-0" value="validate">
           validate
         </label>
       </div>

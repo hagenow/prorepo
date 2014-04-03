@@ -57,9 +57,9 @@ if(!isset($_POST['submit_log']) || !$_POST['submit_log']) {
     
     <!-- File Button --> 
     <div class="form-group">
-      <label class="control-label col-sm-3" for="file_xes">Choose files<br><h6>(.xes,.mxml,.csv)</h6></label>
+      <label class="control-label col-sm-3" for="file_xes">Choose files<br><h6>(.xes,.mxml,.csv,.txt)</h6></label>
       <div class="col-sm-6">
-        <input id="files" name="files[]" class="input-file" multiple="multiple" type="file" accept=".xes,.mxml,.csv">
+        <input id="files" name="files[]" class="input-file" multiple="multiple" type="file" accept=".xes,.mxml,.csv,.txt">
       </div>
     </div>
     
@@ -68,11 +68,11 @@ if(!isset($_POST['submit_log']) || !$_POST['submit_log']) {
       <label class="control-label col-sm-3" for="checkboxes">Validate files</label>
       <div class="col-sm-6">
         <label class="checkbox-inline" for="checkboxes-0">
-          <input type="checkbox" name="checkboxes" id="checkboxes-0" value="validate">
+          <input type="checkbox" name="validate-xes" id="checkboxes-0" value="validate">
           XES
         </label>
         <label class="checkbox-inline" for="checkboxes-1">
-          <input type="checkbox" name="checkboxes" id="checkboxes-1" value="validate">
+          <input type="checkbox" name="validate-mxml" id="checkboxes-1" value="validate">
           MXML
         </label>
       </div>

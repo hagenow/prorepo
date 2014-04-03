@@ -19,7 +19,7 @@ function uploadfiles_new()
     {
         $type = "model";
         $typeinfo = createmodel();
-        $valid_formats = array("pdf", "png", "pnml", "xml", "svg", "eps", "tpn");
+        $valid_formats = array("pdf", "jpg", "png", "pnml", "xml", "svg", "eps", "tpn");
     }
     elseif($_POST['type'] == "log")
     {
@@ -110,15 +110,15 @@ function uploadfiles_new()
                     // run validation process
                     $valid = "2";
 
-                    if(isset($_POST['checkboxes']) && $_POST['checkboxes'] == "validatepnml" && $ext == "pnml")
+                    if(isset($_POST['validate-pnml']) && $_POST['validate-pnml'] == "validate" && $ext == "pnml")
                     {
                         $valid = validatePNML($_FILES["files"]["tmp_name"][$f]);
                     }
-                    if(isset($_POST['checkboxes-0']) && $_POST['checkboxes-0'] == "validatexes" && $ext == "mxml")
+                    if(isset($_POST['validate-mxml']) && $_POST['validate-mxml'] == "validate" && $ext == "mxml")
                     {
                         $valid = validateMXML($_FILES["files"]["tmp_name"][$f]);
                     }
-                    if(isset($_POST['checkboxes-1']) && $_POST['checkboxes-1'] == "validatemxml" && $ext == "xes")
+                    if(isset($_POST['validate-xes']) && $_POST['validate-xes'] == "validate" && $ext == "xes")
                     {
                         $valid = validateXES($_FILES["files"]["tmp_name"][$f]);
                     }
@@ -176,7 +176,7 @@ function uploadfiles_existing()
         $type = "model";
         editmodel($_GET['modelID']);
         $typeinfo = viewmodel($_GET['modelID']);
-        $valid_formats = array("pdf", "png", "pnml", "xml", "svg", "eps", "tpn");
+        $valid_formats = array("pdf", "jpg", "png", "pnml", "xml", "svg", "eps", "tpn");
     }
     elseif($_POST['type'] == "log")
     {
@@ -265,18 +265,19 @@ function uploadfiles_existing()
                     // run validation process
                     $valid = "2";
 
-                    if(isset($_POST['checkboxes']) && $_POST['checkboxes'] == "validatepnml" && $ext == "pnml")
+                    if(isset($_POST['validate-pnml']) && $_POST['validate-pnml'] == "validate" && $ext == "pnml")
                     {
                         $valid = validatePNML($_FILES["files"]["tmp_name"][$f]);
                     }
-                    if(isset($_POST['checkboxes-0']) && $_POST['checkboxes-0'] == "validatexes" && $ext == "mxml")
+                    if(isset($_POST['validate-mxml']) && $_POST['validate-mxml'] == "validate" && $ext == "mxml")
                     {
                         $valid = validateMXML($_FILES["files"]["tmp_name"][$f]);
                     }
-                    if(isset($_POST['checkboxes-1']) && $_POST['checkboxes-1'] == "validatemxml" && $ext == "xes")
+                    if(isset($_POST['validate-xes']) && $_POST['validate-xes'] == "validate" && $ext == "xes")
                     {
                         $valid = validateXES($_FILES["files"]["tmp_name"][$f]);
                     }
+
 
                     $filename_w_ext = $filename.".".$ext;
                     $uniqid =  uniqid('f', TRUE);

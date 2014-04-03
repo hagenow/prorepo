@@ -8,24 +8,31 @@ if(isset( $_POST['login'] ))
     /** Prüfen ob die Anmeldung korrekt war */
     if(!checkblocked($input['user']))
     {
-        if($login)
+        if(checkapproved($input['user']))
         {
-            checkgroup($input['user']);
-            $update = updateuser($input['user']);
-            if($update)
+            if($login)
             {
-                header('location: index.php?show=login');
-                exit;
+                checkgroup($input['user']);
+                $update = updateuser($input['user']);
+                if($update)
+                {
+                    header('location: index.php?show=login');
+                    exit;
+                }
+                else
+                {
+                    $error = "There was an error while login, go back and try again!";
+                }
             }
             else
             {
-                $error = "There was an error while login, go back and try again!";
+                $error = "You entered wrong userdata, go back and try again!<br/>";
+                $error .= "If you want to reset your password, click <a href=\"".$_SERVER['PHP_SELF']."?show=userpwreset\"><strong>here</strong></a>";
             }
         }
         else
         {
-            $error = "You entered wrong userdata, go back and try again!<br/>";
-            $error .= "If you want to reset your password, click <a href=\"".$_SERVER['PHP_SELF']."?show=userpwreset\"><strong>here</strong></a>";
+            $error = "Your account is not approved yet - please stay tuned!";
         }
     }
     else

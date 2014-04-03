@@ -698,10 +698,17 @@ function batchimport_step2()
         $logval = checklogexist($name);
         if($logval['id'] != 0)
         {
+            $filepath = $logval['path'].$timestamp."/";
+            $logval['path'] = $filepath;
+            if(!file_exists($filepath) && !is_dir($filepath))
+            {
+                mkdir($filepath, 0755, true);
+            }
             $logs_assoc[$name] = $logval;
         }
         else
         {
+            /** if a model exists, make a reference */
             $logval = array();
             if(array_key_exists($name, $models_assoc))
             {

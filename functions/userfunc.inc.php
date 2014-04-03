@@ -42,7 +42,7 @@ function checkuser($user)
     return ($res->affected_rows == 1) ?  true : false;
 }
 
-/** checkblocked($user, $count)
+/** checkblocked($user)
  * Falls ein User gesperrt ist, verweigere den Login.
  * */
 function checkblocked($user)
@@ -65,6 +65,31 @@ function checkblocked($user)
     $conid->close();
 
     return $blocked;
+}
+
+/** checkapproved($user)
+ * Falls ein User gesperrt ist, verweigere den Login.
+ * */
+function checkapproved($user)
+{
+    $conid = db_connect();
+
+    $sql = "SELECT
+                approved
+             FROM
+                ".TBL_PREFIX."users
+             WHERE
+                login = '".$user."'";
+
+    $res = $conid->prepare($sql);
+    $res->execute();
+    $res->store_result();
+    $res->bind_result($approved);
+    $res->fetch();
+
+    $conid->close();
+
+    return $approved;
 }
 
 /** Prüft das übergebene Passwort

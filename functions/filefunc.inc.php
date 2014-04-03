@@ -648,6 +648,10 @@ function batchimport_step2()
     $logs = $_SESSION['logs'];
     $models_assoc = array();
     $logs_assoc = array();
+    $newmodels = array();
+    $newlogs = array();
+    $existingmodels = array();
+    $existinglogs = array();
     unset($_SESSION['models']);
     unset($_SESSION['logs']);
 
@@ -664,8 +668,19 @@ function batchimport_step2()
     {
         $modval = checkmodelexist($name);
 
+        /* if model exists, upload into this model */
         if($modval['id'] != 0)
         {
+            $filepath = $modval['path'].$timestamp."/";
+            $modval['path'] = $filepath;
+
+            if(!file_exists($filepath) && !is_dir($filepath))
+            {
+                mkdir($filepath, 0755, true);
+            }
+
+            array_push($existingmodels,$name);
+
             $models_assoc[$name] = $modval;
         }
         else
@@ -682,6 +697,8 @@ function batchimport_step2()
 
             $models_assoc[$name] = $modval;
 
+            array_push($newmodels,$name);
+
             updatetypepath('model',$modval['id'],$typepath);
 
             if(!file_exists($filepath) && !is_dir($filepath))
@@ -696,14 +713,20 @@ function batchimport_step2()
     foreach($logs as $name)
     {
         $logval = checklogexist($name);
+
+        /* if log exists, upload into this log */
         if($logval['id'] != 0)
         {
             $filepath = $logval['path'].$timestamp."/";
             $logval['path'] = $filepath;
+
             if(!file_exists($filepath) && !is_dir($filepath))
             {
                 mkdir($filepath, 0755, true);
             }
+
+            array_push($existinglogs,$name);
+
             $logs_assoc[$name] = $logval;
         }
         else
@@ -722,6 +745,8 @@ function batchimport_step2()
                 $typepath = STRG_PATH."/log/".$logval['id']."_".$name."/";
 
                 $logs_assoc[$name] = $logval; 
+
+                array_push($newlogs,$name);
 
                 updatetypepath('log',$logval['id'],$typepath);
 
@@ -743,6 +768,8 @@ function batchimport_step2()
 
                 $logs_assoc[$name] = $logval; 
 
+                array_push($newlogs,$name);
+
                 updatetypepath('log',$logval['id'],$typepath);
 
                 if(!file_exists($filepath) && !is_dir($filepath))
@@ -755,6 +782,38 @@ function batchimport_step2()
 
     $_SESSION['models_assoc'] = $models_assoc;
     $_SESSION['logs_assoc'] = $logs_assoc;
+
+    echo "New models to create: <br />
+        <ul>";
+    foreach($newmodels as $m)
+    {
+        echo "<li>".$m."</li>";
+    }
+    echo "</ul><br />";
+
+    echo "New logs to create: <br />
+        <ul>";
+    foreach($newlogs as $l)
+    {
+        echo "<li>".$l."</li>";
+    }
+    echo "</ul><br />";
+
+    echo "Update existing models: <br />
+        <ul>";
+    foreach($existingmodels as $m)
+    {
+        echo "<li>".$m."</li>";
+    }
+    echo "</ul><br />";
+
+    echo "Update existing logs: <br />
+        <ul>";
+    foreach($existinglogs as $l)
+    {
+        echo "<li>".$l."</li>";
+    }
+    echo "</ul><br />";
 
     if(DEBUG)
     {

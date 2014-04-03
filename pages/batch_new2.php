@@ -49,7 +49,7 @@ if(isset( $_POST['reset_batch2']) && !empty($_POST['reset_batch2']))
         echo "<pre>" .print_r( $_FILES, true ). "</pre>";
     }
 
-    header('Location: http://'.$_SERVER['PHP_SELF'].'?show=batch1');
+    header('Location: http://'.$_SERVER['SERVER_NAME'].$_SERVER['PHP_SELF'].'?show=start');
 }
 
 /** Wurde das Formular abgeschickt? */ 

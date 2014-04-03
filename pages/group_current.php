@@ -17,7 +17,7 @@ require 'includes/authcheck.inc.php';
 <?php endif; ?>
 
 <?php if((!isset($_GET['action']) || !$_GET['action']) && isset($_SESSION['groupID'])) : ?>
-<?php echo "<pre>".print_r($_SESSION,TRUE)."</pre>"; ?>
+<?php // echo "<pre>".print_r($_SESSION,TRUE)."</pre>"; ?>
 
     <h4>Temporary set of models and logs:</h4>
 

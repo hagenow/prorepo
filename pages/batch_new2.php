@@ -27,6 +27,31 @@ if(isset($_SESSION['mod_semaphore'])) {
         unset($_SESSION['modelname']);
         unset($_SESSION['mod_semaphore']);
 }
+/** wurde resettet */
+if(isset( $_POST['reset_batch2']) && !empty($_POST['reset_batch2']))
+{
+    $targetdir = $_SESSION['targetdir'];
+
+    // delete files after processing
+    rrmdir($targetdir);
+
+    unset($_SESSION['files']);
+    unset($_SESSION['targetdir']);
+
+    unset($_SESSION['cid']);
+    unset($_SESSION['cname']);
+    unset($_SESSION['batch_semaphore']);
+
+    if(DEBUG)
+    {
+        echo "<pre>" .print_r( $_SESSION, true ). "</pre>";
+        echo "<pre>" .print_r( $_POST, true ). "</pre>";
+        echo "<pre>" .print_r( $_FILES, true ). "</pre>";
+    }
+
+    header('Location: http://'.$_SERVER['PHP_SELF'].'?show=batch1');
+}
+
 /** Wurde das Formular abgeschickt? */ 
 if(!isset($_POST['submit_batch2']) || !$_POST['submit_batch2'])
 {
@@ -74,7 +99,7 @@ if(!isset($_POST['submit_batch2']) || !$_POST['submit_batch2'])
             <!-- Indicates a successful or positive action -->
             <button type="submit" class="btn btn-success" id="submit_batch2" name="submit_batch2" value="Submit">Submit</button>
             <!-- Indicates a unsuccesful or negative action -->
-            <button type="reset" class="btn btn-danger" id="reset_batch2" name="reset_batch2" value="Reset">Reset</button>
+            <button type="submit" class="btn btn-danger" id="reset_batch2" name="reset_batch2" value="Reset">Reset</button>
         </div>
     </div>
     

@@ -3,7 +3,8 @@ require_once 'config.inc.php';
 require_once 'functions.inc.php';
 
 $logvalues = array(); 
-$logvalues = viewlog($_GET['logID']);
+$logid = cleaninput($_GET['logID']);
+$logvalues = viewlog($logid);
 
 // if not set via menu
 if(isset($_GET['timestamp']))
@@ -27,19 +28,19 @@ else
     <?php if(isset($_SESSION['angemeldet'])) : ?>
         <div class="btn-group pull-right">
     <?php if(isset($_SESSION['angemeldet']) && isset($_SESSION['user']) && $_SESSION['user'] == $logvalues['creator'] || isadmin()) : ?>
-        <button type="button" class="btn btn-default btn-sm" onclick="location.href='<?php echo $_SERVER['PHP_SELF']."?show=logupload&logID=".$_GET['logID']; ?>'">
+        <button type="button" class="btn btn-default btn-sm" onclick="location.href='<?php echo $_SERVER['PHP_SELF']."?show=logupload&logID=".$logid; ?>'">
            <span class="glyphicon glyphicon-circle-arrow-up"></span> Upload new files
         </button>
-        <button type="button" class="btn btn-default btn-sm" onclick="location.href='<?php echo $_SERVER['PHP_SELF']."?show=logedit&logID=".$_GET['logID']; ?>'">
+        <button type="button" class="btn btn-default btn-sm" onclick="location.href='<?php echo $_SERVER['PHP_SELF']."?show=logedit&logID=".$logid; ?>'">
            <span class="glyphicon glyphicon-wrench"></span> Edit log
         </button>
     <?php endif; ?>
-    <?php if(isset($_SESSION['groupID']) && isset($_SESSION['updateflag']) && in_array($_GET['logID'], $_SESSION['grpoldlogs'])) : ?>
-        <button type="button" class="btn btn-default btn-sm" id="addlog2group_donothing" value="<?php echo $_GET['logID']."|".$date; ?>">
+    <?php if(isset($_SESSION['groupID']) && isset($_SESSION['updateflag']) && in_array($logid, $_SESSION['grpoldlogs'])) : ?>
+        <button type="button" class="btn btn-default btn-sm" id="addlog2group_donothing" value="<?php echo $logid."|".$date; ?>">
            <span class="glyphicon glyphicon-flash"></span> Already added, please remove first!
         </button>
     <?php elseif(isset($_SESSION['groupID'])) : ?>
-        <button type="button" class="btn btn-default btn-sm" id="addlog2group" value="<?php echo $_GET['logID']."|".$date; ?>">
+        <button type="button" class="btn btn-default btn-sm" id="addlog2group" value="<?php echo $logid."|".$date; ?>">
            <span class="glyphicon glyphicon-plus"></span> Add to group
         </button>
     <?php endif; ?>
@@ -62,10 +63,10 @@ else
         Show files with selected timestamp and below.
     </div>
     <div class="col-xs-5">
-        <form method="post" action="<?php echo $_SERVER['PHP_SELF']."?show=logview&logID=".$_GET['logID']; ?>" name="timestampchooser" id="timestampchooser">
+        <form method="post" action="<?php echo $_SERVER['PHP_SELF']."?show=logview&logID=".$logid; ?>" name="timestampchooser" id="timestampchooser">
             <select name="timestamp" onchange="this.form.submit()" class="form-control">
                 <option></option>
-                <?php getversions('log',$_GET['logID']); ?>
+                <?php getversions('log',$logid); ?>
             </select>
         </form>
     </div>
@@ -88,7 +89,7 @@ else
             </tr>
         </thead>
         <tbody>
-            <?php viewfiles("log", $_GET['logID'], "mxml", $date); ?>
+            <?php viewfiles("log", $logid, "mxml", $date); ?>
         </tbody>
     </table>
 </div>
@@ -109,7 +110,7 @@ else
             </tr>
         </thead>
         <tbody>
-            <?php viewfiles("log", $_GET['logID'], "xes", $date); ?>
+            <?php viewfiles("log", $logid, "xes", $date); ?>
         </tbody>
     </table>
 </div>
@@ -129,7 +130,7 @@ else
             </tr>
         </thead>
         <tbody>
-            <?php viewfiles("log", $_GET['logID'], "csv", $date); ?>
+            <?php viewfiles("log", $logid, "csv", $date); ?>
         </tbody>
     </table>
 </div>

@@ -3,7 +3,7 @@ require_once 'config.inc.php';
 require_once 'functions.inc.php';
 
 $modvalues = array(); 
-$modvalues = viewmodel($_GET['modelID']);
+$modvalues = viewmodel(cleaninput($_GET['modelID']));
 
 // if not set via menu
 if(isset($_GET['timestamp']))

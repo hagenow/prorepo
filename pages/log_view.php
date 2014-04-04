@@ -3,7 +3,8 @@ require_once 'config.inc.php';
 require_once 'functions.inc.php';
 
 $logvalues = array(); 
-$logvalues = viewlog($_GET['logID']);
+$logid = cleaninput($_GET['logID']);
+$logvalues = viewlog($logid);
 
 // if not set via menu
 if(isset($_GET['timestamp']))

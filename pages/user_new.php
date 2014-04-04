@@ -50,7 +50,7 @@
             <!-- hidden field for protection -->
             <input type="text" name="foobar" style="display: none;">
 
-            <button type="submit" id="submit_user" name="submit_user" value="Submit "class="btn btn-success">Register</button>
+            <button type="submit" id="submit_user" name="submit_user" value="Submit" class="btn btn-success">Register</button>
             <button type="reset" id="close_modal" name="close_modal" value="Reset and Close" class="btn btn-danger" data-dismiss="modal">Reset &amp; Close</button>
         </div>
     </div>

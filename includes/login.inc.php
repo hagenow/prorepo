@@ -55,12 +55,8 @@ if(!isset($_SESSION['angemeldet']) || !$_SESSION['angemeldet'])
               <input type="password" placeholder="Password" class="form-control" name="pass" id="pass" required>
             </div>
             <button type="submit" class="btn btn-primary" id="login" name="login">Sign in</button>
-        <!-- form in form - registration -->
-            <form class="navbar-form navbar-right" role="form">
-                <div class="form-group">
                     <button type="button" class="btn btn-success" data-toggle="modal" data-target="#register">Sign up</button>
-                </div>
-            </form>
+        <!-- form in form - registration -->
     </form>
 <?php } else {?>
 <ul class="nav navbar-nav navbar-right">

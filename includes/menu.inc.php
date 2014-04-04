@@ -50,7 +50,6 @@
             </li>
         <?php endif; ?>
 	</ul>
-          </ul>
         <?php require_once 'includes/login.inc.php'; ?>
         </div><!--/.nav-collapse -->
       </div>

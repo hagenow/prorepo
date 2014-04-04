@@ -75,6 +75,8 @@ function viewmodel($modelid)
 {
     $conid = db_connect();
 
+    $modelid = cleaninput($modelid);
+
     $modvalues = array();
 
     $sql = "SELECT modelID, modelName, timestamp, lastupdate, comment, catID, path, deletable, creator

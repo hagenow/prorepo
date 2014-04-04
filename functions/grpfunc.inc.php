@@ -393,12 +393,11 @@ function linkedtypes($id,$type,$creator)
 
 function deletefromgroup($type,$id)
 {
-    $id = cleaninput($id);
     $conid = db_connect();
 
     $parts = explode("|",$id);
-    $id = $parts[0];
-    $groupid = $parts[1];
+    $id = cleaninput($parts[0]);
+    $groupid = cleaninput($parts[1]);
 
     $sql = "DELETE FROM ".TBL_PREFIX.$type."groups 
             WHERE groupID = '$groupid'

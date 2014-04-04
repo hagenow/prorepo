@@ -150,7 +150,6 @@ function addmodel2group()
 
 function getnamesfromgroup($type,$key,$typeid)
 {
-    $typeid = cleaninput($typeid);
     $conid = db_connect();
 
     $sql = "SELECT ".$type."ID,".$type."Name, creator
@@ -307,6 +306,11 @@ function savegroup()
 
 function viewgroup($groupid)
 {
+    if($groupid == '')
+    {
+        header( 'location: index.php?show=404' );
+    }
+
     $groupid = cleaninput($groupid);
     $conid = db_connect();
 

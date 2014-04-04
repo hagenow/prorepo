@@ -75,6 +75,11 @@ function getlogs($catid)
 
 function viewlog($logid)
 {
+    if($logid == '')
+    {
+        header( 'location: index.php?show=404' );
+    }
+
     $logid = cleaninput($logid);
     $conid = db_connect();
 

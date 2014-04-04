@@ -74,6 +74,10 @@ function getmodels($catid)
 
 function viewmodel($modelid)
 {
+    if($modelid == '')
+    {
+        header( 'location: index.php?show=404' );
+    }
     $modelid = cleaninput($modelid);
     $conid = db_connect();
 

@@ -1,3 +1,4 @@
+<?php require 'includes/authcheck.inc.php'; ?>
 <?php if(isset($_GET['userID']) && isset($_POST['delete_user']) && isadmin()) : ?>
 <?php 
 $id = cleaninput( $_GET['userID']);

@@ -1,6 +1,6 @@
+<?php require 'includes/authcheck.inc.php'; ?>
 <?php if(isset($_POST['approve'])) : ?>
 <?php
-echo "<pre>".print_r($_POST, TRUE)."</pre>";
     approveusers();
 ?>
 <?php endif; ?>

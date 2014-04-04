@@ -1,3 +1,4 @@
+<?php require 'includes/authcheck.inc.php'; ?>
 <?php if(isset($_POST['unblock'])) : ?>
 <?php
 echo "<pre>".print_r($_POST, TRUE)."</pre>";

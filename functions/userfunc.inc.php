@@ -314,8 +314,10 @@ function updateuser($user)
     {
         $_SESSION['angemeldet']   = true;
         $_SESSION['user'] = $user;
-        $_SESSION['oldtoken']    = md5( $_SERVER['REQUEST_TIME'] );
-        $_SESSION['newtoken']    = md5( $_SERVER['REQUEST_TIME'] );
+        $_SESSION['userAgent'] = $_SERVER['HTTP_USER_AGENT'];
+        $_SESSION['IPaddress'] = $_SERVER['REMOTE_ADDR'];
+        // maximum lifetime of a session
+        $_SESSION['EXPIRES'] = time() + LIFETIME;
         $conid->close();
         return true;
     }
@@ -510,33 +512,6 @@ function cleanlogininput()
 
     // Eingabe zurückgeben
     return $input;
-}
-
-/** checksession($conid)
- * Prüft die Session und überträgt die bisherigen Sessiondaten in eine neue 
- * Session
- * */
-function checksession()
-{
-    $conid = db_connect();
-    // Alte Session löschen und Sessiondaten in neue Session transferieren
-    session_regenerate_id( true );
-
-    if ($_SESSION['login'] !== true) return false;
-
-    $sql = "SELECT 
-                IP, lastlogin
-            FROM
-                ".TBL_PREFIX."users
-            WHERE
-                login = '" .$conid->real_escape_string( $_SESSION['user'] ). "'
-            ";
-
-    $res = $conid->prepare($sql);
-    $res->execute();
-    $res->store_result();
-
-    $conid->close();
 }
 
 /** Beendet die laufende Session und leitet wieder auf den Login um

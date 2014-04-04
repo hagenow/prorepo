@@ -334,6 +334,9 @@ function registeruser()
     $lastname = cleaninput($_POST['lastname']);
     $affiliation = cleaninput($_POST['affiliation']);
 
+    if($login == '' || $firstname == '' || $lastname == '' || $affiliation = '')
+        return false;
+
     // create uniqid for mail-validation
     $uniqid = uniqid('u',TRUE);
 

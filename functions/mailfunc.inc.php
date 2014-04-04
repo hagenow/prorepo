@@ -27,7 +27,7 @@ function checkmail( $email )
     }
     else
     {
-        die( 'The mailaddress is malformed!' );
+        echo 'The mailaddress is malformed!<br>';
     }
 }
 

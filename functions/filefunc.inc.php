@@ -917,7 +917,7 @@ function batchimport_step3()
             }
             else
             {
-                die('error: ' .$conid->error);
+                echo 'error: ' .$conid->error;
             }
 
             $target = $filepath.$filename;

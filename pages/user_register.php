@@ -7,7 +7,7 @@
         }
         else
         {
-            echo "There was an error, please go back and register new!";
+            echo "There was an error, try again and check your data before sending!";
         }
 
     }

@@ -19,21 +19,21 @@
     <div class="form-group">
         <label class="control-label col-sm-3" for="firstname">First name</label>
         <div class="col-sm-8">
-            <input id="firstname" name="firstname" type="text" placeholder="" class="form-control">
+            <input id="firstname" name="firstname" type="text" placeholder="" class="form-control" required="">
         </div>
     </div>
     
     <div class="form-group">
         <label class="control-label col-sm-3" for="lastname">Last name</label>
         <div class="col-sm-8">
-            <input id="lastname" name="lastname" type="text" placeholder="" class="form-control">
+            <input id="lastname" name="lastname" type="text" placeholder="" class="form-control" required="">
         </div>
     </div>
     
     <div class="form-group">
         <label class="control-label col-sm-3" for="email">E-mail</label>
         <div class="col-sm-8">
-            <input id="email" name="email" type="text" placeholder="user@domain.ext" class="form-control">
+            <input id="email" name="email" type="text" placeholder="user@domain.ext" class="form-control" required="">
         </div>
     </div>
     
@@ -47,7 +47,6 @@
     <div class="form-group">
         <label class="control-label col-sm-3"></label>
         <div class="col-sm-8">
-            <!-- hidden field for protection -->
             <input type="text" name="foobar" style="display: none;">
 
             <button type="submit" id="submit_user" name="submit_user" value="Submit" class="btn btn-success">Register</button>

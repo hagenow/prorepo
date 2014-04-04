@@ -580,6 +580,7 @@ function getuseruploads($type)
 
 function verify($id)
 {
+    $id = cleaninput($id);
     $conid = db_connect();
 
     $sql = "UPDATE ".TBL_PREFIX."users
@@ -604,6 +605,7 @@ function verify($id)
 function resetpwfromid($id)
 {
     $conid = db_connect();
+    $id = cleaninput($id);
 
     $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
 

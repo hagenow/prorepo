@@ -31,6 +31,7 @@ function getcategories()
 
 function countmodels($catID)
 {
+    $catID = cleaninput($catID);
     $conid = db_connect();
     $sql = "SELECT COUNT(catID)
             FROM ".TBL_PREFIX."models 
@@ -54,6 +55,7 @@ function countmodels($catID)
 
 function countlogs($catID)
 {
+    $catID = cleaninput($catID);
     $conid = db_connect();
     $sql = "SELECT COUNT(catID) 
             FROM ".TBL_PREFIX."logs 
@@ -129,6 +131,7 @@ function createcat($catname)
 
 function getcatname($catid)
 {
+    $catid = cleaninput($catid);
     $conid = db_connect();
 
     $sql = "SELECT catName

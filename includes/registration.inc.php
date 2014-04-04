@@ -8,6 +8,7 @@
       </div>
       <div class="modal-body">
         <?php require_once 'pages/user_new.php'; ?>
+      </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->

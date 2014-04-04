@@ -313,6 +313,7 @@ function uploadfiles_existing()
 
 function updatetypepath($type,$id,$typepath)
 {
+    $id = cleaninput($id);
     $conid = db_connect();
 
     if($type == "model")
@@ -352,6 +353,7 @@ function updatetypepath($type,$id,$typepath)
 /* get versions of a model or log */
 function getversions($type,$typeid)
 {
+    $typeid = cleaninput($typeid);
     $conid = db_connect();
 
     $sql = "SELECT DISTINCT(timestamp)
@@ -379,6 +381,9 @@ function getversions($type,$typeid)
     * */
 function viewfiles($type,$typeid,$ext,$date)
 {
+
+    $typeid = cleaninput($typeid);
+
     $conid = db_connect();
 
     // $date = date("d.m.Y - H:i:s", $date);
@@ -437,6 +442,7 @@ function viewfiles($type,$typeid,$ext,$date)
 // get values of one specific file
 function viewfile($uniqid)
 {
+    $uniqid = cleaninput($uniqid);
     $conid = db_connect();
 
     $sql = "SELECT *
@@ -460,6 +466,7 @@ function viewfile($uniqid)
 // get values of one specific file
 function deletefile($uniqid, $fullpath)
 {
+    $uniqid = cleaninput($uniqid);
     $conid = db_connect();
 
     $sql = "DELETE FROM ".TBL_PREFIX."files
@@ -484,6 +491,7 @@ function deletefile($uniqid, $fullpath)
 // the files-table and delete all entries and unlinks all files in repository
 function deletefiles($type, $typeid, $basepath)
 {
+    $typeid = cleaninput($typeid);
     $conid = db_connect();
 
     $sql = "SELECT * 

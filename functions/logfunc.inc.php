@@ -45,6 +45,7 @@ function createlog()
 
 function getlogs($catid)
 {
+    $catid = cleaninput($catid);
     $conid = db_connect();
 
     $sql = "SELECT *
@@ -74,6 +75,7 @@ function getlogs($catid)
 
 function viewlog($logid)
 {
+    $logid = cleaninput($logid);
     $conid = db_connect();
 
     $logvalues = array();
@@ -98,6 +100,7 @@ function viewlog($logid)
 }
 function editlog($logid)
 {
+    $logid = cleaninput($logid);
     $conid = db_connect();
     $comment = "";
     $catid = "";
@@ -148,6 +151,7 @@ function editlog($logid)
 
 function updatelog($logid)
 {
+    $logid = cleaninput($logid);
     $conid = db_connect();
 
     $sql = "UPDATE ".TBL_PREFIX."logs
@@ -163,6 +167,7 @@ function updatelog($logid)
 
 function connectedlogs($modelID)
 {
+    $modelID = cleaninput($modelID);
     $conid = db_connect();
 
     $sql = "SELECT logID, logName, lastupdate, creator
@@ -188,6 +193,7 @@ function connectedlogs($modelID)
 // delete log if it's marked as deletable
 function removelog($logid,$basepath)
 {
+    $logid = cleaninput($logid);
     $conid = db_connect();
 
     $logid = cleaninput($logid);
@@ -213,6 +219,8 @@ function removelog($logid,$basepath)
 /** Batchimporting logs */
 function batchimport_createlog($name, $timestamp, $catid, $modelid)
 {
+    $catid = cleaninput($catid);
+    $modelid = cleaninput($modelid);
     $conid = db_connect();
 
     $timestamp = $_POST['timestamp'];

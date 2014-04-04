@@ -54,6 +54,7 @@ function viewusers()
 }
 function viewuser($id)
 {
+    $id = cleaninput($id);
     $conid = db_connect();
 
     $userdata = array();
@@ -82,6 +83,7 @@ function viewuser($id)
 /* update user data */
 function adm_updateuserdata($id)
 {
+    $id = cleaninput($id);
     $conid = db_connect();
 
     $firstname = cleaninput($_POST['firstname']);
@@ -133,6 +135,7 @@ function adm_updateuserdata($id)
 /* delete user */
 function adm_deleteuser($id)
 {
+    $id = cleaninput($id);
     $conid = db_connect();
 
     $sql = "DELETE FROM ".TBL_PREFIX."users

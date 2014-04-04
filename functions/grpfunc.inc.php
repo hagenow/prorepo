@@ -49,6 +49,7 @@ function creategroup()
 
 function initgroup($id)
 {
+    $id = cleaninput($id);
     $models = array();
     $logs = array();
     $models_edit = array();
@@ -149,6 +150,7 @@ function addmodel2group()
 
 function getnamesfromgroup($type,$key,$typeid)
 {
+    $typeid = cleaninput($typeid);
     $conid = db_connect();
 
     $sql = "SELECT ".$type."ID,".$type."Name, creator
@@ -305,6 +307,7 @@ function savegroup()
 
 function viewgroup($groupid)
 {
+    $groupid = cleaninput($groupid);
     $conid = db_connect();
 
     $groupvalues = array();
@@ -331,6 +334,7 @@ function viewgroup($groupid)
 
 function linkedtypes($id,$type,$creator)
 {
+    $id = cleaninput($id);
     $conid = db_connect();
 
     $sql = "SELECT ".$type."ID,timestamp
@@ -389,6 +393,7 @@ function linkedtypes($id,$type,$creator)
 
 function deletefromgroup($type,$id)
 {
+    $id = cleaninput($id);
     $conid = db_connect();
 
     $parts = explode("|",$id);
@@ -403,10 +408,12 @@ function deletefromgroup($type,$id)
 
     echo $conid->error;
     return ($res->affected_rows == 1) ? true : false;
+    $conid->close();
 }
 
 function editgroup($id)
 {
+    $id = cleaninput($id);
     $conid = db_connect();
 
     $tags = cleantags($_POST['tags']);
@@ -426,6 +433,7 @@ function editgroup($id)
 
 function createzip($id)
 {
+    $id = cleaninput($id);
     $conid = db_connect();
 
     $type = "";
@@ -478,9 +486,9 @@ function createzip($id)
     foreach($tmp as $t)
     {
         $parts = explode("|",$t);
-        $typeid = $parts[0];
-        $date = $parts[1];
-        $type = $parts[2];
+        $typeid = cleaninput($parts[0]);
+        $date = cleaninput($parts[1]);
+        $type = cleaninput($parts[2]);
         $sqlfiles = "SELECT DISTINCT(path)
                      FROM ".TBL_PREFIX."files
                      WHERE type = '$type' AND foreignID = '$typeid' AND timestamp <= '$date'
@@ -501,6 +509,7 @@ function createzip($id)
 
 function getgroupid($guid)
 {
+    $guid = cleaninput($guid);
     $conid = db_connect();
 
     $sql = "SELECT groupID
@@ -531,8 +540,8 @@ function switchgrpstate($st)
     $state = "";
 
     $parts = explode("|",$st);
-    $id = $parts[0];
-    $state = $parts[1];
+    $id = cleaninput($parts[0]);
+    $state = cleaninput($parts[1]);
 
     if($state == "0")
         $statename = "<span class=\"label label-danger\">closed</span>";
@@ -563,6 +572,7 @@ function switchgrpstate($st)
 // delete group
 function removegroup($grpid)
 {
+    $grpid = cleaninput($grpid);
     $conid = db_connect();
 
     $sqlgrp = "DELETE FROM ".TBL_PREFIX."groups

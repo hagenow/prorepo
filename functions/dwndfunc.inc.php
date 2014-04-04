@@ -1,6 +1,7 @@
 <?php 
 function getfile($uniqid) 
 {
+    $uniqid = cleaninput($uniqid);
     $conid = db_connect();
 
     $sql = "SELECT fileName, path, fileType,size

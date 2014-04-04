@@ -3,7 +3,7 @@
 function cleansearch($keyword)
 {
     $keyword = cleaninput($keyword);
-    $keyword = preg_replace('/[^-a-zA-ZäÄöÖüÜß0-9,]/', '',$keyword);
+    $keyword = preg_replace('/[^-a-zA-ZäÄöÖüÜß0-9,.]/', '',$keyword);
     return $keyword;
 }
 

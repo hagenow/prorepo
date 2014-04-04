@@ -44,6 +44,7 @@ function createmodel()
 
 function getmodels($catid)
 {
+    $catid = cleaninput($catid);
     $conid = db_connect();
 
     $sql = "SELECT *
@@ -73,6 +74,7 @@ function getmodels($catid)
 
 function viewmodel($modelid)
 {
+    $modelid = cleaninput($modelid);
     $conid = db_connect();
 
     $modelid = cleaninput($modelid);
@@ -100,6 +102,7 @@ function viewmodel($modelid)
 
 function editmodel($modelid)
 {
+    $modelid = cleaninput($modelid);
     $conid = db_connect();
     $comment = "";
     $catid = "";
@@ -143,6 +146,7 @@ function editmodel($modelid)
 
 function updatemodel($modelid)
 {
+    $modelid = cleaninput($modelid);
     $conid = db_connect();
 
     $sql = "UPDATE ".TBL_PREFIX."models
@@ -158,6 +162,7 @@ function updatemodel($modelid)
 
 function getmodname($modid)
 {
+    $modid = cleaninput($modid);
     $conid = db_connect();
 
     $sql = "SELECT modelName
@@ -210,10 +215,10 @@ function batchimport_createmodel($name, $timestamp, $catid)
 {
     $conid = db_connect();
 
-    $timestamp = $_POST['timestamp'];
+    $timestamp = cleaninput($_POST['timestamp']);
 
-    $catid = $_POST['catid'];
-    $creator = $_SESSION['user'];
+    $catid = cleaninput($_POST['catid']);
+    $creator = cleaninput($_SESSION['user']);
 
     $sql = "INSERT INTO
                 ".TBL_PREFIX."models

@@ -459,6 +459,9 @@ function getuserdata()
 
 function showuserdata($name)
 {
+    if($name == '')
+        header( 'location: index.php?show=404' );
+
     $conid = db_connect();
 
     $userdata = array();
@@ -483,6 +486,8 @@ function showuserdata($name)
         $res->fetch();
         return $userdata;
     }
+    else
+        header( 'location: index.php?show=404' );
     
 }
 

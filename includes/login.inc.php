@@ -6,7 +6,7 @@ if(isset( $_POST['login'] ))
     $input = cleanlogininput();
     $login = checkuserlogin( $input['user'], $input['pass']);
     /** Prüfen ob die Anmeldung korrekt war */
-    if(!checkblocked($input['user']))
+    if(!checkblocked($input['user']) )
     {
         if(checkapproved($input['user']))
         {
@@ -54,9 +54,9 @@ if(!isset($_SESSION['angemeldet']) || !$_SESSION['angemeldet'])
             <div class="form-group">
               <input type="password" placeholder="Password" class="form-control" name="pass" id="pass" required>
             </div>
+            <input type="hidden" name="nonce" value="<?php echo $nonce?>"/>
             <button type="submit" class="btn btn-primary" id="login" name="login">Sign in</button>
-                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#register">Sign up</button>
-        <!-- form in form - registration -->
+            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#register">Sign up</button>
     </form>
 <?php } else {?>
 <ul class="nav navbar-nav navbar-right">

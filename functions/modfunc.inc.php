@@ -44,6 +44,10 @@ function createmodel()
 
 function getmodels($catid)
 {
+    if($catid == '')
+    {
+        header( 'location: index.php?show=404' );
+    }
     $catid = cleaninput($catid);
     $conid = db_connect();
 
@@ -52,22 +56,27 @@ function getmodels($catid)
             WHERE catID = '$catid'";
 
     if( $res = $conid->query($sql) ){
-
-        while( $row = $res->fetch_assoc() )
+        if($conid->affected_rows > 0)
         {
-            $html = "";
-            $html .= "<tr>";
-            $html .= "<td><a href=\"".$_SERVER['PHP_SELF']."?show=modview&modelID=".$row['modelID']."\">".$row['modelName']."</a></td>";
-            $html .= "<td class=\"text-center\">".date("d.m.Y - H:i:s", strtotime($row['timestamp']))."</td>";
-            $html .= "<td class=\"text-center\"><a href=\"".$_SERVER['PHP_SELF']."?show=usershow&name=".$row['creator']."\">".$row['creator']."</td>";
-            if($row['deletable'] == "1" && isadmin())
-                $html .= "<td class=\"text-center\"><button type=\"submit\" class=\"btn btn-link\" name=\"deletemodel\" value=\"".$row['modelID']."\"><span class=\"glyphicon glyphicon-remove\"></span></button></td>";
-            elseif($row['deletable'] == "0" && isadmin())
-                $html .= "<td class=\"text-center\"></td>";
-            $html .= "</tr>";
 
-            echo $html;
+            while( $row = $res->fetch_assoc() )
+            {
+                $html = "";
+                $html .= "<tr>";
+                $html .= "<td><a href=\"".$_SERVER['PHP_SELF']."?show=modview&modelID=".$row['modelID']."\">".$row['modelName']."</a></td>";
+                $html .= "<td class=\"text-center\">".date("d.m.Y - H:i:s", strtotime($row['timestamp']))."</td>";
+                $html .= "<td class=\"text-center\"><a href=\"".$_SERVER['PHP_SELF']."?show=usershow&name=".$row['creator']."\">".$row['creator']."</td>";
+                if($row['deletable'] == "1" && isadmin())
+                    $html .= "<td class=\"text-center\"><button type=\"submit\" class=\"btn btn-link\" name=\"deletemodel\" value=\"".$row['modelID']."\"><span class=\"glyphicon glyphicon-remove\"></span></button></td>";
+                elseif($row['deletable'] == "0" && isadmin())
+                    $html .= "<td class=\"text-center\"></td>";
+                $html .= "</tr>";
+
+                echo $html;
+            }
         }
+        else
+            header( 'location: index.php?show=404' );
     }
     $conid->close();
 }
@@ -102,6 +111,9 @@ function viewmodel($modelid)
         $conid->close();
         return $modvalues;
     }
+    else
+        header( 'location: index.php?show=404' );
+
 }
 
 function editmodel($modelid)

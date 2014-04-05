@@ -60,7 +60,5 @@ if(isset($_GET['show']))
     }
 }
 else
-{
     require 'pages/start.php';
-}
 ?>

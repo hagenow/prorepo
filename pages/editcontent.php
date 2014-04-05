@@ -105,15 +105,15 @@
         }
         else
         {
-            echo "no area given!";
+            header( 'location: index.php?show=404' );
         }
     }
     elseif(!isset($_GET['content']))
     {
-        echo "Wrong procedure call...";
+        header( 'location: index.php?show=404' );
     }
     else
     {
-        echo "something else...";
+        header( 'location: index.php?show=404' );
     }
 ?>

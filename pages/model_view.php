@@ -3,7 +3,8 @@ require_once 'config.inc.php';
 require_once 'functions.inc.php';
 
 $modvalues = array(); 
-$modvalues = viewmodel(cleaninput($_GET['modelID']));
+$modelid = cleaninput($_GET['modelID']);
+$modvalues = viewmodel($modelid);
 
 // if not set via menu
 if(isset($_GET['timestamp']))
@@ -29,19 +30,19 @@ else
     <?php if(isset($_SESSION['angemeldet'])) : ?>
         <div class="btn-group pull-right">
     <?php if(isset($_SESSION['angemeldet']) && isset($_SESSION['user']) && $_SESSION['user'] == $modvalues['creator'] || isadmin()) : ?>
-        <button type="button" class="btn btn-default btn-sm" onclick="location.href='<?php echo $_SERVER['PHP_SELF']."?show=modupload&modelID=".$_GET['modelID']; ?>'">
+        <button type="button" class="btn btn-default btn-sm" onclick="location.href='<?php echo $_SERVER['PHP_SELF']."?show=modupload&modelID=".$modelid; ?>'">
            <span class="glyphicon glyphicon-circle-arrow-up"></span> Upload new files
         </button>
-        <button type="button" class="btn btn-default btn-sm" onclick="location.href='<?php echo $_SERVER['PHP_SELF']."?show=modedit&modelID=".$_GET['modelID']; ?>'">
+        <button type="button" class="btn btn-default btn-sm" onclick="location.href='<?php echo $_SERVER['PHP_SELF']."?show=modedit&modelID=".$modelid; ?>'">
            <span class="glyphicon glyphicon-wrench"></span> Edit model
         </button>
     <?php endif; ?>
-    <?php if(isset($_SESSION['groupID']) && isset($_SESSION['updateflag']) && isset($_SESSION['grpoldmodels']) && in_array($_GET['modelID'], $_SESSION['grpoldmodels'])) : ?>
-        <button type="button" class="btn btn-default btn-sm" id="addmodel2group_donothing" value="<?php echo $_GET['modelID']."|".$date; ?>">
+    <?php if(isset($_SESSION['groupID']) && isset($_SESSION['updateflag']) && isset($_SESSION['grpoldmodels']) && in_array($modelid, $_SESSION['grpoldmodels'])) : ?>
+        <button type="button" class="btn btn-default btn-sm" id="addmodel2group_donothing" value="<?php echo $modelid."|".$date; ?>">
            <span class="glyphicon glyphicon-flash"></span> Already added, please remove first!
         </button>
     <?php elseif(isset($_SESSION['groupID'])) : ?>
-        <button type="button" class="btn btn-default btn-sm" id="addmodel2group" value="<?php echo $_GET['modelID']."|".$date; ?>">
+        <button type="button" class="btn btn-default btn-sm" id="addmodel2group" value="<?php echo $modelid."|".$date; ?>">
            <span class="glyphicon glyphicon-plus"></span> Add to group
         </button>
     <?php endif; ?>
@@ -66,10 +67,10 @@ else
         Show files with selected timestamp and below.
     </div>
     <div class="col-xs-5">
-        <form method="post" action="<?php echo $_SERVER['PHP_SELF']."?show=modview&modelID=".$_GET['modelID']; ?>" name="timestampchooser" id="timestampchooser">
+        <form method="post" action="<?php echo $_SERVER['PHP_SELF']."?show=modview&modelID=".$modelid; ?>" name="timestampchooser" id="timestampchooser">
             <select name="timestamp" onchange="this.form.submit()" class="form-control">
                 <option></option>
-                <?php getversions('model',$_GET['modelID']); ?>
+                <?php getversions('model',$modelid); ?>
             </select>
         </form>
     </div>
@@ -93,7 +94,7 @@ else
             </tr>
         </thead>
         <tbody>
-            <?php viewfiles("model", $_GET['modelID'], "pnml", $date); ?>
+            <?php viewfiles("model", $modelid, "pnml", $date); ?>
         </tbody>
     </table>
 </div>
@@ -114,7 +115,7 @@ else
             </tr>
         </thead>
         <tbody>
-            <?php viewfiles("model", $_GET['modelID'], "tpn", $date); ?>
+            <?php viewfiles("model", $modelid, "tpn", $date); ?>
         </tbody>
     </table>
 </div>
@@ -136,7 +137,7 @@ else
             </tr>
         </thead>
         <tbody>
-            <?php viewfiles("model", $_GET['modelID'], "xml", $date); ?>
+            <?php viewfiles("model", $modelid, "xml", $date); ?>
         </tbody>
     </table>
 </div>
@@ -157,7 +158,7 @@ else
             </tr>
         </thead>
         <tbody>
-            <?php viewfiles("model", $_GET['modelID'], "pdf", $date); ?>
+            <?php viewfiles("model", $modelid, "pdf", $date); ?>
         </tbody>
     </table>
 </div>
@@ -177,7 +178,7 @@ else
             </tr>
         </thead>
         <tbody>
-            <?php viewfiles("model", $_GET['modelID'], "png", $date); ?>
+            <?php viewfiles("model", $modelid, "png", $date); ?>
         </tbody>
     </table>
 </div>
@@ -197,7 +198,7 @@ else
             </tr>
         </thead>
         <tbody>
-            <?php viewfiles("model", $_GET['modelID'], "jpg", $date); ?>
+            <?php viewfiles("model", $modelid, "jpg", $date); ?>
         </tbody>
     </table>
 </div>
@@ -217,7 +218,7 @@ else
             </tr>
         </thead>
         <tbody>
-            <?php viewfiles("model", $_GET['modelID'], "svg", $date); ?>
+            <?php viewfiles("model", $modelid, "svg", $date); ?>
         </tbody>
     </table>
 </div>
@@ -237,7 +238,7 @@ else
             </tr>
         </thead>
         <tbody>
-            <?php viewfiles("model", $_GET['modelID'], "eps", $date); ?>
+            <?php viewfiles("model", $modelid, "eps", $date); ?>
         </tbody>
     </table>
 </div>
@@ -253,7 +254,7 @@ else
             </tr>
         </thead>
         <tbody>
-            <?php connectedlogs($_GET['modelID']); ?>
+            <?php connectedlogs($modelid); ?>
         </tbody>
     </table>
 </div>

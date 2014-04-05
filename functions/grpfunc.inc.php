@@ -334,6 +334,8 @@ function viewgroup($groupid)
         $conid->close();
         return $groupvalues;
     }
+    else
+        header( 'location: index.php?show=404' );
 }
 
 function linkedtypes($id,$type,$creator)

@@ -1,5 +1,7 @@
-<?php if(!isset($_GET['action']) || $_GET['action'] == "") : ?>
-keine direkte angabe
+<?php if(!isset($_GET['action']) || $_GET['action'] == "") :?> 
+<?php
+    header( 'location: index.php?show=404' ); 
+?>
 <?php elseif(isset($_GET['action']) && $_GET['action'] == "view") : ?>
 <?php require_once 'pages/admin/admin_user_view.php'; ?> 
 <?php elseif(isset($_GET['action']) && $_GET['action'] == "edit") : ?>

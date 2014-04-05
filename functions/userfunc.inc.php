@@ -314,10 +314,11 @@ function updateuser($user)
     {
         $_SESSION['angemeldet']   = true;
         $_SESSION['user'] = $user;
+        // prevent session fixation
+        // but on problem: don't turn your smartphone or tablet, because the 
+        // user-agent changes the resolution that is sending to the srv.
         $_SESSION['userAgent'] = $_SERVER['HTTP_USER_AGENT'];
         $_SESSION['IPaddress'] = $_SERVER['REMOTE_ADDR'];
-        // maximum lifetime of a session
-        $_SESSION['EXPIRES'] = time() + LIFETIME;
         $conid->close();
         return true;
     }

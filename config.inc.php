@@ -24,8 +24,6 @@ define ('PATHINFO', '/prorepo/');
 /** own debug check */
 define ('DEBUG', TRUE);
 
-/**  600 seconds lifetime of a session*/
-define ('LIFETIME', 600);
 
 /** own debug check */
 define ('ADMINMAIL', 'hagenowh@informatik.uni-freiburg.de');

@@ -54,7 +54,6 @@ if(!isset($_SESSION['angemeldet']) || !$_SESSION['angemeldet'])
             <div class="form-group">
               <input type="password" placeholder="Password" class="form-control" name="pass" id="pass" required>
             </div>
-            <input type="hidden" name="nonce" value="<?php echo $nonce?>"/>
             <button type="submit" class="btn btn-primary" id="login" name="login">Sign in</button>
             <button type="button" class="btn btn-success" data-toggle="modal" data-target="#register">Sign up</button>
     </form>

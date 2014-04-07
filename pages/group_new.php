@@ -42,6 +42,9 @@ if(isset($_POST['submit_group']) && $_POST['submit_group'] && isset($_SESSION['g
     require_once 'pages/group_current.php';
 
 if(isset($_POST['submit_group']) && $_POST['submit_group'])
+{
     creategroup();
+    header('Location: '.$_SERVER['PHP_SELF'].'?show=groupcurrent');
+}
 
 ?>

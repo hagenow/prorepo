@@ -111,8 +111,8 @@ function initgroup($id)
 function addlog2group()
 {
     if(in_array($_POST['logID'], $_SESSION['grplogs']) && !isset($_SESSION['updateflag']) || 
-        in_array($_POST['logID'], $_SESSION['grpoldlogs']) && isset($_SESSION['updateflag']) ||
-        in_array($_POST['logID'], $_SESSION['grplogs']) && isset($_SESSION['updateflag']) )
+        in_array($_POST['logID'], $_SESSION['grplogs']) && isset($_SESSION['updateflag'])|| 
+        in_array($_POST['logID'], $_SESSION['grpoldlogs']) && isset($_SESSION['updateflag']))
     {
         echo "Already added!";
     }
@@ -132,7 +132,7 @@ function addmodel2group()
 {
     if(in_array($_POST['modelID'], $_SESSION['grpmodels']) && !isset($_SESSION['updateflag']) || 
         in_array($_POST['modelID'], $_SESSION['grpmodels']) && isset($_SESSION['updateflag']) || 
-        in_array($_POST['modelID'], $_SESSION['grpoldmodels']) && isset($_SESSION['updateflag']))
+        isset($_SESSION['grpoldmodels']) && in_array($_POST['modelID'], $_SESSION['grpoldmodels']) && isset($_SESSION['updateflag'])) 
     {
         echo "Already added!";
     }

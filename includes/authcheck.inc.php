@@ -1,4 +1,6 @@
 <?php 
+require_once 'config.inc.php';
+
 ob_start(); 
 
 if(!isset($_SESSION)){

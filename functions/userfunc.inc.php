@@ -319,9 +319,6 @@ function updateuser($user)
         // user-agent changes the resolution that is sending to the srv.
         $_SESSION['userAgent'] = $_SERVER['HTTP_USER_AGENT'];
         $_SESSION['IPaddress'] = $_SERVER['REMOTE_ADDR'];
-        // Session lifetime, look in config.inc.php for value, default is 1800 
-        // seconds
-        $_SESSION['LIFETIME'] = time() + LIFETIME;
         $conid->close();
         return true;
     }

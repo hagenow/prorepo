@@ -375,6 +375,29 @@ function getversions($type,$typeid)
     $conid->close();
 }
 
+/* get latest versions of a model or log */
+function getlatestversions($type,$typeid)
+{
+    $typeid = cleaninput($typeid);
+    $conid = db_connect();
+
+    $sql = "SELECT DISTINCT(timestamp)
+            FROM ".TBL_PREFIX."files
+            WHERE type = '$type' AND foreignID = '$typeid'
+            ORDER BY timestamp
+            DESC
+            LIMIT 1";
+
+    if( $res = $conid->query($sql) ){
+
+        while( $row = $res->fetch_assoc() )
+        {
+            return $row['timestamp'];
+        }
+    }
+    $conid->close();
+}
+
 /* returns files by given type (model/log), the foreignID als typeid, the 
     * fileextension for filtering and the upper bound as date, if no date is 
     * given, then all files will be displayed

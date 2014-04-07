@@ -22,10 +22,7 @@ define ('TMP', 'tmp/');
 define ('PATHINFO', '/prorepo/');
 
 /** own debug check */
-define ('DEBUG', TRUE);
-
-/** session lifetime */
-define ('LIFETIME', 1800);
+define ('DEBUG', FALSE);
 
 /** own debug check */
 define ('ADMINMAIL', 'hagenowh@informatik.uni-freiburg.de');

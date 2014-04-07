@@ -19,7 +19,7 @@ elseif(isset($_POST['timestamp']))
 }
 else
 {
-    $date = date("Y-m-d H:i:s");
+    $date = getlatestversions('model',$modelid);
 }
 
 

@@ -13,5 +13,9 @@ if($_SESSION['userAgent'] !== $_SERVER['HTTP_USER_AGENT'] ||
     $_SESSION['IPaddress'] !== $_SERVER['REMOTE_ADDR'] )
      resetsession();
 
+if($_SESSION['LIFETIME'] > time())
+    $_SESSION['LIFETIME'] + LIFETIME;
+else
+    resetsession();
 
 ?>

@@ -24,6 +24,8 @@ define ('PATHINFO', '/prorepo/');
 /** own debug check */
 define ('DEBUG', TRUE);
 
+/** session lifetime */
+define ('LIFETIME', 1800);
 
 /** own debug check */
 define ('ADMINMAIL', 'hagenowh@informatik.uni-freiburg.de');
@@ -46,21 +48,6 @@ define ('PNMLReport' , 'schemas/pnmlValidationReport.html');
  * */
 define ('STRG_DEST', 'local');
 define ('STRG_PATH', 'repository');
-
-/** Example for remote storage:
- *
- * PRECONDITION: a function/class must exists, that can handle this
- * look at http://us2.php.net/manual/de/function.ssh2-sftp.php for sftp/ssh2 
- * connection or http://php.net/manual/de/ref.ftp.php for ftp functions.
- *
- * define ('STRG_DEST', 'remote');
- * define ('STRG_PROT', 'sftp');
- * define ('STRG_HOST', 'IP_ADDRESS');
- * define ('STRG_PORT', 'PORT as Number, eg. 22');
- * define ('STRG_USER', 'SSH-USER');
- * define ('STRG_PASS', 'SSH-PASS');
- * define ('STRG_PATH', 'repository');
- * */
 
 /** PHP Settings */
 /** suppress errors with 0, else -1 will display all errors in the apache log 

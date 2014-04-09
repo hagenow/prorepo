@@ -1,4 +1,5 @@
 <?php
+// https://docs.djangoproject.com/en/dev/ref/contrib/csrf/
 require_once 'functions/csrf-magic.php';
 ob_start();
 if(!isset($_SESSION)){
@@ -14,7 +15,6 @@ $error = '';
 require_once 'config.inc.php';
 require_once 'functions.inc.php';
 header('X-Frame-Options: DENY');
-// https://docs.djangoproject.com/en/dev/ref/contrib/csrf/
 ?>
 
 <!DOCTYPE html>

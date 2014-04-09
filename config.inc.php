@@ -1,16 +1,16 @@
 <?php
 /**  MySQL settings */
 /** Name of the database */
-define('DB_NAME', 'prorepo');
+define('DB_NAME', 'processrepo');
 
 /** database user */
-define('DB_USER', 'prorepo');
+define('DB_USER', 'tmrepo');
 
 /** database password*/
-define('DB_PASSWORD', 'jeB6KVM6Vm8LseMS');
+define('DB_PASSWORD', 'bls8LausG');
 
 /** location of mysql-service */
-define('DB_HOST', 'localhost');
+define('DB_HOST', 'mysql.ruf.uni-freiburg.de');
 
 /** prefix of tables */
 define ('TBL_PREFIX', 'repo_');
@@ -19,13 +19,13 @@ define ('TBL_PREFIX', 'repo_');
 define ('TMP', 'tmp/');
 
 /** path ( folder ) */
-define ('PATHINFO', '/prorepo/');
+define ('PATHINFO', '/');
 
 /** own debug check */
 define ('DEBUG', FALSE);
 
 /** own debug check */
-define ('ADMINMAIL', 'hagenowh@informatik.uni-freiburg.de');
+define ('ADMINMAIL', 'stocker@iig.uni-freiburg.de');
 
 /** define max. size of an uploaded file 
  * here 1024*100000 are 100 Megabytes. 

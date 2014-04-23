@@ -1,5 +1,4 @@
 <?php
-// https://docs.djangoproject.com/en/dev/ref/contrib/csrf/
 require_once 'functions/csrf-magic.php';
 ob_start();
 if(!isset($_SESSION)){
@@ -15,6 +14,7 @@ $error = '';
 require_once 'config.inc.php';
 require_once 'functions.inc.php';
 header('X-Frame-Options: DENY');
+// https://docs.djangoproject.com/en/dev/ref/contrib/csrf/
 ?>
 
 <!DOCTYPE html>
@@ -24,7 +24,7 @@ header('X-Frame-Options: DENY');
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="A simple process repository for storing business process models and business process logs">
-    <meta name="author" content="hhagenow">
+    <meta name="author" content=" Hendrik Hagenow">
 
     <title>ProRepo - Process Repository</title>
 

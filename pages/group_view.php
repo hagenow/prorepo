@@ -73,7 +73,7 @@ $state = $state^1;
             </tr>
         </thead>
         <tbody>
-            <?php linkedtypes($_GET['groupID'],"model",$groupvalues['creator']); ?>
+            <?php linkedtypes($_GET['groupID'],"model",$groupvalues['creator'],$groupvalues['state']); ?>
         </tbody>
     </table>
 </div>
@@ -91,7 +91,7 @@ $state = $state^1;
             </tr>
         </thead>
         <tbody>
-            <?php linkedtypes($_GET['groupID'],"log",$groupvalues['creator']); ?>
+            <?php linkedtypes($_GET['groupID'],"log",$groupvalues['creator'],$groupvalues['state']); ?>
         </tbody>
     </table>
 </div>

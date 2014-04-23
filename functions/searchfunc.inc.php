@@ -32,7 +32,7 @@ function searchmodel($keyword)
                 $creator = $row['creator'];
 
                 $html .= "<tr>";
-                $html .= "<td><a href=\"". $_SERVER['PHP_SELF']."?show=adminuser&action=view&userID=".$id."\">".$name."</a></td>";
+                $html .= "<td><a href=\"". $_SERVER['PHP_SELF']."?show=modview&modelID=".$id."\">".$name."</a></td>";
                 $html .= "<td class=\"text-center\">".$timestamp."</td>";
                 $html .= "<td class=\"text-center\"><a href=\"".$_SERVER['PHP_SELF']."?show=usershow&name=".$row['creator']."\">".$row['creator']."</td>";
                 $html .= "</tr>";
@@ -84,7 +84,7 @@ function searchlog($keyword)
                 $creator = $row['creator'];
 
                 $html .= "<tr>";
-                $html .= "<td><a href=\"". $_SERVER['PHP_SELF']."?show=adminuser&action=view&userID=".$id."\">".$name."</a></td>";
+                $html .= "<td><a href=\"". $_SERVER['PHP_SELF']."?show=logview&logID=".$id."\">".$name."</a></td>";
                 $html .= "<td class=\"text-center\">".$timestamp."</td>";
                 $html .= "<td class=\"text-center\"><a href=\"".$_SERVER['PHP_SELF']."?show=usershow&name=".$row['creator']."\">".$row['creator']."</td>";
                 $html .= "</tr>";
@@ -139,7 +139,7 @@ function searchgroup($keyword)
                 $tags = $row['tags'];
 
                 $html .= "<tr>";
-                $html .= "<td><a href=\"". $_SERVER['PHP_SELF']."?show=adminuser&action=view&userID=".$id."\">".$name."</a></td>";
+                $html .= "<td><a href=\"". $_SERVER['PHP_SELF']."?show=groupview&groupID=".$id."\">".$name."</a></td>";
                 $html .= "<td class=\"text-center\">".$timestamp."</td>";
                 $html .= "<td class=\"text-center\">".$tags."</td>";
                 $html .= "<td class=\"text-center\"><a href=\"".$_SERVER['PHP_SELF']."?show=usershow&name=".$row['creator']."\">".$row['creator']."</td>";
@@ -196,8 +196,8 @@ function searchuser($keyword)
                 $affiliation = $row['affiliation'];
 
                 $html .= "<tr>";
-                $html .= "<td><a href=\"". $_SERVER['PHP_SELF']."?show=adminuser&action=view&userID=".$id."\">".$login."</a></td>";
-                $html .= "<td class=\"text-center\"><a href=\"". $_SERVER['PHP_SELF']."?show=adminuser&action=view&userID=".$id."\">".$firstname." ".$lastname."</a></td>";
+                $html .= "<td><a href=\"". $_SERVER['PHP_SELF']."?show=usershow&name=".$login."\">".$login."</a></td>";
+                $html .= "<td class=\"text-center\"><a href=\"". $_SERVER['PHP_SELF']."?show=usershow&name=".$login."\">".$firstname." ".$lastname."</a></td>";
                 $html .= "<td class=\"text-center\">".$email."</td>";
                 $html .= "<td class=\"text-center\">".$affiliation."</td>";
                 $html .= "</tr>";

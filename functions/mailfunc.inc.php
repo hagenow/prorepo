@@ -55,14 +55,14 @@ function sendmail($email,$login,$subject,$mailbody)
     checkInjection();
 
     // Mail Header
-    $mailheader  = "From: ProRepo Webserver<noreply@" .$_SERVER['SERVER_NAME']. ">\r\n";
+    /*$mailheader  = "From: ProRepo Webserver<noreply@" .$_SERVER['SERVER_NAME']. ">\r\n";
     $mailheader .= "Reply-To: " .$login. "<" .$email. ">\r\n";
-    $mailheader .= "Return-Path: noreply@" .$_SERVER['SERVER_NAME']. "\r\n";
+    $mailheader .= "Return-Path: noreply@" .$_SERVER['SERVER_NAME']. "\r\n";*/
     $mailheader .= "MIME-Version: 1.0\r\n";
     $mailheader .= "Content-Type: text/plain; charset=UTF-8\r\n";
     $mailheader .= "Content-Transfer-Encoding: 7bit\r\n";
-    $mailheader .= "Message-ID: <" .time(). " noreply@" .$_SERVER['SERVER_NAME']. ">\r\n";
-    $mailheader .= "X-Mailer: PHP v" .phpversion(). "\r\n\r\n";
+/*    $mailheader .= "Message-ID: <" .time(). " noreply@" .$_SERVER['SERVER_NAME']. ">\r\n";
+    $mailheader .= "X-Mailer: PHP v" .phpversion(). "\r\n\r\n";*/
 
     // send mail
     if (@mail( $email, $subject, $mailbody, $mailheader ))

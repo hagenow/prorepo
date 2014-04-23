@@ -338,7 +338,7 @@ function viewgroup($groupid)
         header( 'location: index.php?show=404' );
 }
 
-function linkedtypes($id,$type,$creator)
+function linkedtypes($id,$type,$creator,$state)
 {
     $id = cleaninput($id);
     $conid = db_connect();
@@ -361,7 +361,7 @@ function linkedtypes($id,$type,$creator)
                 $html .= "<td><a href=\"".$_SERVER['PHP_SELF']."?show=modview&modelID=".$values['id']."&timestamp=".date("YmdHis", strtotime($row['timestamp']))."\">".$values['name']."</a></td>";
                 $html .= "<td class=\"text-center\">".date("d.m.Y - H:i:s", strtotime($row['timestamp']))."</td>";
                 $html .= "<td class=\"text-center\">";
-                if(isset($_SESSION['angemeldet']) && isset($_SESSION['user']) && $_SESSION['user'] == $creator || isadmin())
+                if(isset($_SESSION['angemeldet']) && isset($_SESSION['user']) && $_SESSION['user'] == $creator && $state == 1 || isadmin())
                 {
                     $html .= "<button type=\"submit\" class=\"btn btn-default btn-xs\" name=\"removegroupmodel\" value=\"".$values['id']."|".$id."\">";
                     $html .= "<span class=\"glyphicon glyphicon-minus\"></span> Remove from group</button>";
@@ -381,7 +381,7 @@ function linkedtypes($id,$type,$creator)
                 $html .= "<td><a href=\"".$_SERVER['PHP_SELF']."?show=logview&logID=".$values['id']."&timestamp=".date("YmdHis", strtotime($row['timestamp']))."\">".$values['name']."</a></td>";
                 $html .= "<td class=\"text-center\">".date("d.m.Y - H:i:s", strtotime($row['timestamp']))."</td>";
                 $html .= "<td class=\"text-center\">";
-                if(isset($_SESSION['angemeldet']) && isset($_SESSION['user']) && $_SESSION['user'] == $creator || isadmin())
+                if(isset($_SESSION['angemeldet']) && isset($_SESSION['user']) && $_SESSION['user'] == $creator && $state == 1 || isadmin())
                 {
                     $html .= "<button type=\"submit\" class=\"btn btn-default btn-xs\" name=\"removegrouplog\" value=\"".$values['id']."|".$id."\">";
                     $html .= "<span class=\"glyphicon glyphicon-minus\"></span> Remove from group</button>";
@@ -491,9 +491,9 @@ function createzip($id)
     foreach($tmp as $t)
     {
         $parts = explode("|",$t);
-        $typeid = cleaninput($parts[0]);
-        $date = cleaninput($parts[1]);
-        $type = cleaninput($parts[2]);
+        $typeid = $parts[0];
+        $date = $parts[1];
+        $type = $parts[2];
         $sqlfiles = "SELECT DISTINCT(path)
                      FROM ".TBL_PREFIX."files
                      WHERE type = '$type' AND foreignID = '$typeid' AND timestamp <= '$date'

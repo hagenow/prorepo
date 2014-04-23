@@ -1,16 +1,16 @@
 <?php
 /**  MySQL settings */
 /** Name of the database */
-define('DB_NAME', 'processrepo');
+define('DB_NAME', 'prorepo');
 
 /** database user */
-define('DB_USER', 'tmrepo');
+define('DB_USER', 'prorepo');
 
 /** database password*/
-define('DB_PASSWORD', 'bls8LausG');
+define('DB_PASSWORD', 'wAnUvpCSWv44DF4r');
 
 /** location of mysql-service */
-define('DB_HOST', 'mysql.ruf.uni-freiburg.de');
+define('DB_HOST', 'localhost');
 
 /** prefix of tables */
 define ('TBL_PREFIX', 'repo_');
@@ -19,7 +19,7 @@ define ('TBL_PREFIX', 'repo_');
 define ('TMP', 'tmp/');
 
 /** path ( folder ) */
-define ('PATHINFO', '/');
+define ('PATHINFO', '/prorepo/');
 
 /** own debug check */
 define ('DEBUG', FALSE);

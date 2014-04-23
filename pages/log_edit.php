@@ -45,6 +45,13 @@ $logvalues = viewlog($_GET['logID']);
 $logvalues['catName'] = getcatname($logvalues['catID']);
 $logvalues['modelName'] = getmodname($logvalues['modelID']);
 
+        if(DEBUG)
+        {
+            echo "<pre>" .print_r( $_SESSION, true ). "</pre>";
+            echo "<pre>" .print_r( $_POST, true ). "</pre>";
+            echo "<pre>" .print_r( $_FILES, true ). "</pre>";
+        }
+
 /** Wurde das Formular abgeschickt? */
 if(!isset($_POST['submit_log']) || !$_POST['submit_log']) { 
 ?>
@@ -165,13 +172,6 @@ else {
         unset($_SESSION['modelid']);
         unset($_SESSION['modelname']);
         unset($_SESSION['log_semaphore']);
-
-        if(DEBUG)
-        {
-            echo "<pre>" .print_r( $_SESSION, true ). "</pre>";
-            echo "<pre>" .print_r( $_POST, true ). "</pre>";
-            echo "<pre>" .print_r( $_FILES, true ). "</pre>";
-        }
 
         if(editlog($_POST['logid']))
         {

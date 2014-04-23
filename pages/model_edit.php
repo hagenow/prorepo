@@ -30,6 +30,13 @@ $modvalues = viewmodel($_GET['modelID']);
 $modvalues['catName'] = getcatname($modvalues['catID']);
 $catname = getcatname($modvalues['catID']);
 
+        if(DEBUG)
+        {
+            echo "<pre>" .print_r( $_SESSION, true ). "</pre>";
+            echo "<pre>" .print_r( $_POST, true ). "</pre>";
+            echo "<pre>" .print_r( $_FILES, true ). "</pre>";
+        }
+
 /** Wurde das Formular abgeschickt? */
 if(!isset($_POST['submit_model']) || !$_POST['submit_model']) { 
 ?>
@@ -121,12 +128,6 @@ else {
         unset($_SESSION['cname']);
         unset($_SESSION['mod_semaphore']);
 
-        if(DEBUG)
-        {
-            echo "<pre>" .print_r( $_SESSION, true ). "</pre>";
-            echo "<pre>" .print_r( $_POST, true ). "</pre>";
-            echo "<pre>" .print_r( $_FILES, true ). "</pre>";
-        }
 
         if(editmodel($_POST['modid']))
         {

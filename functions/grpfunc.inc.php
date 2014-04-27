@@ -574,6 +574,51 @@ function switchgrpstate($st)
 
 }
 
+// checks if a type (model or log) is already in a group
+function checkdependencies($typeid,$type)
+{
+    $typeid = cleaninput($typeid);
+    $conid = db_connect();
+
+    $sql = "SELECT ".$type."ID
+            FROM ".TBL_PREFIX.$type."groups
+            WHERE ".$type."ID = $typeid";
+
+    $res = $conid->prepare($sql);
+    $res->execute();
+    $res->store_result();
+
+    // if there is no dependency
+    if($res->affected_rows == 0)
+        return true;
+    else
+        return false;
+
+}
+
+function getlinkedtypeids($grpid,$type)
+{
+    $grpid = cleaninput($grpid);
+    $conid = db_connect();
+
+    $sql = "SELECT ".$type."ID,timestamp
+            FROM ".TBL_PREFIX.$type."groups
+            WHERE groupID = $grpid";
+
+    $values = array();
+
+    if( $res = $conid->query($sql) )
+    {
+
+        while( $row = $res->fetch_assoc() )
+        {
+            array_push($values, $row);
+        }
+    }
+    return $values;
+}
+
+
 // delete group
 function removegroup($grpid)
 {
@@ -590,10 +635,22 @@ function removegroup($grpid)
     $sqllog = "DELETE FROM ".TBL_PREFIX."loggroups
             WHERE groupID = '$grpid'";
 
-    // check if this is the last group, in which these models or logs included
+    // get linked models and logs in arrays
+    $models = getlinkedtypeids($grpid,'model'); 
+    $logs = getlinkedtypeids($grpid,'log'); 
+    
+    // check the linked typeids
     // if yes: free them, so the user can delete them
     // if not: keep them undeletable
-    // checkdependencies('log',$groupid);
+    foreach($models as $m)
+    {
+        if(checkdependencies($m,'model'))
+            echo "unused";
+    }
+    foreach($logs as $l)
+    {
+        checkdependencies($m,'log');
+    }
 
     if($res = $conid->prepare($sqlgrp))
     {

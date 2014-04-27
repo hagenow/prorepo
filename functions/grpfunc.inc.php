@@ -411,9 +411,7 @@ function deletefromgroup($type,$id)
 
     $res = $conid->query($sql);
 
-    echo $conid->error;
-    return ($res->affected_rows == 1) ? true : false;
-    $conid->close();
+    return ($conid->affected_rows == 1) ? true : false;
 }
 
 function editgroup($id)
@@ -584,12 +582,50 @@ function checkdependencies($typeid,$type)
             FROM ".TBL_PREFIX.$type."groups
             WHERE ".$type."ID = $typeid";
 
-    $res = $conid->prepare($sql);
-    $res->execute();
-    $res->store_result();
+    $res = $conid->query($sql);
 
     // if there is no dependency
-    if($res->affected_rows == 0)
+    if($conid->affected_rows == 0)
+        return true;
+    else
+        return false;
+
+}
+
+// checks if a type (model or log) is in another group
+function checkfiledependencies_desc($typeid,$type,$timestamp)
+{
+    $typeid = cleaninput($typeid);
+    $conid = db_connect();
+
+    $sql = "SELECT ".$type."ID
+            FROM ".TBL_PREFIX.$type."groups
+            WHERE ".$type."ID = $typeid AND timestamp < '".$timestamp."";
+
+    $res = $conid->query($sql);
+
+    // if there is no dependency
+    if($conid->affected_rows == 0)
+        return true;
+    else
+        return false;
+
+}
+
+// checks if a type (model or log) is in another group
+function checkfiledependencies_equal($typeid,$type,$timestamp)
+{
+    $typeid = cleaninput($typeid);
+    $conid = db_connect();
+
+    $sql = "SELECT ".$type."ID
+            FROM ".TBL_PREFIX.$type."groups
+            WHERE ".$type."ID = $typeid AND timestamp = '".$timestamp."";
+
+    $res = $conid->query($sql);
+
+    // if there is no dependency
+    if($conid->affected_rows == 0)
         return true;
     else
         return false;
@@ -618,6 +654,51 @@ function getlinkedtypeids($grpid,$type)
     return $values;
 }
 
+// make a type deletable, if there are no dependencies
+function makedeletable($typeid,$type)
+{
+    $conid = db_connect();
+    // update files that they can be deleted furthermore!
+    $sqlfiles = "UPDATE ".TBL_PREFIX."files
+                    SET deletable = 1
+                    WHERE type = '".$type."' AND foreignID = ".$typeid."";
+    
+    // update type entry, that it can be deleted!
+    $sqlentry = "UPDATE ".TBL_PREFIX.$type."s
+                    SET deletable = 1
+                    WHERE ".$type."ID = ".$typeid."";
+
+    $res1 = $conid->query($sqlfiles);
+    $res2 = $conid->query($sqlentry);
+}
+
+// only make files deletable, if there are no dependencies
+function makedeletablefiles_desc($typeid,$timestamp,$type)
+{
+    $conid = db_connect();
+    // update files that they can be deleted furthermore!
+    $sqlfiles = "UPDATE ".TBL_PREFIX."files
+                    SET deletable = 1
+                    WHERE type = '".$type."' AND foreignID = ".$typeid." AND timestamp < '".$timestamp."'";
+    
+    $res1 = $conid->query($sqlfiles);
+
+    $res1->close();
+}
+
+// only make files deletable, if there are no dependencies
+function makedeletablefiles_equal($typeid,$timestamp,$type)
+{
+    $conid = db_connect();
+    // update files that they can be deleted furthermore!
+    $sqlfiles = "UPDATE ".TBL_PREFIX."files
+                    SET deletable = 1
+                    WHERE type = '".$type."' AND foreignID = ".$typeid." AND timestamp = '".$timestamp."'";
+    
+    $res1 = $conid->query($sqlfiles);
+
+    $res1->close();
+}
 
 // delete group
 function removegroup($grpid)
@@ -638,19 +719,6 @@ function removegroup($grpid)
     // get linked models and logs in arrays
     $models = getlinkedtypeids($grpid,'model'); 
     $logs = getlinkedtypeids($grpid,'log'); 
-    
-    // check the linked typeids
-    // if yes: free them, so the user can delete them
-    // if not: keep them undeletable
-    foreach($models as $m)
-    {
-        if(checkdependencies($m,'model'))
-            echo "unused";
-    }
-    foreach($logs as $l)
-    {
-        checkdependencies($m,'log');
-    }
 
     if($res = $conid->prepare($sqlgrp))
     {
@@ -660,13 +728,54 @@ function removegroup($grpid)
             $res3->execute();
         $res->execute();
         $conid->close();
-        return true;
     }
     else
     {
         echo $conid->error;
         return false;
     }
+   
+    
+    // check the linked typeids
+    // if yes: free them, so the user can delete them
+    // if not: keep them undeletable
+    foreach($models as $m)
+    {
+        // check if a model has group dependencies
+        if(checkdependencies($m['modelID'],'model'))
+            makedeletable($m['modelID'],'model');
+        else
+        {
+            // check if a model has group dependencies with given timestamp 
+            // exactly
+            if(checkfiledependencies_equal($m['modelID'],$m['timestamp'],'model'))
+                makedeletablefiles_equal($m['modelID'],$m['timestamp'],'model');
+
+            // check if a model has group dependencies with given timestamp 
+            // descending
+            if(checkfiledependencies_desc($m['modelID'],$m['timestamp'],'model'))
+                makedeletablefiles_desc($m['modelID'],$m['timestamp'],'model');
+        }
+    }
+    foreach($logs as $l)
+    {
+        // check if a log has group dependencies
+        if(checkdependencies($l['logID'],'log'))
+            makedeletable($l['logID'],'log');
+        else 
+        {
+            // check if a log has group dependencies with given timestamp 
+            // exactly
+            if(checkfiledependencies_equal($l['logID'],$l['timestamp'],'log'))
+                makedeletablefiles_equal($l['logID'],$l['timestamp'],'log');
+
+            // check if a log has group dependencies with given timestamp 
+            // descending
+            if(checkfiledependencies_desc($l['logID'],$l['timestamp'],'log'))
+                makedeletablefiles_desc($l['logID'],$l['timestamp'],'log');
+        }
+    }
+    return true;
     $conid->close();
 }
 

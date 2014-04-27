@@ -81,6 +81,7 @@ else
   </div>
 </div>
 
+<?php if(!checkemptiness("log", $logid, "mxml", $date)) : ?>
 <div class="panel panel-info">
   <div class="panel-heading">
   <h3 class="panel-title">MXML</h3>
@@ -102,7 +103,9 @@ else
         </tbody>
     </table>
 </div>
+<?php endif; ?>
 
+<?php if(!checkemptiness("log", $logid, "xes", $date)) : ?>
 <div class="panel panel-info">
   <div class="panel-heading">
   <h3 class="panel-title">XES</h3>
@@ -124,7 +127,9 @@ else
         </tbody>
     </table>
 </div>
+<?php endif; ?>
 
+<?php if(!checkemptiness("log", $logid, "csv", $date)) : ?>
 <div class="panel panel-info">
 <div class="panel-heading">
 <h3 class="panel-title">CSV</h3>
@@ -145,7 +150,9 @@ else
     </tbody>
 </table>
 </div>
+<?php endif; ?>
 
+<?php if(!checkemptiness("log", $logid, "txt", $date)) : ?>
 <div class="panel panel-info">
 <div class="panel-heading">
 <h3 class="panel-title">TXT</h3>
@@ -166,3 +173,4 @@ else
     </tbody>
 </table>
 </div>
+<?php endif; ?>

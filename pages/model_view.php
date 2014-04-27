@@ -85,6 +85,7 @@ else
   </div>
 </div>
 
+<?php if(!checkemptiness("model", $modelid, "pnml", $date)) : ?>
 <div class="panel panel-success">
   <div class="panel-heading">
   <h3 class="panel-title">PNML</h3>
@@ -106,7 +107,9 @@ else
         </tbody>
     </table>
 </div>
+<?php endif; ?>
 
+<?php if(!checkemptiness("model", $modelid, "tpn", $date)) : ?>
 <div class="panel panel-success">
   <div class="panel-heading">
   <h3 class="panel-title">TPN</h3>
@@ -127,7 +130,9 @@ else
         </tbody>
     </table>
 </div>
+<?php endif; ?>
 
+<?php if(!checkemptiness("model", $modelid, "xml", $date)) : ?>
 <div class="panel panel-success">
   <div class="panel-heading">
   <h3 class="panel-title">XML</h3>
@@ -149,7 +154,9 @@ else
         </tbody>
     </table>
 </div>
+<?php endif; ?>
 
+<?php if(!checkemptiness("model", $modelid, "pdf", $date)) : ?>
 <div class="panel panel-success">
   <div class="panel-heading">
   <h3 class="panel-title">PDF</h3>
@@ -170,6 +177,9 @@ else
         </tbody>
     </table>
 </div>
+<?php endif; ?>
+
+<?php if(!checkemptiness("model", $modelid, "png", $date)) : ?>
 <div class="panel panel-success">
   <div class="panel-heading">
   <h3 class="panel-title">PNG</h3>
@@ -190,6 +200,9 @@ else
         </tbody>
     </table>
 </div>
+<?php endif; ?>
+
+<?php if(!checkemptiness("model", $modelid, "jpg", $date)) : ?>
 <div class="panel panel-success">
   <div class="panel-heading">
   <h3 class="panel-title">JPG</h3>
@@ -210,6 +223,9 @@ else
         </tbody>
     </table>
 </div>
+<?php endif; ?>
+
+<?php if(!checkemptiness("model", $modelid, "svg", $date)) : ?>
 <div class="panel panel-success">
   <div class="panel-heading">
   <h3 class="panel-title">SVG</h3>
@@ -230,6 +246,9 @@ else
         </tbody>
     </table>
 </div>
+<?php endif; ?>
+
+<?php if(!checkemptiness("model", $modelid, "eps", $date)) : ?>
 <div class="panel panel-success">
   <div class="panel-heading">
   <h3 class="panel-title">EPS</h3>
@@ -250,6 +269,8 @@ else
         </tbody>
     </table>
 </div>
+<?php endif; ?>
+
 <hr>
 <div class="panel panel-info">
   <div class="panel-heading">

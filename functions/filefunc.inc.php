@@ -410,6 +410,27 @@ function getlatestversions($type,$typeid)
     $conid->close();
 }
 
+// if no type is uploaded, then return true!
+function checkemptiness($type,$typeid,$ext,$date)
+{
+    $typeid = cleaninput($typeid);
+    $conid = db_connect();
+
+    $sql = "SELECT *
+            FROM ".TBL_PREFIX."files
+            WHERE type = '$type' AND foreignID = '$typeid' AND ext = '$ext' AND timestamp <= '$date'
+            ORDER BY timestamp
+            DESC";
+
+    $res = $conid->query($sql);
+
+    if($conid->affected_rows == 0)
+        return true;
+    else
+        return false;
+
+}
+
 /* returns files by given type (model/log), the foreignID als typeid, the 
     * fileextension for filtering and the upper bound as date, if no date is 
     * given, then all files will be displayed

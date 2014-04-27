@@ -22,15 +22,14 @@
 <?php 
 if(isset($_POST['submit_cat']) && $_POST['submit_cat'])
 {
-    if(DEBUG) echo "<pre>" .print_r( $_POST, true ). "</pre>";
+    echo "<pre>" .print_r( $_POST, true ). "</pre>";
 
     /** write function that returns user-id or read user-id from session */
 
     if (isset( $_POST['catname'] ))
     {
         $catname = cleancatname();
-        if(createcat($catname)) echo "Category created!";
-        else echo "Category is already there, nothing to create!";
+        createcat($catname);
     }
     else
     {

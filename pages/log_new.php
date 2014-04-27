@@ -114,7 +114,7 @@ if(!isset($_POST['submit_log']) || !$_POST['submit_log']) {
 
 <!-- File Button --> 
 <div class="form-group">
-  <label class="control-label col-sm-3" for="file_xes">Choose files<br><h6>(.xes,.mxml,.csv,.txt)</h6></label>
+  <label class="control-label col-sm-3" for="file_xes">Choose files<br><h6>(Accepted file formats: .xes, .mxml, .csv, .txt)</h6></label>
   <div class="col-sm-6">
     <input id="files" name="files[]" class="input-file" multiple="multiple" type="file" accept=".xes,.mxml,.csv,.txt">
   </div>
@@ -184,6 +184,8 @@ else {
         }
 
         uploadfiles_new();
+	echo "<br>---------<br>";
+	echo "Created log successfully. You can find it in your menu at <b>my logs</b>!";
     }
 }
 ?>

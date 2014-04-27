@@ -21,7 +21,7 @@
   <div class="form-group">
     <label for="html" class="col-sm-2 control-label">Plain HTML</label>
     <div class="col-sm-10">
-    <textarea id="html" name="html" class="form-control" rows="20"><?php echo htmlentities($file); ?></textarea>
+    <textarea id="html" name="html" class="form-control" rows="20"><?php echo $file; ?></textarea>
     </div>
   </div>
   <div class="form-group">
@@ -55,7 +55,7 @@
   <div class="form-group">
     <label for="html" class="col-sm-2 control-label">Plain HTML</label>
     <div class="col-sm-10">
-    <textarea id="html" name="html" class="form-control" rows="20"><?php echo htmlentities($file); ?></textarea>
+    <textarea id="html" name="html" class="form-control" rows="20"><?php echo $file; ?></textarea>
     </div>
   </div>
   <div class="form-group">
@@ -89,7 +89,7 @@
   <div class="form-group">
     <label for="html" class="col-sm-2 control-label">Plain HTML</label>
     <div class="col-sm-10">
-    <textarea id="html" name="html" class="form-control" rows="20"><?php echo htmlentities($file); ?></textarea>
+    <textarea id="html" name="html" class="form-control" rows="20"><?php echo $file; ?></textarea>
     </div>
   </div>
   <div class="form-group">

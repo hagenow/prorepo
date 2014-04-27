@@ -65,7 +65,15 @@ else
     <div class="col-xs-5">
         <form method="post" action="<?php echo $_SERVER['PHP_SELF']."?show=logview&logID=".$logid; ?>" name="timestampchooser" id="timestampchooser">
             <select name="timestamp" onchange="this.form.submit()" class="form-control">
-                <option></option>
+	    <?php
+		if(isset($_POST['timestamp']))
+		{
+			echo "<option>".$_POST['timestamp']."</option>";
+			echo "<optgroup disabled=\"disabled\">";
+			echo "<option>-------------------</option>";
+			echo "</optgroup>";
+		}
+	    ?>
                 <?php getversions('log',$logid); ?>
             </select>
         </form>

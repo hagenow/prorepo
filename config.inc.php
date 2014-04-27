@@ -22,15 +22,15 @@ define ('TMP', 'tmp/');
 define ('PATHINFO', '/prorepo/');
 
 /** own debug check */
-define ('DEBUG', FALSE);
+define ('DEBUG', TRUE);
 
 /** own debug check */
-define ('ADMINMAIL', 'stocker@iig.uni-freiburg.de');
+define ('ADMINMAIL', 'hagenowh@tf.uni-freiburg.de');
 
 /** define max. size of an uploaded file 
- * here 1024*100000 are 100 Megabytes. 
+ * here 2GiB
  * The value have to be in bytes */
-define ('FILESIZE', '102400000');
+define ('FILESIZE', '2048000000');
 
 /** Schemas for XML checking */
 define ('XESSchema' , 'schemas/xes.xsd');

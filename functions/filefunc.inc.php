@@ -55,7 +55,15 @@ function uploadfiles_new()
     /** set creator to current logged in user */
     $creator = $_SESSION['user'];
 
-    
+    /** create the pathname for the type*/ 
+    $typepath = STRG_PATH."/".$type."/".$id."_".$name."/";
+
+    if(!file_exists($typepath) && !is_dir($typepath))
+    {
+        mkdir($typepath, 0755, true);
+    }
+    updatetypepath($type,$id,$typepath);
+
     /** if the form is sending input data, then execute the following if-stmt */
     if(isset($_POST) && $_SERVER['REQUEST_METHOD'] == "POST")
     {
@@ -72,12 +80,12 @@ function uploadfiles_new()
                 /** if the file is to large, then go to the next file */
                 if ($_FILES['files']['size'][$f] > $max_file_size) 
                 {
-    	            $message[] = "$filename is too large!.";
+    	            echo "$filename is too large!.";
     	            continue; // Skip large files
     	        }
                 elseif( ! in_array(pathinfo($filename, PATHINFO_EXTENSION), $valid_formats) )
                 {
-    				$message[] = "$filename is not a valid format";
+    				echo "$filename is not a valid format<br>";
     				continue; // Skip invalid file formats
     			}
                 else // No error found! Move uploaded files 
@@ -101,6 +109,11 @@ function uploadfiles_new()
 
                     /** create the pathname for the type*/ 
                     $typepath = STRG_PATH."/".$type."/".$id."_".$name."/";
+
+                    if(!file_exists($typepath) && !is_dir($typepath))
+                    {
+                        mkdir($typepath, 0755, true);
+                    }
 
                     if(!file_exists($filepath) && !is_dir($filepath))
                     {
@@ -136,7 +149,6 @@ function uploadfiles_new()
                     if($res = $conid->prepare($sql)){
                         $res->execute();
                         $res->store_result();
-                        updatetypepath($type,$id,$typepath);
                     }
                     else
                     {
@@ -640,7 +652,9 @@ function batchimport_step1($result,$targetdir)
             $filename = $path_parts['basename'];
             $extension = $path_parts['extension'];
             $size = filesize($res);
-            $mimetype = shell_exec("file -b --mime-type $res");
+	    // escape path to prevent errors with blanks
+	    $restmp = escapeshellarg($res);
+            $mimetype = shell_exec("file -b --mime-type $restmp");
 
 
             array_push($filenames, $filename);
@@ -797,7 +811,7 @@ function batchimport_step2()
 
                 /** create the pathname for the type*/ 
                 $typepath = STRG_PATH."/log/".$logval['id']."_".$name."/";
-
+		
                 $logs_assoc[$name] = $logval; 
 
                 array_push($newlogs,$name);

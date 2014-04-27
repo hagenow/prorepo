@@ -52,7 +52,7 @@ if(!isset($_POST['submit_model']) || !$_POST['submit_model']) {
     
     <!-- File Button -->
     <div class="form-group">
-      <label class="control-label col-sm-3" for="file_xes">Choose files<br><h6>(.pnml,.png,.jpg,.pdf,.eps,.svg,.xml,.tpn)</h6></label>
+      <label class="control-label col-sm-3" for="file_xes">Choose files<br><h6>(Accepted file formats: .pnml,.png,.jpg,.pdf,.eps,.svg,.xml,.tpn)</h6></label>
       <div class="col-sm-6">
         <input id="files" name="files[]" class="input-file" multiple="multiple" type="file" accept=".pnml,.png,.jpg,.pdf,.eps,.svg,.xml,.tpn">
       </div>

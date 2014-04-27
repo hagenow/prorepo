@@ -21,7 +21,7 @@ $logvalues = viewlog($_GET['logID']);
 $logvalues['catName'] = getcatname($logvalues['catID']);
 $catname = getcatname($logvalues['catID']);
 
-            echo "<pre>" .print_r( $logvalues, true ). "</pre>";
+if(DEBUG) echo "<pre>" .print_r( $logvalues, true ). "</pre>";
 
 /* Wurde das Formular abgeschickt? */
 if(!isset($_POST['submit_log']) || !$_POST['submit_log']) { 

@@ -22,7 +22,7 @@ define ('TMP', 'tmp/');
 define ('PATHINFO', '/prorepo/');
 
 /** own debug check */
-define ('DEBUG', TRUE);
+define ('DEBUG', FALSE);
 
 /** own debug check */
 define ('ADMINMAIL', 'hagenowh@tf.uni-freiburg.de');

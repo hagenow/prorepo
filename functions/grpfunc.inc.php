@@ -580,6 +580,7 @@ function removegroup($grpid)
     $grpid = cleaninput($grpid);
     $conid = db_connect();
 
+
     $sqlgrp = "DELETE FROM ".TBL_PREFIX."groups
             WHERE groupID = '$grpid'";
 
@@ -588,6 +589,11 @@ function removegroup($grpid)
 
     $sqllog = "DELETE FROM ".TBL_PREFIX."loggroups
             WHERE groupID = '$grpid'";
+
+    // check if this is the last group, in which these models or logs included
+    // if yes: free them, so the user can delete them
+    // if not: keep them undeletable
+    // checkdependencies('log',$groupid);
 
     if($res = $conid->prepare($sqlgrp))
     {

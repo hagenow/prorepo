@@ -29,7 +29,7 @@ function uploadfiles_new()
     }
     else
     {
-        $message[] = "something wrent wrong with the type of the uploaded files!";
+        echo "something wrent wrong with the type of the uploaded files!";
     }    
 
     /** replace the given chars with their equivalents */
@@ -199,7 +199,7 @@ function uploadfiles_existing()
     }
     else
     {
-        $message[] = "something wrent wrong with the type of the uploaded files!";
+        echo "something wrent wrong with the type of the uploaded files!";
     }    
 
     /** replace the given chars with their equivalents */
@@ -241,12 +241,12 @@ function uploadfiles_existing()
                 /** if the file is to large, then go to the next file */
                 if ($_FILES['files']['size'][$f] > $max_file_size) 
                 {
-    	            $message[] = "$filename is too large!.";
+    	            echo "$filename is too large!.";
     	            continue; // Skip large files
     	        }
                 elseif( ! in_array(pathinfo($filename, PATHINFO_EXTENSION), $valid_formats) )
                 {
-    				$message[] = "$filename is not a valid format";
+    				echo "$filename is not a valid format";
     				continue; // Skip invalid file formats
     			}
                 else // No error found! Move uploaded files 

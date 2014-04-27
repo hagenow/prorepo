@@ -8,7 +8,9 @@ require_once 'functions.inc.php';
     <!-- Default panel contents -->
     <div class="panel-heading">
       <?php if(isadmin()) :?>
-        <button type="button" class="btn btn-default btn-sm pull-right" onclick="location.href='<?php echo $_SERVER['PHP_SELF']."?show=catnew"; ?>'">New category</button> 
+        <button type="button" class="btn btn-default btn-sm pull-right" onclick="location.href='<?php echo $_SERVER['PHP_SELF']."?show=catnew"; ?>'">New category</button>
+
+        <button type="button" class="btn btn-default btn-sm pull-right" onclick="location.href='<?php echo $_SERVER['PHP_SELF']."?show=catedit"; ?>'">Edit categories</button> 
       <?php endif; ?>
         <h3 class="panel-title"><h3>Category list</h3></h3>
     </div>

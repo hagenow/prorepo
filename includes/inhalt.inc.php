@@ -28,6 +28,7 @@ if(isset($_GET['show']))
 
         case "cat": require 'pages/cat_list.php'; break;
         case "catnew": require 'pages/cat_new.php'; break;
+        case "catedit": require 'pages/cat_edit.php'; break;
 
         case "modlist": require 'pages/model_list.php'; break;
         case "modview": require 'pages/model_view.php'; break;

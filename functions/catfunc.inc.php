@@ -29,6 +29,36 @@ function getcategories()
     $conid->close();
 }
 
+function adm_getcategories()
+{
+    $conid = db_connect();
+    $sql = "SELECT
+                catID, catName
+            FROM 
+                ".TBL_PREFIX."categories";
+
+    if( $res = $conid->query($sql) ){
+
+        while( $row = $res->fetch_assoc() )
+        {
+            $modelcnt = countmodels($row['catID']);
+            $logcnt = countlogs($row['catID']);
+
+            $html = "";
+            $html .= "<tr>";
+            $html .= "<td>".$row['catName']."</td>";
+            $html .= "<td class=\"text-center\"><a href=\"".$_SERVER['PHP_SELF']."?show=catedit&action=rename&catID=".$row['catID']."\"><span class=\"glyphicon glyphicon-wrench\"></span>
+                </a></td>";
+            $html .= "<td class=\"text-center\"><a href=\"".$_SERVER['PHP_SELF']."?show=catedit&action=delete&catID=".$row['catID']."\"><span class=\"glyphicon glyphicon-remove\"></a></td>";
+            $html .= "</tr>";
+
+            echo $html;
+        }
+    }
+    else
+    $conid->close();
+}
+
 function countmodels($catID)
 {
     $catID = cleaninput($catID);
@@ -151,6 +181,28 @@ function getcatname($catid)
     {
         echo $conid->error;
     }
+    $conid->close();
+}
+
+function renamecat($catid,$catname)
+{
+    $catid = cleaninput($catid);
+    $conid = db_connect();
+
+    $sql = "UPDATE ".TBL_PREFIX."categories SET catName = '".$catname."' WHERE catID = ".$catid."";
+
+    $conid->query($sql);
+    $conid->close();
+}
+
+function deletecat($catid)
+{
+    $catid = cleaninput($catid);
+    $conid = db_connect();
+
+    $sql = "DELETE FROM ".TBL_PREFIX."categories WHERE catID = $catid";
+
+    $conid->query($sql);
     $conid->close();
 }
 ?>

@@ -65,7 +65,7 @@ function validatePNML($file)
     // $result_shell = shell_exec(PNMLSchema." ".$file);
 
     // load result from HTML file under PNMLReport (look at config.inc.php)
-    $html = file_get_contents(PNMLReport);
+    $html = file_get_contents(../PNMLReport);
 
     if(strpos($html, 'validates') !== false)
     { 

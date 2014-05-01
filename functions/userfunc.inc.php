@@ -335,7 +335,7 @@ function registeruser()
     $lastname = cleaninput($_POST['lastname']);
     $affiliation = cleaninput($_POST['affiliation']);
 
-    if($login == '' || $firstname == '' || $lastname == '' || $affiliation = '')
+    if($login == '' || $firstname == '' || $lastname == '')
         return false;
 
     // create uniqid for mail-validation
@@ -448,6 +448,34 @@ function getuserdata()
     $res->execute();
     $res->store_result();
     $res->bind_result($userdata['firstname'],$userdata['lastname'],$userdata['email'],$userdata['affiliation']);
+    $res->fetch();
+
+    if($res->affected_rows == 1)
+    {
+        $res->fetch();
+        return $userdata;
+    }
+    
+}
+
+/** get user email address for approval */
+function getusermail($id)
+{
+    $conid = db_connect();
+
+    $userdata = array();
+
+    $sql = "SELECT 
+                email,login
+            FROM
+                ".TBL_PREFIX."users
+            WHERE
+                userID = '$id'";
+
+    $res = $conid->prepare($sql);
+    $res->execute();
+    $res->store_result();
+    $res->bind_result($userdata['email'],$userdata['login']);
     $res->fetch();
 
     if($res->affected_rows == 1)

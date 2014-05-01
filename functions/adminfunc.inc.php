@@ -229,6 +229,7 @@ function approveusers()
         {
             $id = $val;
             $res->execute();
+            sendapprovalmail($id);
         } 
         echo "All users were approved!";
         $conid->close();

@@ -2,7 +2,8 @@
     if(empty($_POST['foobar']))
     {
         if(registeruser())
-        {
+         {
+            print_r($_POST);
             echo "Thank you, the registration was successful!<br/>Please check your mails and confirm your mailaddress!";
         }
         else

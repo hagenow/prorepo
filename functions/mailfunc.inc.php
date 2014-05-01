@@ -94,6 +94,20 @@ function sendregmail($login,$uniqid,$email)
     return sendmail($email,$login,$subject,$mailbody);
 }
 
+function sendapprovalmail($id)
+{
+    // Load mailtemplate
+    $userdata = getusermail($id); 
+    $mailbody = file_get_contents( 'includes/mailtemplates/approval.txt' );
+
+    $subject = "ProRepo - Your account was approved!.";
+
+    // replace placeholders with given parameters
+    $mailbody = str_replace( '###LOGIN###', $userdata['login'], $mailbody );
+
+    return sendmail($userdata['email'],$userdata['login'],$subject,$mailbody);
+}
+
 function sendmailpw($email,$login,$uniqid)
 {
     checkInjection();

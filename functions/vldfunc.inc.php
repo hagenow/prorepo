@@ -41,7 +41,6 @@ function validatePNML($file)
 {
     // file to be loaded must have extension pnml, but will checked before this 
     // function is called
-    //
 
     // create objeckt $parser, which holds content from $file
     $parser = simplexml_load_file($file);
@@ -62,7 +61,6 @@ function validatePNML($file)
     // otherwise run shellscript and returns true, if validates can be found in 
     // a line of the html file - otherwise return false!
     $result_shell = shell_exec(PNMLSchema." $file 2>&1");
-    // $result_shell = shell_exec(PNMLSchema." ".$file);
 
     // load result from HTML file under PNMLReport (look at config.inc.php)
     $html = file_get_contents(PNMLReport);

@@ -20,6 +20,19 @@
       </div>
     </div>
 
+<?php if(isadmin()) : ?>
+    <!-- Private Mode -->
+    <div class="form-group">
+      <label class="control-label col-sm-3" for="comment">Private Mode</label>
+      <div class="col-sm-6">
+        <label class="checkbox-inline" for="privates">
+          <input type="checkbox" name="private" id="private" value="1">
+          Activate private mode
+        </label>
+      </div>
+    </div>
+<?php endif; ?>
+
     <!-- timestamp -->
     <input type="hidden" name="timestamp" value="<?php echo date("YmdHis"); ?>">
 

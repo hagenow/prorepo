@@ -92,14 +92,14 @@ function viewmodel($modelid)
 
     $modvalues = array();
 
-    $sql = "SELECT modelID, modelName, timestamp, lastupdate, comment, catID, path, deletable, creator
+    $sql = "SELECT modelID, modelName, timestamp, lastupdate, comment, catID, path, deletable, creator, private
             FROM ".TBL_PREFIX."models
             WHERE modelID = '$modelid'";
 
     $res = $conid->prepare($sql);
     $res->execute();
     $res->store_result();
-    $res->bind_result($modvalues['id'],$modvalues['name'],$modvalues['timestamp'],$modvalues['lastupdate'],$modvalues['comment'],$modvalues['catID'],$modvalues['path'],$modvalues['deletable'],$modvalues['creator']);
+    $res->bind_result($modvalues['id'],$modvalues['name'],$modvalues['timestamp'],$modvalues['lastupdate'],$modvalues['comment'],$modvalues['catID'],$modvalues['path'],$modvalues['deletable'],$modvalues['creator'],$modvalues['private']);
     $res->fetch();
 
 

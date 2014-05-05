@@ -56,6 +56,7 @@ if(isset($_GET['show']))
         case "uc": require 'pages/under_construction.php'; break;
 
         case "404": require 'pages/error_404.php'; break;
+        case "noauth": require 'pages/not_authorized.php'; break;
 
         default: require 'pages/start.php'; break;
     }

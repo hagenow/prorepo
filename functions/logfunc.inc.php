@@ -94,14 +94,14 @@ function viewlog($logid)
 
     $logvalues = array();
 
-    $sql = "SELECT logID, logName, timestamp, lastupdate, comment, catID, modelID, path, deletable, creator
+    $sql = "SELECT logID, logName, timestamp, lastupdate, comment, catID, modelID, path, deletable, creator, private
             FROM ".TBL_PREFIX."logs
             WHERE logID = '$logid'";
 
     $res = $conid->prepare($sql);
     $res->execute();
     $res->store_result();
-    $res->bind_result($logvalues['id'],$logvalues['name'],$logvalues['timestamp'],$logvalues['lastupdate'],$logvalues['comment'],$logvalues['catID'],$logvalues['modelID'],$logvalues['path'],$logvalues['deletable'],$logvalues['creator']);
+    $res->bind_result($logvalues['id'],$logvalues['name'],$logvalues['timestamp'],$logvalues['lastupdate'],$logvalues['comment'],$logvalues['catID'],$logvalues['modelID'],$logvalues['path'],$logvalues['deletable'],$logvalues['creator'],$logvalues['private']);
     $res->fetch();
 
 

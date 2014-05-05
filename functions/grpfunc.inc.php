@@ -316,14 +316,14 @@ function viewgroup($groupid)
 
     $groupvalues = array();
 
-    $sql = "SELECT groupID, groupName, timestamp, guid, creator, state, tags
+    $sql = "SELECT groupID, groupName, timestamp, guid, creator, state, tags, private
             FROM ".TBL_PREFIX."groups
             WHERE groupID = '$groupid'";
 
     $res = $conid->prepare($sql);
     $res->execute();
     $res->store_result();
-    $res->bind_result($groupvalues['id'],$groupvalues['name'],$groupvalues['timestamp'],$groupvalues['guid'],$groupvalues['creator'],$groupvalues['state'],$groupvalues['tags']);
+    $res->bind_result($groupvalues['id'],$groupvalues['name'],$groupvalues['timestamp'],$groupvalues['guid'],$groupvalues['creator'],$groupvalues['state'],$groupvalues['tags'],$groupvalues['private']);
     $res->fetch();
 
 

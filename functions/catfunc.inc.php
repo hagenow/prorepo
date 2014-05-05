@@ -63,9 +63,19 @@ function countmodels($catID)
 {
     $catID = cleaninput($catID);
     $conid = db_connect();
-    $sql = "SELECT COUNT(catID)
+
+    if(!isadmin())
+    {
+        $sql = "SELECT COUNT(catID)
+            FROM ".TBL_PREFIX."models 
+            WHERE catID = '$catID' AND private ='0'";
+    }
+    else
+    {
+        $sql = "SELECT COUNT(catID)
             FROM ".TBL_PREFIX."models 
             WHERE catID = '$catID'";
+    }
 
     if($res = $conid->prepare($sql))
     {

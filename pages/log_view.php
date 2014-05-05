@@ -21,6 +21,18 @@ else
 {
     $date = getlatestversions('log',$logid);
 }
+
+//check private mode
+if($logvalues['private'] == FALSE )
+{
+    // do nothing!
+}
+elseif($logvalues['private'] == TRUE && isadmin())
+{
+    // do nothing!
+}
+elseif(!($logvalues['private'] == TRUE && isadmin()))
+    header( 'location: index.php?show=noauth' );
 ?>
 
 <div class="panel panel-info">

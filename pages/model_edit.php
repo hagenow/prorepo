@@ -93,8 +93,8 @@ if(!isset($_POST['submit_model']) || !$_POST['submit_model']) {
       <label class="control-label col-sm-3" for="comment">Private Mode</label>
       <div class="col-sm-6">
         <label class="checkbox-inline" for="privates">
-          <input type="checkbox" name="private" id="private" value="1">
-          Activate private mode
+            <input type="checkbox" name="private" id="private" value="1" <?php if($modvalues['private'] == TRUE) echo "checked=\"checked\""; ?>>
+            Activate private mode
         </label>
       </div>
     </div>

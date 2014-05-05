@@ -24,11 +24,13 @@ else
 
 //check private mode
 if($modvalues['private'] == FALSE )
+{
     // do nothing!
-    return;
+}
 elseif($modvalues['private'] == TRUE && isadmin())
+{
     // do nothing!
-    return;
+}
 elseif(!($modvalues['private'] == TRUE && isadmin()))
     header( 'location: index.php?show=noauth' );
 

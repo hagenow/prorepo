@@ -20,11 +20,17 @@ function createmodel()
     $catid = $_POST['catid'];
     $creator = $_SESSION['user'];
 
+    // check private flag
+    if(isset($_POST['private']) && $_POST['private'] == TRUE)
+        $private = 1;
+    else
+        $private = 0;
+
     $sql = "INSERT INTO
                 ".TBL_PREFIX."models
-                (modelName, timestamp, lastupdate, comment, catID, creator, deletable)
+                (modelName, timestamp, lastupdate, comment, catID, creator, deletable, private)
                 VALUES
-                ('$modelName','$timestamp','$timestamp','$comment','$catid','$creator', '1')";
+                ('$modelName','$timestamp','$timestamp','$comment','$catid','$creator', '1','$private')";
 
     if($res = $conid->prepare($sql)){
         $res->execute();
@@ -51,9 +57,18 @@ function getmodels($catid)
     $catid = cleaninput($catid);
     $conid = db_connect();
 
-    $sql = "SELECT *
-            FROM ".TBL_PREFIX."models
-            WHERE catID = '$catid'";
+    if(!isadmin())
+    {
+        $sql = "SELECT *
+                FROM ".TBL_PREFIX."models
+                WHERE catID = '$catid' AND private = '0'";
+    }
+    else
+    {
+        $sql = "SELECT *
+                FROM ".TBL_PREFIX."models
+                WHERE catID = '$catid'";
+    }
 
     if( $res = $conid->query($sql) ){
         if($conid->affected_rows > 0)
@@ -143,6 +158,12 @@ function editmodel($modelid)
     {
         $catid = $_POST['catid'];
     }
+    
+    // check private flag
+    if(isset($_POST['private']) && $_POST['private'] == TRUE)
+        $private = 1;
+    else
+        $private = 0;
 
     $sql = "UPDATE ".TBL_PREFIX."models
             SET lastupdate = '".$_POST['timestamp']."', comment = '$comment', catID = '$catid'

@@ -19,15 +19,21 @@ function createlog()
 
     $catid = $_POST['catid'];
     $creator = $_SESSION['user'];
+    
+    // check private flag
+    if(isset($_POST['private']) && $_POST['private'] == TRUE)
+        $private = 1;
+    else
+        $private = 0;
 
     /** must set via POST from search form */ 
     $modelID = $_POST['modelid'];
 
     $sql = "INSERT INTO
                 ".TBL_PREFIX."logs
-                (logName, timestamp, lastupdate, comment, catID, modelID, creator, deletable)
+                (logName, timestamp, lastupdate, comment, catID, modelID, creator, deletable, private)
                 VALUES
-                ('$logName','$timestamp','$timestamp','$comment','$catid', '$modelID','$creator', '1')";
+                ('$logName','$timestamp','$timestamp','$comment','$catid', '$modelID','$creator', '1','$private')";
 
     if($res = $conid->prepare($sql)){
         $res->execute();
@@ -52,9 +58,18 @@ function getlogs($catid)
     $catid = cleaninput($catid);
     $conid = db_connect();
 
-    $sql = "SELECT *
-            FROM ".TBL_PREFIX."logs
-            WHERE catID = '$catid'";
+    if(!isadmin())
+    {
+        $sql = "SELECT *
+                FROM ".TBL_PREFIX."logs
+                WHERE catID = '$catid' AND private = '0'";
+    }
+    else
+    {
+        $sql = "SELECT *
+                FROM ".TBL_PREFIX."logs
+                WHERE catID = '$catid'";
+    }
 
     if( $res = $conid->query($sql) ){
 

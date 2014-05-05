@@ -93,6 +93,19 @@ $_SESSION['cname']; ?>" class="form-control search-query" disabled>
         <textarea id="comment" name="comment" class="form-control" rows="4" placeholder="Write something about this model!"></textarea>
       </div>
     </div>
+
+<?php if(isadmin()) : ?>
+    <!-- Private Mode -->
+    <div class="form-group">
+      <label class="control-label col-sm-3" for="comment">Private Mode</label>
+      <div class="col-sm-6">
+        <label class="checkbox-inline" for="privates">
+          <input type="checkbox" name="private" id="private" value="1">
+          Activate private mode
+        </label>
+      </div>
+    </div>
+<?php endif; ?>
     
     <!-- hidden field for marking up as model -->
     <input type="hidden" name="type" value="model">

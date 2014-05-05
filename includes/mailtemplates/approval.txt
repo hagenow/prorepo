@@ -1,0 +1,6 @@
+Hello ###LOGIN###,
+
+your account was approved by an administrator. You're now able to use ProRepo.
+
+Sincere regards,
+your ProRepo Team

@@ -13,10 +13,21 @@ function searchmodel($keyword)
 
     $keyword = cleansearch($keyword);
 
-    $sql = "SELECT modelID, modelName, timestamp, creator
-            FROM ".TBL_PREFIX."models
-            WHERE modelName LIKE '%$keyword%'
-               OR creator LIKE '%$keyword%'";
+    if(!isadmin())
+    {
+        $sql = "SELECT modelID, modelName, timestamp, creator
+                FROM ".TBL_PREFIX."models
+                WHERE (modelName LIKE '%$keyword%'
+                OR creator LIKE '%$keyword%')
+                AND private = '0'";
+    }
+    else
+    {
+        $sql = "SELECT modelID, modelName, timestamp, creator
+                FROM ".TBL_PREFIX."models
+                WHERE (modelName LIKE '%$keyword%'
+                   OR creator LIKE '%$keyword%')";
+    }
 
     $html = "";
 
@@ -65,10 +76,21 @@ function searchlog($keyword)
 
     $keyword = cleansearch($keyword);
 
-    $sql = "SELECT logID, logName, timestamp, creator
-            FROM ".TBL_PREFIX."logs
-            WHERE logName LIKE '%$keyword%'
-               OR creator LIKE '%$keyword%'";
+    if(!isadmin())
+    {
+        $sql = "SELECT logID, logName, timestamp, creator
+                FROM ".TBL_PREFIX."logs
+                WHERE (logName LIKE '%$keyword%'
+                OR creator LIKE '%$keyword%')
+                AND private = '0'";
+    }
+    else
+    {
+        $sql = "SELECT logID, logName, timestamp, creator
+                FROM ".TBL_PREFIX."logs
+                WHERE (logName LIKE '%$keyword%'
+                OR creator LIKE '%$keyword%')";
+    }
 
     $html = "";
 
@@ -122,18 +144,18 @@ function searchgroup($keyword)
     {
         $sql = "SELECT groupID, groupName, timestamp, creator, tags
                 FROM ".TBL_PREFIX."groups
-                WHERE groupName LIKE '%$keyword%'
+                WHERE (groupName LIKE '%$keyword%'
                    OR tags LIKE '%$keyword%'
-                   OR creator LIKE '%$keyword%'
+                   OR creator LIKE '%$keyword%')
                 AND private = '0'";
     }
     else
     {
         $sql = "SELECT groupID, groupName, timestamp, creator, tags
                 FROM ".TBL_PREFIX."groups
-                WHERE groupName LIKE '%$keyword%'
+                WHERE (groupName LIKE '%$keyword%'
                    OR tags LIKE '%$keyword%'
-                   OR creator LIKE '%$keyword%'";
+                   OR creator LIKE '%$keyword%')";
     }
 
     $html = "";
@@ -187,10 +209,10 @@ function searchuser($keyword)
 
     $sql = "SELECT userID, login, firstname, lastname, email, affiliation
             FROM ".TBL_PREFIX."users
-            WHERE firstname LIKE '%$keyword%'
+            WHERE (firstname LIKE '%$keyword%'
                OR lastname LIKE '%$keyword%'
                OR login LIKE '%$keyword%'
-               OR affiliation LIKE '%$keyword%'";
+               OR affiliation LIKE '%$keyword%')";
 
     $html = "";
 

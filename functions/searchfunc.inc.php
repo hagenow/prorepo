@@ -118,11 +118,23 @@ function searchgroup($keyword)
 
     $keyword = cleansearch($keyword);
 
-    $sql = "SELECT groupID, groupName, timestamp, creator, tags
-            FROM ".TBL_PREFIX."groups
-            WHERE groupName LIKE '%$keyword%'
-               OR tags LIKE '%$keyword%'
-               OR creator LIKE '%$keyword%'";
+    if(!isadmin())
+    {
+        $sql = "SELECT groupID, groupName, timestamp, creator, tags
+                FROM ".TBL_PREFIX."groups
+                WHERE groupName LIKE '%$keyword%'
+                   OR tags LIKE '%$keyword%'
+                   OR creator LIKE '%$keyword%'
+                AND private = '0'";
+    }
+    else
+    {
+        $sql = "SELECT groupID, groupName, timestamp, creator, tags
+                FROM ".TBL_PREFIX."groups
+                WHERE groupName LIKE '%$keyword%'
+                   OR tags LIKE '%$keyword%'
+                   OR creator LIKE '%$keyword%'";
+    }
 
     $html = "";
 

@@ -22,13 +22,19 @@ function creategroup()
     $_SESSION['groupName'] = cleaninput($_SESSION['groupName']);
     $_SESSION['groupTags'] = cleantags($_SESSION['groupTags']);
 
+    // check private flag
+    if(isset($_POST['private']) && $_POST['private'] == TRUE)
+        $private = 1;
+    else
+        $private = 0;
+
     $conid = db_connect();
     
     $guid = guid();
 
     $sql = "INSERT INTO ".TBL_PREFIX."groups
-                    (groupName, timestamp, guid, creator, state, tags)
-            VALUES  ('".$_SESSION['groupName']."', NOW(), '$guid', '".$_SESSION['user']."','1','".$_SESSION['groupTags']."')";
+                    (groupName, timestamp, guid, creator, state, tags, private)
+            VALUES  ('".$_SESSION['groupName']."', NOW(), '$guid', '".$_SESSION['user']."','1','".$_SESSION['groupTags']."', '$private')";
 
     if($res = $conid->prepare($sql))
     {
@@ -421,8 +427,14 @@ function editgroup($id)
 
     $tags = cleantags($_POST['tags']);
 
+    // check private flag
+    if(isset($_POST['private']) && $_POST['private'] == TRUE)
+        $private = 1;
+    else
+        $private = 0;
+
     $sql = "UPDATE ".TBL_PREFIX."groups
-            SET timestamp = '".$_POST['timestamp']."', tags = '$tags'
+            SET timestamp = '".$_POST['timestamp']."', tags = '$tags', private = '$private'
             WHERE groupID = '$id'";
 
     $res = $conid->prepare($sql);

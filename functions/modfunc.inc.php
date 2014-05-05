@@ -166,7 +166,7 @@ function editmodel($modelid)
         $private = 0;
 
     $sql = "UPDATE ".TBL_PREFIX."models
-            SET lastupdate = '".$_POST['timestamp']."', comment = '$comment', catID = '$catid'
+            SET lastupdate = '".$_POST['timestamp']."', comment = '$comment', catID = '$catid', private = '$private'
             WHERE modelID = '$modelid'";
 
     if($res = $conid->prepare($sql))

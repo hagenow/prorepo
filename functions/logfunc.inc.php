@@ -162,9 +162,14 @@ function editlog($logid)
     {
         $modid = $_POST['modid'];
     }
+    // check private flag
+    if(isset($_POST['private']) && $_POST['private'] == TRUE)
+        $private = 1;
+    else
+        $private = 0;
 
     $sql = "UPDATE ".TBL_PREFIX."logs
-            SET lastupdate = '".$_POST['timestamp']."', comment = '$comment', catID = '$catid', modelID = '$modid'
+            SET lastupdate = '".$_POST['timestamp']."', comment = '$comment', catID = '$catid', modelID = '$modid', private = '$private'
             WHERE logID = '$logid'";
 
     if($res = $conid->prepare($sql))

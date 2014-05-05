@@ -361,6 +361,14 @@ function linkedtypes($id,$type,$creator,$state)
             if($type == "model")
             {
                 $values = viewmodel($row['modelID']);
+                if($values['private'] == TRUE && isadmin())
+                {
+                    // do nothing
+                }
+                else
+                {
+                    continue;
+                }
 
                 $html = "";
                 $html .= "<tr>";
@@ -381,6 +389,14 @@ function linkedtypes($id,$type,$creator,$state)
             if($type == "log")
             {
                 $values = viewlog($row['logID']);
+                if($values['private'] == TRUE && isadmin())
+                {
+                    // do nothing
+                }
+                else
+                {
+                    continue;
+                }
 
                 $html = "";
                 $html .= "<tr>";

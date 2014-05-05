@@ -136,7 +136,7 @@ if(!isset($_POST['submit_log']) || !$_POST['submit_log']) {
       <label class="control-label col-sm-3" for="comment">Private Mode</label>
       <div class="col-sm-6">
         <label class="checkbox-inline" for="privates">
-            <input type="checkbox" name="private" id="private" value="1" <?php if($modvalues['private'] == TRUE) echo "checked=\"checked\""; ?>>
+            <input type="checkbox" name="private" id="private" value="1" <?php if($logvalues['private'] == TRUE) echo "checked=\"checked\""; ?>>
           Activate private mode
         </label>
       </div>

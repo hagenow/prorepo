@@ -18,6 +18,18 @@ else
 $state = $groupvalues['state'];
 $state = $state^1;
 
+//check private mode
+if($groupvalues['private'] == FALSE )
+{
+    // do nothing!
+}
+elseif($groupvalues['private'] == TRUE && isadmin())
+{
+    // do nothing!
+}
+elseif(!($groupvalues['private'] == TRUE && isadmin()))
+    header( 'location: index.php?show=noauth' );
+
 ?>
 
 <div class="panel panel-warning">

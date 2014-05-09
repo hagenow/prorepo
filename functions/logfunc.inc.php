@@ -164,9 +164,15 @@ function editlog($logid)
     }
     // check private flag
     if(isset($_POST['private']) && $_POST['private'] == TRUE)
+    {
+        echo "This log is now in private mode. If it is included in a public group, it is now hidden!<br>Administrators and you are able to see and use this log!<br>";
         $private = 1;
+    }
     else
+    {
+        echo "This log is no longer in private mode.<br>";
         $private = 0;
+    }
 
     $sql = "UPDATE ".TBL_PREFIX."logs
             SET lastupdate = '".$_POST['timestamp']."', comment = '$comment', catID = '$catid', modelID = '$modid', private = '$private'

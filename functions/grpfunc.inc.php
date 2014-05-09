@@ -24,9 +24,15 @@ function creategroup()
 
     // check private flag
     if(isset($_POST['private']) && $_POST['private'] == TRUE)
+    {
+        echo "This group is now in private mode. Administrators can see this group, when they logged in!<br>";
         $private = 1;
+    }
     else
+    {
+        echo "This log is no longer in private mode. Included private models and logs are already hidden!<br>";
         $private = 0;
+    }
 
     $conid = db_connect();
     

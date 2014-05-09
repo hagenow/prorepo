@@ -91,7 +91,6 @@ function adm_updateuserdata($id)
     $email = checkmail($_POST['email']);
     $affiliation = cleaninput($_POST['affiliation']);
     $usergroup = cleaninput($_POST['usergroup']);
-    $olduser = cleaninput($_POST['login']);
 
     /** encrypt password */
     if(isset($_POST['password'])&& (strlen($_POST['password']) >= 1 && $_POST['password'] !== ' ') )
@@ -130,6 +129,9 @@ function adm_updateuserdata($id)
     // in admin
     if($usergroup == '2')
     {
+        $olduser = cleaninput($_POST['userlogin']);
+        $newuser = $_SESSION['user'];
+
         if(moveprivatedatatoadmin($olduser,$newuser))
             echo "All models, logs and groups that were private are transfered to you!<br>";
         else
@@ -358,14 +360,17 @@ function moveprivatedatatoadmin($olduser,$newuser)
 
     $res = $conid->query($sqlmodels);
     if($conid->affected_rows == 0)
-       $res = $conid->query($sqllogs);
+       $affrow = $conid->affected_rows;
+
     $res = $conid->query($sqllogs);
     if($conid->affected_rows == 0)
-       $res = $conid->query($sqllogs);
-    $res = $conid->query($sqlgroups);
-    $affrow = $conid->affected_rows;
+       $affrow = $conid->affected_rows;
 
-    if ($affrow == 1)
+    $res = $conid->query($sqlgroups);
+    if($conid->affected_rows == 0)
+       $affrow = $conid->affected_rows;
+
+    if ($affrow != 0)
     {
         $conid->close();
         return true;

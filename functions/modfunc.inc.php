@@ -161,9 +161,15 @@ function editmodel($modelid)
     
     // check private flag
     if(isset($_POST['private']) && $_POST['private'] == TRUE)
+    {
+        echo "This model is now in private mode. If it is included in a public group, it is now hidden!<br>Administrators and you are able to see and use this model!<br>";
         $private = 1;
+    }
     else
+    {
+        echo "This log is no longer in private mode.<br>";
         $private = 0;
+    }
 
     $sql = "UPDATE ".TBL_PREFIX."models
             SET lastupdate = '".$_POST['timestamp']."', comment = '$comment', catID = '$catid', private = '$private'

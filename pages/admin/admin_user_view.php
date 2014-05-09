@@ -37,6 +37,7 @@ else
         <label class="control-label col-sm-3" for="login">Login</label>
         <div class="col-sm-8">
         <input id="login" name="login" type="text" placeholder="<?php echo $userdata['login']; ?>" class="form-control" disabled>
+        <input type="hidden" name="userlogin" value="<?php echo $userdata['login']; ?>">
         </div>
     </div>
 

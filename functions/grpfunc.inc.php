@@ -328,9 +328,19 @@ function viewgroup($groupid)
 
     $groupvalues = array();
 
-    $sql = "SELECT groupID, groupName, timestamp, guid, creator, state, tags, private
-            FROM ".TBL_PREFIX."groups
-            WHERE groupID = '$groupid'";
+    if(isadmin())
+    {
+        $sql = "SELECT groupID, groupName, timestamp, guid, creator, state, tags, private
+                FROM ".TBL_PREFIX."groups
+                WHERE groupID = '$groupid'";
+    }
+    else
+    {
+        $sql = "SELECT groupID, groupName, timestamp, guid, creator, state, tags, private
+                FROM ".TBL_PREFIX."groups
+                WHERE groupID = '$groupid'
+                AND private = '0'";
+    }
 
     $res = $conid->prepare($sql);
     $res->execute();
@@ -371,6 +381,10 @@ function linkedtypes($id,$type,$creator,$state)
                 {
                     // do nothing
                 }
+                elseif($values['private'] == FALSE)
+                {
+                    // do nothing
+                }
                 else
                 {
                     continue;
@@ -396,6 +410,10 @@ function linkedtypes($id,$type,$creator,$state)
             {
                 $values = viewlog($row['logID']);
                 if($values['private'] == TRUE && isadmin())
+                {
+                    // do nothing
+                }
+                elseif($values['private'] == FALSE)
                 {
                     // do nothing
                 }

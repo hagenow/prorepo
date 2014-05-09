@@ -400,11 +400,16 @@ function getlatestversions($type,$typeid)
             DESC
             LIMIT 1";
 
-    if( $res = $conid->query($sql) ){
-
-        while( $row = $res->fetch_assoc() )
+    if( $res = $conid->query($sql) )
+    {
+        if($conid->affected_rows == 0)
+            return date("Y-m-d H:i:s");
+        else
         {
-            return $row['timestamp'];
+            while( $row = $res->fetch_assoc() )
+            {
+                return $row['timestamp'];
+            }
         }
     }
     $conid->close();

@@ -77,7 +77,6 @@ else {
             echo "<pre>" .print_r( $_FILES, true ). "</pre>";
         }
 
-        echo $_POST['grpid'];
         if(editgroup($_POST['grpid']))
         {
             echo "Successfully updated the group!";

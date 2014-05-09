@@ -578,6 +578,8 @@ function getgroupid($guid)
         $res->bind_result($groupID);
         $res->fetch();
         $conid->close();
+        if(empty($groupID))
+            return 0;
 
         return $groupID;
     }

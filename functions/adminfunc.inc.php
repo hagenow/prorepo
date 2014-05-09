@@ -359,15 +359,15 @@ function moveprivatedatatoadmin($olduser,$newuser)
                     AND creator = '$olduser' ";
 
     $res = $conid->query($sqlmodels);
-    if($conid->affected_rows == 0)
+    if($conid->affected_rows != 0)
        $affrow = $conid->affected_rows;
 
     $res = $conid->query($sqllogs);
-    if($conid->affected_rows == 0)
+    if($conid->affected_rows != 0)
        $affrow = $conid->affected_rows;
 
     $res = $conid->query($sqlgroups);
-    if($conid->affected_rows == 0)
+    if($conid->affected_rows != 0)
        $affrow = $conid->affected_rows;
 
     if ($affrow != 0)

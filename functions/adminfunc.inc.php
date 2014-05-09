@@ -91,6 +91,7 @@ function adm_updateuserdata($id)
     $email = checkmail($_POST['email']);
     $affiliation = cleaninput($_POST['affiliation']);
     $usergroup = cleaninput($_POST['usergroup']);
+    $olduser = cleaninput($_POST['login']);
 
     /** encrypt password */
     if(isset($_POST['password'])&& (strlen($_POST['password']) >= 1 && $_POST['password'] !== ' ') )
@@ -123,6 +124,16 @@ function adm_updateuserdata($id)
                      WHERE
                          userID = '$id'";
         $res = $conid->prepare($sql_wopw);
+    }
+
+    // transfer private elements (model,log,group) from former admin to logged 
+    // in admin
+    if($usergroup == '2')
+    {
+        if(moveprivatedatatoadmin($olduser,$newuser))
+            echo "All models, logs and groups that were private are transfered to you!<br>";
+        else
+            echo "There was no private model, log or group that can be transfered to you!<br>";
     }
 
     $res->execute();
@@ -326,4 +337,43 @@ function unblockusers()
     }
 }
 
+function moveprivatedatatoadmin($olduser,$newuser)
+{
+    $conid = db_connect();
+
+    $sqlmodels = "UPDATE ".TBL_PREFIX."models
+                    SET creator = '$newuser'
+                    WHERE private = '1'
+                    AND creator = '$olduser' ";
+
+    $sqllogs = "UPDATE ".TBL_PREFIX."logs
+                    SET creator = '$newuser'
+                    WHERE private = '1'
+                    AND creator = '$olduser' ";
+
+    $sqlgroups = "UPDATE ".TBL_PREFIX."groups
+                    SET creator = '$newuser'
+                    WHERE private = '1'
+                    AND creator = '$olduser' ";
+
+    $res = $conid->query($sqlmodels);
+    if($conid->affected_rows == 0)
+       $res = $conid->query($sqllogs);
+    $res = $conid->query($sqllogs);
+    if($conid->affected_rows == 0)
+       $res = $conid->query($sqllogs);
+    $res = $conid->query($sqlgroups);
+    $affrow = $conid->affected_rows;
+
+    if ($affrow == 1)
+    {
+        $conid->close();
+        return true;
+    }
+    else
+    {
+        $conid->close();
+        return false;
+    }
+}
 ?>
